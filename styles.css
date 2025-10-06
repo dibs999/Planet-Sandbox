@@ -1,0 +1,349 @@
+:root {
+  --bg-dark: #0c0f1a;
+  --bg-panel: #151b2d;
+  --accent: #62d5ff;
+  --accent-2: #f6a23c;
+  --text: #f5f7fb;
+  font-family: "Press Start 2P", "VT323", "Courier New", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: var(--text);
+  background: radial-gradient(circle at top, #223354, var(--bg-dark) 60%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  text-align: center;
+  padding: 1.5rem 1rem 0.5rem;
+}
+
+header h1 {
+  font-size: clamp(1.5rem, 4vw, 2.75rem);
+  margin: 0 0 0.25rem;
+  letter-spacing: 0.15em;
+}
+
+header p {
+  margin: 0;
+  opacity: 0.8;
+}
+
+main {
+  display: grid;
+  grid-template-columns: minmax(280px, 340px) 1fr;
+  gap: 1.5rem;
+  width: min(1200px, 94vw);
+  margin: 0 auto;
+  flex: 1;
+  padding-bottom: 2rem;
+}
+
+#control-panel {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+
+.panel {
+  background: color-mix(in srgb, var(--bg-panel) 88%, transparent);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 10px 30px rgba(6, 7, 12, 0.4);
+}
+
+.panel h2 {
+  margin-top: 0;
+  font-size: 1rem;
+  color: var(--accent);
+}
+
+#element-palette {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.element-button {
+  border: none;
+  color: var(--text);
+  font-weight: bold;
+  padding: 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.35);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.15), rgba(0, 0, 0, 0.35));
+  position: relative;
+  isolation: isolate;
+}
+
+.element-button:hover,
+.element-button.active {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.45);
+}
+
+.element-button .swatch {
+  position: absolute;
+  inset: 4px;
+  border-radius: 6px;
+  z-index: -1;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+}
+
+input[type="range"] {
+  accent-color: var(--accent);
+}
+
+.button-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.mobile-only {
+  display: none;
+}
+
+.mobile-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 1.1rem;
+  padding: 0.25rem;
+  margin: -0.25rem;
+  align-self: flex-end;
+}
+
+.mobile-header {
+  padding-bottom: 0.5rem;
+  display: flex;
+  justify-content: flex-end;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+button {
+  font-family: inherit;
+  background: linear-gradient(135deg, rgba(98, 213, 255, 0.25), rgba(98, 213, 255, 0.05));
+  color: var(--text);
+  border: 1px solid rgba(98, 213, 255, 0.45);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+}
+
+#sandbox-wrapper {
+  position: relative;
+  border-radius: 18px;
+  padding: 1rem;
+  background: rgba(10, 13, 24, 0.7);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+}
+
+#sandbox {
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+  border-radius: 12px;
+  background: #0b111d;
+}
+
+#planet-description {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+footer {
+  text-align: center;
+  padding: 1rem 0 1.5rem;
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+.status-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+}
+
+.status-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.status-list span {
+  color: var(--accent-2);
+}
+
+.sim-info {
+  margin-top: 0.75rem;
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+}
+
+#speed-display {
+  font-size: 0.8rem;
+  color: var(--accent-2);
+  margin-left: 0.35rem;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.checkbox input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+}
+
+#event-log {
+  display: grid;
+  gap: 0.4rem;
+  max-height: 180px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+  font-size: 0.8rem;
+}
+
+.event-entry {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 0.45rem 0.5rem;
+  line-height: 1.3;
+}
+
+@media (max-width: 920px) {
+  main {
+    grid-template-columns: 1fr;
+  }
+
+  #sandbox {
+    height: min(65vh, 480px);
+  }
+}
+
+@media (max-width: 600px) {
+  body.mobile-panel-open {
+    overflow: hidden;
+  }
+
+  header {
+    padding: 1rem 1rem 0.5rem;
+  }
+
+  main {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 1rem;
+    padding: 0 0 4.5rem;
+  }
+
+  #sandbox-wrapper {
+    margin: 0 1rem 1rem;
+    padding: 0.75rem;
+  }
+
+  #planet-description {
+    font-size: 0.85rem;
+  }
+
+  #element-palette {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .button-row {
+    flex-wrap: wrap;
+  }
+
+  #event-log {
+    max-height: 150px;
+  }
+
+  #mobile-panel-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 0 1rem;
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .mobile-only {
+    display: block;
+  }
+
+  #control-panel {
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    transform: translate(-50%, calc(100% + 1rem));
+    width: min(520px, 100%);
+    max-height: 70vh;
+    overflow-y: auto;
+    gap: 0.75rem;
+    padding: 0.5rem 1rem 1.5rem;
+    border-radius: 18px 18px 0 0;
+    backdrop-filter: blur(6px);
+    background: rgba(12, 15, 26, 0.9);
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.55);
+    z-index: 1001;
+    transition: transform 0.3s ease;
+  }
+
+  body.mobile-panel-open #control-panel {
+    transform: translate(-50%, 0);
+  }
+
+  #mobile-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 8, 14, 0.6);
+    backdrop-filter: blur(2px);
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  body.mobile-panel-open #mobile-overlay {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .panel {
+    box-shadow: none;
+  }
+}
