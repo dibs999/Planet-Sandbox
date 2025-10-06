@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Planet Sandbox</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Planet Sandbox</h1>
+    <p>Erschaffe Welten, kombiniere Elemente und beobachte das Leben!</p>
+  </header>
+
+  <main>
+    <button id="mobile-panel-toggle" class="mobile-only" aria-expanded="false">
+      Steuerung anzeigen
+    </button>
+    <section id="control-panel">
+      <div class="panel mobile-only mobile-header">
+        <button id="mobile-panel-close" class="mobile-close-btn" aria-label="Steuerung schließen">
+          ✕
+        </button>
+      </div>
+      <div class="panel">
+        <h2>Planet</h2>
+        <select id="planet-select"></select>
+        <button id="reset-btn">Planet zurücksetzen</button>
+      </div>
+      <div class="panel">
+        <h2>Elemente</h2>
+        <div id="element-palette"></div>
+      </div>
+      <div class="panel">
+        <h2>Pinsel</h2>
+        <label>
+          Größe
+          <input type="range" id="brush-size" min="1" max="8" value="2" />
+        </label>
+        <label>
+          Dichte
+          <input type="range" id="brush-density" min="0.1" max="1" step="0.1" value="0.8" />
+        </label>
+        <div class="button-row">
+          <button id="pause-btn">⏸ Pause</button>
+          <button id="step-btn">Einzelner Schritt</button>
+        </div>
+      </div>
+      <div class="panel legend">
+        <h2>Reaktionen</h2>
+        <ul>
+          <li>Wasser + Lava → Stein</li>
+          <li>Wasser + Feuer → Dampf</li>
+          <li>Sand + Feuer → Glas</li>
+          <li>Pflanze + Feuer → Rauch</li>
+          <li>Metall + Lava → Legierung</li>
+          <li>Mensch baut mit Holz Häuser</li>
+          <li>Alien sammelt Kristalle für Biokuppeln</li>
+        </ul>
+      </div>
+    </section>
+
+    <div id="mobile-overlay" class="mobile-only"></div>
+
+    <section id="sandbox-wrapper">
+      <canvas id="sandbox" width="800" height="600"></canvas>
+      <div id="planet-description"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Tipp: Ziehe Elemente auf die Karte und beobachte, wie sich deine Zivilisation entwickelt.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
