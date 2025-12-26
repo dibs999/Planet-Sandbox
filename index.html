@@ -1,0 +1,2755 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Planet Sandbox - Anno im Orbit</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Work+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --paper: #f8efe0;
+        --paper-2: #ead6b8;
+        --ink: #1d1a16;
+        --muted: #5a4e44;
+        --navy: #1b2b3a;
+        --ocean: #234b5c;
+        --brass: #b18a55;
+        --brass-light: #d8b97a;
+        --copper: #c86b3c;
+        --panel: rgba(255, 251, 242, 0.86);
+        --panel-strong: rgba(255, 251, 242, 0.96);
+        --stroke: rgba(29, 26, 22, 0.18);
+        --shadow: 0 20px 45px rgba(19, 17, 15, 0.18);
+        --shadow-soft: 0 12px 25px rgba(19, 17, 15, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Work Sans", system-ui, -apple-system, sans-serif;
+        color: var(--ink);
+        background: linear-gradient(160deg, var(--paper) 0%, var(--paper-2) 60%, #ccb28e 100%);
+        min-height: 100vh;
+        position: relative;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image:
+          radial-gradient(circle, rgba(27, 43, 58, 0.08) 1px, transparent 1px),
+          radial-gradient(circle, rgba(27, 43, 58, 0.06) 1px, transparent 1px),
+          radial-gradient(circle, rgba(27, 43, 58, 0.05) 1px, transparent 1px);
+        background-size: 160px 160px, 220px 220px, 240px 240px;
+        background-position: 0 0, 40px 70px, 120px 40px;
+        opacity: 0.5;
+        pointer-events: none;
+      }
+
+      .page {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 48px 24px 90px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.85fr);
+        gap: 32px;
+        align-items: center;
+        padding: 32px;
+        background: var(--panel);
+        border: 1px solid var(--stroke);
+        border-radius: 28px;
+        box-shadow: var(--shadow);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(120deg, rgba(255, 255, 255, 0.75), transparent 60%),
+          radial-gradient(circle at 85% 20%, rgba(177, 138, 85, 0.18), transparent 55%);
+        pointer-events: none;
+      }
+
+      .hero-text,
+      .hero-visual {
+        position: relative;
+        z-index: 1;
+      }
+
+      .eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        font-size: 0.7rem;
+        color: var(--navy);
+        margin: 0 0 12px;
+      }
+
+      h1 {
+        font-family: "Cinzel", serif;
+        font-size: clamp(2.4rem, 3.4vw, 3.7rem);
+        margin: 0 0 12px;
+      }
+
+      h2 {
+        font-family: "Cinzel", serif;
+        font-size: 1.7rem;
+        margin: 0 0 12px;
+      }
+
+      h3 {
+        margin: 0 0 8px;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+        color: var(--navy);
+      }
+
+      p {
+        margin: 0;
+        line-height: 1.6;
+      }
+
+      .lead {
+        font-size: 1.05rem;
+        color: var(--muted);
+        max-width: 720px;
+      }
+
+      .badge-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .badge {
+        padding: 6px 14px;
+        border-radius: 999px;
+        background: rgba(27, 43, 58, 0.08);
+        border: 1px solid rgba(27, 43, 58, 0.22);
+        font-size: 0.85rem;
+      }
+
+      .callout {
+        margin-top: 18px;
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: rgba(177, 138, 85, 0.12);
+        border-left: 4px solid var(--brass);
+        color: var(--muted);
+      }
+
+      section {
+        margin-top: 40px;
+        animation: fadeUp 0.7s ease both;
+      }
+
+      section:nth-of-type(2) {
+        animation-delay: 0.1s;
+      }
+
+      section:nth-of-type(3) {
+        animation-delay: 0.18s;
+      }
+
+      section:nth-of-type(4) {
+        animation-delay: 0.26s;
+      }
+
+      section:nth-of-type(5) {
+        animation-delay: 0.34s;
+      }
+
+      .grid-2 {
+        display: grid;
+        gap: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      }
+
+      .grid-3 {
+        display: grid;
+        gap: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      }
+
+      .grid-4 {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      }
+
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--stroke);
+        border-radius: 18px;
+        padding: 18px;
+        box-shadow: var(--shadow-soft);
+      }
+
+      .card strong {
+        color: var(--navy);
+      }
+
+      ul,
+      ol {
+        margin: 0;
+        padding-left: 22px;
+        color: var(--muted);
+      }
+
+      li {
+        margin-bottom: 6px;
+      }
+
+      .planet-diorama {
+        position: relative;
+        width: min(320px, 100%);
+        aspect-ratio: 1;
+        margin: 0 auto;
+        display: grid;
+        place-items: center;
+      }
+
+      .planet {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background:
+          radial-gradient(circle at 30% 30%, #fff5e2 0%, #f1d4a5 40%, #b5905b 100%),
+          radial-gradient(circle at 70% 70%, rgba(35, 75, 92, 0.5), transparent 55%);
+        border: 2px solid rgba(29, 26, 22, 0.25);
+        box-shadow: inset 0 0 30px rgba(29, 26, 22, 0.2);
+      }
+
+      .orbit {
+        position: absolute;
+        border: 1px dashed rgba(177, 138, 85, 0.45);
+        border-radius: 50%;
+      }
+
+      .orbit-one {
+        width: 220px;
+        height: 220px;
+      }
+
+      .orbit-two {
+        width: 270px;
+        height: 270px;
+      }
+
+      .orbit-three {
+        width: 320px;
+        height: 320px;
+      }
+
+      .ring {
+        position: absolute;
+        width: 240px;
+        height: 70px;
+        border-radius: 50%;
+        border: 1px solid rgba(27, 43, 58, 0.35);
+        transform: rotate(-12deg);
+      }
+
+      .colony-dot {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--copper);
+        box-shadow: 0 0 0 7px rgba(200, 107, 60, 0.18);
+        top: 18%;
+        left: 62%;
+      }
+
+      .colony-dot.second {
+        top: 62%;
+        left: 30%;
+        background: var(--brass);
+        box-shadow: 0 0 0 7px rgba(177, 138, 85, 0.18);
+      }
+
+      .colony-dot.third {
+        top: 38%;
+        left: 18%;
+        background: var(--ocean);
+        box-shadow: 0 0 0 7px rgba(35, 75, 92, 0.18);
+      }
+
+      .legend {
+        margin-top: 10px;
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+
+      .kpi-grid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      }
+
+      .kpi-card {
+        background: var(--panel-strong);
+        border: 1px solid var(--stroke);
+        border-radius: 16px;
+        padding: 14px;
+        box-shadow: var(--shadow-soft);
+      }
+
+      .kpi-title {
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        color: var(--navy);
+      }
+
+      .kpi-value {
+        font-family: "Cinzel", serif;
+        font-size: 1.6rem;
+        margin: 6px 0 2px;
+      }
+
+      .kpi-sub {
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+
+      .kpi-meter {
+        height: 6px;
+        background: rgba(27, 43, 58, 0.15);
+        border-radius: 999px;
+        margin-top: 10px;
+        overflow: hidden;
+      }
+
+      .kpi-meter span {
+        display: block;
+        height: 100%;
+        width: var(--value, 50%);
+        background: linear-gradient(90deg, var(--brass-light), var(--copper));
+      }
+
+      .tabs {
+        background: var(--panel);
+        border: 1px solid var(--stroke);
+        border-radius: 20px;
+        padding: 18px;
+        box-shadow: var(--shadow-soft);
+      }
+
+      .tablist {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .tab-button {
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.8);
+        color: var(--navy);
+        padding: 8px 14px;
+        border-radius: 999px;
+        font-size: 0.9rem;
+        cursor: pointer;
+      }
+
+      .tab-button[aria-selected="true"] {
+        background: var(--navy);
+        color: #fff;
+        border-color: var(--navy);
+      }
+
+      .tab-panel {
+        margin-top: 16px;
+      }
+
+      .tab-panel[hidden] {
+        display: none;
+      }
+
+      .chip-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 10px;
+      }
+
+      .chip {
+        padding: 4px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(27, 43, 58, 0.25);
+        background: rgba(27, 43, 58, 0.08);
+        font-size: 0.78rem;
+      }
+
+      .route-list {
+        display: grid;
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      .route {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid var(--stroke);
+        font-size: 0.9rem;
+      }
+
+      .route span {
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+
+      .steps {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      }
+
+      .step {
+        background: var(--panel);
+        border: 1px solid var(--stroke);
+        border-radius: 16px;
+        padding: 16px;
+        box-shadow: var(--shadow-soft);
+      }
+
+      .step-num {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: var(--brass);
+        color: #fff;
+        font-weight: 600;
+        display: grid;
+        place-items: center;
+        margin-bottom: 10px;
+        box-shadow: 0 8px 18px rgba(177, 138, 85, 0.35);
+      }
+
+      .chain-map {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+        margin-top: 12px;
+      }
+
+      .chain-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        align-items: center;
+        margin-top: 10px;
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+
+      .legend-dot {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-right: 6px;
+        background: var(--brass);
+      }
+
+      .legend-dot.good {
+        background: #2f7a4b;
+      }
+
+      .legend-dot.warn {
+        background: #c58f2a;
+      }
+
+      .legend-dot.bad {
+        background: #b6422a;
+      }
+
+      .chain-node {
+        padding: 8px 28px 8px 12px;
+        border-radius: 12px;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.85);
+        font-size: 0.9rem;
+        position: relative;
+        cursor: pointer;
+        text-align: left;
+      }
+
+      .chain-node[data-status="good"] {
+        --status-color: #2f7a4b;
+      }
+
+      .chain-node[data-status="warn"] {
+        --status-color: #c58f2a;
+      }
+
+      .chain-node[data-status="bad"] {
+        --status-color: #b6422a;
+      }
+
+      .node-indicator {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--status-color, var(--brass));
+        box-shadow: 0 0 0 3px rgba(27, 43, 58, 0.12);
+      }
+
+      .chain-node .node-tag {
+        display: block;
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      .chain-node[aria-expanded="true"] {
+        background: var(--navy);
+        border-color: var(--navy);
+        color: #fff;
+      }
+
+      .chain-node[aria-expanded="true"] .node-tag {
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      .chain-node[aria-expanded="true"] .node-indicator {
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+      }
+
+      .chain-node:focus-visible {
+        outline: 2px solid var(--brass);
+        outline-offset: 2px;
+      }
+
+      .chain-node[data-tooltip]::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 130%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--navy);
+        color: #fff;
+        padding: 6px 8px;
+        border-radius: 8px;
+        font-size: 0.72rem;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease;
+      }
+
+      .chain-node[data-tooltip]::before {
+        content: "";
+        position: absolute;
+        bottom: 112%;
+        left: 50%;
+        transform: translateX(-50%);
+        border-width: 6px;
+        border-style: solid;
+        border-color: var(--navy) transparent transparent transparent;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+      }
+
+      .chain-node[data-tooltip]:hover::after,
+      .chain-node[data-tooltip]:hover::before {
+        opacity: 1;
+      }
+
+      .chain-link {
+        color: var(--brass);
+        font-weight: 600;
+      }
+
+      .subchain-group {
+        display: grid;
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      .subchain {
+        display: none;
+        padding: 12px;
+        border-radius: 12px;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.85);
+      }
+
+      .subchain.is-open {
+        display: block;
+      }
+
+      .subchain h4 {
+        margin: 0 0 8px;
+        font-size: 0.95rem;
+        color: var(--navy);
+      }
+
+      .subchain-grid {
+        display: grid;
+        gap: 8px;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      }
+
+      .subchain-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 6px 8px;
+        border-radius: 10px;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.8);
+        font-size: 0.85rem;
+      }
+
+      .subchain-label {
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        font-size: 0.7rem;
+      }
+
+      .subchain-value {
+        color: var(--navy);
+        font-weight: 600;
+      }
+
+      .subchain-value.good {
+        color: #2f7a4b;
+      }
+
+      .subchain-value.warn {
+        color: #c58f2a;
+      }
+
+      .subchain-value.bad {
+        color: #b6422a;
+      }
+
+      .tier-grid {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        margin-top: 12px;
+      }
+
+      .tier {
+        padding: 14px;
+        border-radius: 14px;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.88);
+      }
+
+      .tier span {
+        display: block;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+
+      .sector-panel {
+        display: grid;
+        gap: 18px;
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+        align-items: center;
+      }
+
+      .sector-map {
+        position: relative;
+        height: 180px;
+        border-radius: 14px;
+        border: 1px solid var(--stroke);
+        background:
+          linear-gradient(135deg, rgba(35, 75, 92, 0.15), transparent 50%),
+          repeating-linear-gradient(0deg, rgba(29, 26, 22, 0.08), rgba(29, 26, 22, 0.08) 1px, transparent 1px, transparent 22px),
+          repeating-linear-gradient(90deg, rgba(29, 26, 22, 0.08), rgba(29, 26, 22, 0.08) 1px, transparent 1px, transparent 22px);
+        overflow: hidden;
+      }
+
+      .map-marker {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        box-shadow: 0 0 0 6px rgba(200, 107, 60, 0.18);
+        background: var(--copper);
+      }
+
+      .map-marker.ore {
+        top: 22%;
+        left: 68%;
+      }
+
+      .map-marker.water {
+        top: 55%;
+        left: 32%;
+        background: var(--ocean);
+        box-shadow: 0 0 0 6px rgba(35, 75, 92, 0.18);
+      }
+
+      .map-marker.risk {
+        top: 70%;
+        left: 58%;
+        background: var(--brass);
+        box-shadow: 0 0 0 6px rgba(177, 138, 85, 0.18);
+      }
+
+      .stat-list {
+        display: grid;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .stat-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 8px 10px;
+        border-radius: 10px;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.8);
+        font-size: 0.9rem;
+      }
+
+      .stat-label {
+        color: var(--muted);
+      }
+
+      .stat-value {
+        color: var(--navy);
+        font-weight: 600;
+      }
+
+      .ui-layout {
+        border: 1px dashed rgba(29, 26, 22, 0.35);
+        border-radius: 18px;
+        padding: 16px;
+        background: rgba(255, 255, 255, 0.72);
+      }
+
+      .ui-frame {
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        border: 1px solid var(--stroke);
+        border-radius: 14px;
+        overflow: hidden;
+      }
+
+      .ui-top,
+      .ui-bottom {
+        padding: 10px 14px;
+        background: rgba(27, 43, 58, 0.08);
+        font-size: 0.85rem;
+      }
+
+      .ui-body {
+        display: grid;
+        grid-template-columns: 1fr 2.3fr 1fr;
+        min-height: 200px;
+      }
+
+      .ui-panel {
+        padding: 12px;
+        border-right: 1px solid var(--stroke);
+        font-size: 0.85rem;
+      }
+
+      .ui-panel:last-child {
+        border-right: none;
+        border-left: 1px solid var(--stroke);
+      }
+
+      .ui-center {
+        display: grid;
+        place-items: center;
+        background: radial-gradient(circle at 50% 45%, rgba(27, 43, 58, 0.15), transparent 60%);
+        color: var(--muted);
+        font-size: 0.9rem;
+        gap: 8px;
+      }
+
+      .timeline {
+        position: relative;
+        display: grid;
+        gap: 16px;
+        margin-top: 12px;
+        padding-left: 8px;
+      }
+
+      .timeline::before {
+        content: "";
+        position: absolute;
+        left: 7px;
+        top: 4px;
+        bottom: 4px;
+        width: 2px;
+        background: rgba(27, 43, 58, 0.2);
+      }
+
+      .timeline-item {
+        position: relative;
+        padding-left: 26px;
+      }
+
+      .timeline-dot {
+        position: absolute;
+        left: -1px;
+        top: 6px;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--brass);
+        box-shadow: 0 0 0 6px rgba(177, 138, 85, 0.2);
+      }
+
+      .timeline-card {
+        background: rgba(255, 255, 255, 0.85);
+        border: 1px solid var(--stroke);
+        border-radius: 12px;
+        padding: 10px 12px;
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      .warning-grid {
+        display: grid;
+        gap: 12px;
+        margin-top: 12px;
+      }
+
+      .warning-card {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 10px;
+        align-items: center;
+        padding: 12px;
+        border-radius: 14px;
+        border: 1px solid var(--stroke);
+        background: rgba(200, 107, 60, 0.12);
+      }
+
+      .warning-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--copper);
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.95rem;
+      }
+
+      .planet-gallery {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        margin-top: 12px;
+      }
+
+      .planet-card {
+        display: grid;
+        gap: 8px;
+        padding: 12px;
+        border-radius: 14px;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.85);
+        text-align: center;
+      }
+
+      .planet-card .seed-button {
+        width: 100%;
+      }
+
+      .planet-note {
+        margin: 0;
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+
+      .seed-tag {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+      }
+
+      .planet-meta {
+        display: grid;
+        gap: 4px;
+        margin-top: 6px;
+        text-align: left;
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+
+      .meta-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .meta-value {
+        color: var(--navy);
+        font-weight: 600;
+      }
+
+      .planet-mini {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        margin: 0 auto;
+        border: 2px solid rgba(29, 26, 22, 0.25);
+        box-shadow: inset 0 0 18px rgba(29, 26, 22, 0.2);
+      }
+
+      .planet-mini.desert {
+        background: radial-gradient(circle at 30% 30%, #fff2d2, #d4a56b);
+      }
+
+      .planet-mini.ocean {
+        background: radial-gradient(circle at 30% 30%, #d1f1ff, #3a6c89);
+      }
+
+      .planet-mini.ice {
+        background: radial-gradient(circle at 30% 30%, #f5fbff, #9db6cc);
+      }
+
+      .planet-mini.ember {
+        background: radial-gradient(circle at 30% 30%, #ffe0c2, #b04d2a);
+      }
+
+      .planet-mini.forest {
+        background: radial-gradient(circle at 30% 30%, #e2f8dd, #3f6f4a);
+      }
+
+      .planet-mini.metal {
+        background: radial-gradient(circle at 30% 30%, #f0f0f0, #6b7783);
+      }
+
+      .seed-form {
+        display: grid;
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      .seed-input {
+        width: 100%;
+        padding: 8px 10px;
+        border-radius: 10px;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.9);
+        font-size: 0.95rem;
+        font-family: inherit;
+      }
+
+      .seed-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .seed-button {
+        border: 1px solid var(--navy);
+        background: var(--navy);
+        color: #fff;
+        padding: 8px 12px;
+        border-radius: 10px;
+        font-size: 0.85rem;
+        cursor: pointer;
+      }
+
+      .seed-button.secondary {
+        background: rgba(27, 43, 58, 0.08);
+        color: var(--navy);
+        border-color: var(--stroke);
+      }
+
+      .seed-output {
+        display: grid;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .seed-feedback {
+        margin: 0;
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+
+      .seed-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 8px 10px;
+        border-radius: 10px;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.85);
+        font-size: 0.85rem;
+      }
+
+      .seed-row strong {
+        color: var(--navy);
+      }
+
+      .archive-list {
+        display: grid;
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      .archive-item {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: minmax(0, 1fr) auto;
+        padding: 12px;
+        border-radius: 12px;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.85);
+      }
+
+      .archive-item.is-favorite {
+        border-color: rgba(177, 138, 85, 0.6);
+        box-shadow: 0 10px 18px rgba(177, 138, 85, 0.2);
+      }
+
+      .archive-seed {
+        font-family: "Cinzel", serif;
+        font-size: 1rem;
+      }
+
+      .archive-badge {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      .archive-item.is-favorite .archive-badge {
+        color: var(--brass);
+      }
+
+      .archive-meta {
+        font-size: 0.78rem;
+        color: var(--muted);
+        margin-top: 6px;
+      }
+
+      .archive-actions {
+        display: grid;
+        gap: 6px;
+      }
+
+      .archive-actions .seed-button {
+        padding: 6px 10px;
+        font-size: 0.78rem;
+      }
+
+      .favorite-toggle.is-favorite {
+        background: var(--brass);
+        border-color: var(--brass);
+        color: #fff;
+      }
+
+      .archive-empty {
+        margin-top: 12px;
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+
+      .challenge-grid {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        margin-top: 12px;
+      }
+
+      .challenge-card {
+        padding: 12px;
+        border-radius: 14px;
+        border: 1px solid var(--stroke);
+        background: rgba(27, 43, 58, 0.06);
+      }
+
+      .idea-grid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+
+      .idea-card {
+        padding: 16px;
+        border-radius: 16px;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.88);
+        box-shadow: var(--shadow-soft);
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 960px) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+        .sector-panel {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 760px) {
+        .ui-body {
+          grid-template-columns: 1fr;
+        }
+        .ui-panel {
+          border-right: none;
+          border-bottom: 1px solid var(--stroke);
+        }
+        .ui-panel:last-child {
+          border-left: none;
+        }
+        .archive-item {
+          grid-template-columns: 1fr;
+        }
+        .archive-actions {
+          grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        section {
+          animation: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="hero">
+        <div class="hero-text">
+          <p class="eyebrow">Anno-inspirierte Planetensimulation</p>
+          <h1>Planet Sandbox: Siedeln, Handeln, Terraformen</h1>
+          <p class="lead">
+            Ein Siedlungs- und Wirtschaftsspiel, das die klare Lesbarkeit und Tiefe von Anno
+            auf einen lebendigen Planeten &uuml;bertr&auml;gt. Statt Inseln gibt es Sektoren
+            auf einer Kugel, statt Schiffsrouten Orbit-Lanes - der Kern bleibt: elegante
+            Produktionsketten, zufriedene Bewohner, sichtbare Konsequenzen.
+          </p>
+          <div class="badge-row">
+            <span class="badge">Zielgruppe: 12+</span>
+            <span class="badge">Fokus: Aufbau + Simulation</span>
+            <span class="badge">Stil: spielerisch plausibel</span>
+            <span class="badge">Engine: Unity / Godot / Unreal</span>
+          </div>
+          <div class="callout">
+            <strong>Anno-DNA:</strong> Warenketten, Bedarfe, Handel und klares Feedback -
+            nur planetar gedacht.
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="planet-diorama" aria-hidden="true">
+            <div class="orbit orbit-one"></div>
+            <div class="orbit orbit-two"></div>
+            <div class="orbit orbit-three"></div>
+            <div class="ring"></div>
+            <div class="planet"></div>
+            <div class="colony-dot"></div>
+            <div class="colony-dot second"></div>
+            <div class="colony-dot third"></div>
+          </div>
+          <div class="legend">Sektoren, Orbit-Lanes, Klima-Overlay</div>
+        </div>
+      </header>
+
+      <section>
+        <h2>Kolonie-Status</h2>
+        <p class="lead">Die Anno-typische Statusleiste als schneller &Uuml;berblick.</p>
+        <div class="kpi-grid">
+          <div class="kpi-card" style="--value: 72%;">
+            <div class="kpi-title">Bev&ouml;lkerung</div>
+            <div class="kpi-value">128k</div>
+            <div class="kpi-sub">Stufe: Kolonisten</div>
+            <div class="kpi-meter"><span></span></div>
+          </div>
+          <div class="kpi-card" style="--value: 84%;">
+            <div class="kpi-title">Versorgung</div>
+            <div class="kpi-value">84%</div>
+            <div class="kpi-sub">Engpass: Verbundmaterial</div>
+            <div class="kpi-meter"><span></span></div>
+          </div>
+          <div class="kpi-card" style="--value: 71%;">
+            <div class="kpi-title">Zufriedenheit</div>
+            <div class="kpi-value">71%</div>
+            <div class="kpi-sub">Steuern stabil</div>
+            <div class="kpi-meter"><span></span></div>
+          </div>
+          <div class="kpi-card" style="--value: 32%;">
+            <div class="kpi-title">Emissionen</div>
+            <div class="kpi-value">32%</div>
+            <div class="kpi-sub">Limit: 60%</div>
+            <div class="kpi-meter"><span></span></div>
+          </div>
+          <div class="kpi-card" style="--value: 55%;">
+            <div class="kpi-title">Energie</div>
+            <div class="kpi-value">55%</div>
+            <div class="kpi-sub">Puffer: 2 Tage</div>
+            <div class="kpi-meter"><span></span></div>
+          </div>
+          <div class="kpi-card" style="--value: 90%;">
+            <div class="kpi-title">Wasser</div>
+            <div class="kpi-value">90%</div>
+            <div class="kpi-sub">Reservoir stabil</div>
+            <div class="kpi-meter"><span></span></div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Ansichten &amp; Ebenen</h2>
+        <p class="lead">
+          Wechsel zwischen Planet, Sektor und Handel - jede Ebene zeigt nur die Infos,
+          die du f&uuml;r Entscheidungen brauchst.
+        </p>
+        <div class="tabs">
+          <div class="tablist" role="tablist" aria-label="Ansichten">
+            <button
+              id="tab-planet"
+              class="tab-button"
+              role="tab"
+              aria-selected="true"
+              aria-controls="panel-planet"
+              tabindex="0"
+            >
+              Planet
+            </button>
+            <button
+              id="tab-sektor"
+              class="tab-button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="panel-sektor"
+              tabindex="-1"
+            >
+              Sektor
+            </button>
+            <button
+              id="tab-handel"
+              class="tab-button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="panel-handel"
+              tabindex="-1"
+            >
+              Handel
+            </button>
+          </div>
+          <div id="panel-planet" class="tab-panel" role="tabpanel" aria-labelledby="tab-planet">
+            <div class="grid-2">
+              <div class="card">
+                <h3>Planetare Ebene</h3>
+                <p class="lead">
+                  Globale Parameter wie Sonnenintensit&auml;t, Atmosph&auml;re und Magnetfeld
+                  werden hier gesteuert. Sektoren sind als farbige Zonen markiert.
+                </p>
+                <div class="chip-row">
+                  <span class="chip">Temperatur</span>
+                  <span class="chip">Druck</span>
+                  <span class="chip">Biome</span>
+                  <span class="chip">Orbit</span>
+                </div>
+              </div>
+              <div class="card">
+                <h3>Klima-Overlays</h3>
+                <ul>
+                  <li>Heatmap f&uuml;r Temperatur, Feuchte und St&uuml;rme.</li>
+                  <li>Emissionswolken zeigen Industrie-Belastung.</li>
+                  <li>Terraforming-Korridore markieren aktive Eingriffe.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div
+            id="panel-sektor"
+            class="tab-panel"
+            role="tabpanel"
+            aria-labelledby="tab-sektor"
+            hidden
+          >
+            <div class="grid-2">
+              <div class="card">
+                <h3>Sektor-Analyse</h3>
+                <p class="lead">
+                  Lokale Planung wie in Anno: Baufl&auml;chen, Ressourcen, Risiko und
+                  Versorgung sind auf einen Blick sichtbar.
+                </p>
+                <div class="sector-map" aria-hidden="true">
+                  <span class="map-marker ore"></span>
+                  <span class="map-marker water"></span>
+                  <span class="map-marker risk"></span>
+                </div>
+                <div class="legend">Erz, Wasser, Risiko-Hotspots</div>
+              </div>
+              <div class="card">
+                <h3>Detailpanel</h3>
+                <div class="stat-list">
+                  <div class="stat-row"><span class="stat-label">Klima</span><span class="stat-value">Mild / 18C</span></div>
+                  <div class="stat-row"><span class="stat-label">Boden</span><span class="stat-value">Basalt + Lehm</span></div>
+                  <div class="stat-row"><span class="stat-label">Risiko</span><span class="stat-value">Staubsturm 12%</span></div>
+                  <div class="stat-row"><span class="stat-label">Kapazit&auml;t</span><span class="stat-value">+2200 Wohnraum</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            id="panel-handel"
+            class="tab-panel"
+            role="tabpanel"
+            aria-labelledby="tab-handel"
+            hidden
+          >
+            <div class="grid-2">
+              <div class="card">
+                <h3>Orbit-Lanes</h3>
+                <p class="lead">
+                  Routen verbinden Sektoren und orbitale Hubs. Distanz, Wetter und
+                  Gravitation beeinflussen die Laufzeit.
+                </p>
+                <div class="route-list">
+                  <div class="route">Nordkuppe 07 &rarr; Orbit-Hub A <span>8d / 120t</span></div>
+                  <div class="route">S&uuml;dg&uuml;rtel 02 &rarr; Raffinerie 4 <span>5d / 80t</span></div>
+                  <div class="route">Ozeanring &rarr; Terra-Knoten <span>6d / 95t</span></div>
+                </div>
+              </div>
+              <div class="card">
+                <h3>Handelsknoten</h3>
+                <ul>
+                  <li>Orbit-Hubs speichern Reserveg&uuml;ter und puffern Krisen.</li>
+                  <li>Schiffe lassen sich nach Bedarf priorisieren.</li>
+                  <li>Frachtkapazit&auml;t beeinflusst Aufstiegsrate.</li>
+                </ul>
+                <div class="chip-row">
+                  <span class="chip">Fracht</span>
+                  <span class="chip">Routen</span>
+                  <span class="chip">Subvention</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Wie Anno auf einen Planeten &uuml;bersetzt wird</h2>
+        <div class="grid-3">
+          <div class="card">
+            <h3>Inseln -&gt; Sektoren</h3>
+            <p class="lead">
+              Jeder Sektor hat eigenes Klima, Boden und Ressourcen - wie eine Insel mit
+              klarem Profil.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Handel -&gt; Orbit-Lanes</h3>
+            <p class="lead">
+              Handelsrouten verlaufen als Orbit-Lanes zwischen Sektoren und orbitalen
+              Knotenpunkten.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Warenketten -&gt; Terraforming</h3>
+            <p class="lead">
+              Klassische Ketten werden mit planetaren Systemen verkn&uuml;pft: Wasser,
+              Sauerstoff und Energie sind Basiswaren.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Bewohnerstufen</h3>
+            <p class="lead">
+              Pioniere, Kolonisten, Ingenieure, Terraformer - jede Stufe hebt die
+              planetare Stabilit&auml;t.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Politik &amp; Einfluss</h3>
+            <p class="lead">
+              Planetarer Rat, Umweltabgaben und Forschungsquoten ersetzen klassische Steuern.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Kern-Loop &amp; Progression</h2>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <strong>Sektoren scannen</strong>
+            <p class="lead">Gebiete mit Ressourcen, Klima und Gefahren identifizieren.</p>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <strong>Siedlungen gr&uuml;nden</strong>
+            <p class="lead">Grundversorgung sichern: Wasser, Energie, Nahrung.</p>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <strong>Warenketten bauen</strong>
+            <p class="lead">Produktionen verzahnen und St&ouml;rungen stabilisieren.</p>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <strong>Orbit handeln</strong>
+            <p class="lead">Routen optimieren, neue Sektoren anbinden, Upgrades finanzieren.</p>
+          </div>
+          <div class="step">
+            <div class="step-num">5</div>
+            <strong>Stufen aufsteigen</strong>
+            <p class="lead">Bessere Infrastruktur schaltet Tools und Terraforming frei.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Warenketten &amp; Gesellschaft</h2>
+        <p class="lead">
+          Klicke auf einen Knoten, um Unterketten, Effekte und Engp&auml;sse sichtbar zu
+          machen. Jede Stufe verr&auml;t dir, wo Optimierung am meisten bringt.
+        </p>
+        <div class="chain-legend">
+          <span><span class="legend-dot good"></span>Stabil</span>
+          <span><span class="legend-dot warn"></span>Knapp</span>
+          <span><span class="legend-dot bad"></span>Engpass</span>
+        </div>
+        <div class="grid-2">
+          <div class="card" data-chain-card>
+            <h3>Warenkette: Lebenserhalt</h3>
+            <p class="lead">Grundversorgung f&uuml;r die erste Bev&ouml;lkerungsstufe.</p>
+            <div class="chain-map" role="list">
+              <button
+                class="chain-node"
+                type="button"
+                aria-expanded="true"
+                aria-controls="life-ice"
+                data-tooltip="Rohstoffquelle"
+                data-status="good"
+              >
+                Eisfelder <span class="node-tag">Rohstoff</span>
+                <span class="node-indicator" aria-hidden="true"></span>
+              </button>
+              <span class="chain-link">-&gt;</span>
+              <button
+                class="chain-node"
+                type="button"
+                aria-expanded="false"
+                aria-controls="life-waterworks"
+                data-tooltip="Verarbeitung"
+                data-status="warn"
+              >
+                Wasserwerke <span class="node-tag">Veredelung</span>
+                <span class="node-indicator" aria-hidden="true"></span>
+              </button>
+              <span class="chain-link">-&gt;</span>
+              <button
+                class="chain-node"
+                type="button"
+                aria-expanded="false"
+                aria-controls="life-hydro"
+                data-tooltip="Produktion"
+                data-status="good"
+              >
+                Hydroponik <span class="node-tag">Produktion</span>
+                <span class="node-indicator" aria-hidden="true"></span>
+              </button>
+              <span class="chain-link">-&gt;</span>
+              <button
+                class="chain-node"
+                type="button"
+                aria-expanded="false"
+                aria-controls="life-food"
+                data-tooltip="Endprodukt"
+                data-status="bad"
+              >
+                Nahrung <span class="node-tag">Gut</span>
+                <span class="node-indicator" aria-hidden="true"></span>
+              </button>
+              <span class="chain-link">-&gt;</span>
+              <button
+                class="chain-node"
+                type="button"
+                aria-expanded="false"
+                aria-controls="life-pioneers"
+                data-tooltip="Bev&ouml;lkerung"
+                data-status="warn"
+              >
+                Pioniere <span class="node-tag">Stufe 1</span>
+                <span class="node-indicator" aria-hidden="true"></span>
+              </button>
+            </div>
+            <div class="subchain-group">
+              <div id="life-ice" class="subchain is-open" role="region" aria-label="Eisfelder">
+                <h4>Eisfelder</h4>
+                <div class="subchain-grid">
+                  <div class="subchain-row">
+                    <span class="subchain-label">Input</span>
+                    <span class="subchain-value">Energie</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Output</span>
+                    <span class="subchain-value">Schmelzwasser</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Effekt</span>
+                    <span class="subchain-value">+15% in Kaltsektoren</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Engpass</span>
+                    <span class="subchain-value good">Keiner</span>
+                  </div>
+                </div>
+              </div>
+              <div id="life-waterworks" class="subchain" role="region" aria-label="Wasserwerke">
+                <h4>Wasserwerke</h4>
+                <div class="subchain-grid">
+                  <div class="subchain-row">
+                    <span class="subchain-label">Input</span>
+                    <span class="subchain-value">Eis</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Output</span>
+                    <span class="subchain-value">Trinkwasser</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Effekt</span>
+                    <span class="subchain-value">Puffer +2 Tage</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Engpass</span>
+                    <span class="subchain-value warn">Filterleistung</span>
+                  </div>
+                </div>
+              </div>
+              <div id="life-hydro" class="subchain" role="region" aria-label="Hydroponik">
+                <h4>Hydroponik</h4>
+                <div class="subchain-grid">
+                  <div class="subchain-row">
+                    <span class="subchain-label">Input</span>
+                    <span class="subchain-value">Wasser, Energie</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Output</span>
+                    <span class="subchain-value">Nahrung</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Effekt</span>
+                    <span class="subchain-value">+10% in milden Sektoren</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Engpass</span>
+                    <span class="subchain-value good">Keiner</span>
+                  </div>
+                </div>
+              </div>
+              <div id="life-food" class="subchain" role="region" aria-label="Nahrung">
+                <h4>Nahrung</h4>
+                <div class="subchain-grid">
+                  <div class="subchain-row">
+                    <span class="subchain-label">Input</span>
+                    <span class="subchain-value">Hydroponik</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Output</span>
+                    <span class="subchain-value">Versorgung</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Bedarf</span>
+                    <span class="subchain-value">1 Nahrung / Haushalt</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Engpass</span>
+                    <span class="subchain-value bad">Lager leer</span>
+                  </div>
+                </div>
+              </div>
+              <div id="life-pioneers" class="subchain" role="region" aria-label="Pioniere">
+                <h4>Pioniere</h4>
+                <div class="subchain-grid">
+                  <div class="subchain-row">
+                    <span class="subchain-label">Input</span>
+                    <span class="subchain-value">Nahrung, Wasser</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Output</span>
+                    <span class="subchain-value">Bev&ouml;lkerungswachstum</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Effekt</span>
+                    <span class="subchain-value">Wachstum ab 60% Zufriedenheit</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Engpass</span>
+                    <span class="subchain-value warn">Bedarf steigt</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card" data-chain-card>
+            <h3>Warenkette: Industriegut</h3>
+            <p class="lead">F&uuml;r Aufstieg zu Ingenieuren und orbitalen Modulen.</p>
+            <div class="chain-map" role="list">
+              <button
+                class="chain-node"
+                type="button"
+                aria-expanded="true"
+                aria-controls="ind-regolith"
+                data-tooltip="Rohstoffquelle"
+                data-status="good"
+              >
+                Regolith <span class="node-tag">Rohstoff</span>
+                <span class="node-indicator" aria-hidden="true"></span>
+              </button>
+              <span class="chain-link">-&gt;</span>
+              <button
+                class="chain-node"
+                type="button"
+                aria-expanded="false"
+                aria-controls="ind-refinery"
+                data-tooltip="Verarbeitung"
+                data-status="bad"
+              >
+                Erzraffinerie <span class="node-tag">Veredelung</span>
+                <span class="node-indicator" aria-hidden="true"></span>
+              </button>
+              <span class="chain-link">-&gt;</span>
+              <button
+                class="chain-node"
+                type="button"
+                aria-expanded="false"
+                aria-controls="ind-metal"
+                data-tooltip="Halbfertig"
+                data-status="warn"
+              >
+                Metall <span class="node-tag">Bauteil</span>
+                <span class="node-indicator" aria-hidden="true"></span>
+              </button>
+              <span class="chain-link">-&gt;</span>
+              <button
+                class="chain-node"
+                type="button"
+                aria-expanded="false"
+                aria-controls="ind-yard"
+                data-tooltip="Produktion"
+                data-status="good"
+              >
+                Werft <span class="node-tag">Fertigung</span>
+                <span class="node-indicator" aria-hidden="true"></span>
+              </button>
+              <span class="chain-link">-&gt;</span>
+              <button
+                class="chain-node"
+                type="button"
+                aria-expanded="false"
+                aria-controls="ind-freighter"
+                data-tooltip="Logistik"
+                data-status="warn"
+              >
+                Frachter <span class="node-tag">Transport</span>
+                <span class="node-indicator" aria-hidden="true"></span>
+              </button>
+            </div>
+            <div class="subchain-group">
+              <div id="ind-regolith" class="subchain is-open" role="region" aria-label="Regolith">
+                <h4>Regolith</h4>
+                <div class="subchain-grid">
+                  <div class="subchain-row">
+                    <span class="subchain-label">Input</span>
+                    <span class="subchain-value">Energie</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Output</span>
+                    <span class="subchain-value">Erz</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Effekt</span>
+                    <span class="subchain-value">+20% an Gebirgszonen</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Engpass</span>
+                    <span class="subchain-value good">Keiner</span>
+                  </div>
+                </div>
+              </div>
+              <div id="ind-refinery" class="subchain" role="region" aria-label="Erzraffinerie">
+                <h4>Erzraffinerie</h4>
+                <div class="subchain-grid">
+                  <div class="subchain-row">
+                    <span class="subchain-label">Input</span>
+                    <span class="subchain-value">Erz, Energie</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Output</span>
+                    <span class="subchain-value">Metallbarren</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Effekt</span>
+                    <span class="subchain-value">Emissionen +8%</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Engpass</span>
+                    <span class="subchain-value bad">Energie fehlt</span>
+                  </div>
+                </div>
+              </div>
+              <div id="ind-metal" class="subchain" role="region" aria-label="Metall">
+                <h4>Metall</h4>
+                <div class="subchain-grid">
+                  <div class="subchain-row">
+                    <span class="subchain-label">Input</span>
+                    <span class="subchain-value">Barren</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Output</span>
+                    <span class="subchain-value">Bauteile</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Effekt</span>
+                    <span class="subchain-value">Druckbonus +5%</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Engpass</span>
+                    <span class="subchain-value warn">Barren knapp</span>
+                  </div>
+                </div>
+              </div>
+              <div id="ind-yard" class="subchain" role="region" aria-label="Werft">
+                <h4>Werft</h4>
+                <div class="subchain-grid">
+                  <div class="subchain-row">
+                    <span class="subchain-label">Input</span>
+                    <span class="subchain-value">Metall, Energie</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Output</span>
+                    <span class="subchain-value">Frachter</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Effekt</span>
+                    <span class="subchain-value">Bauzeit 3 Tage</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Engpass</span>
+                    <span class="subchain-value good">Keiner</span>
+                  </div>
+                </div>
+              </div>
+              <div id="ind-freighter" class="subchain" role="region" aria-label="Frachter">
+                <h4>Frachter</h4>
+                <div class="subchain-grid">
+                  <div class="subchain-row">
+                    <span class="subchain-label">Input</span>
+                    <span class="subchain-value">Treibstoff</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Output</span>
+                    <span class="subchain-value">Transportkapazit&auml;t</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Effekt</span>
+                    <span class="subchain-value">+120t pro Route</span>
+                  </div>
+                  <div class="subchain-row">
+                    <span class="subchain-label">Engpass</span>
+                    <span class="subchain-value warn">Treibstoff knapp</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="margin-top: 20px;">
+          <h3>Bev&ouml;lkerungsstufen</h3>
+          <p class="lead">Neue Stufen erweitern Bedarfe und geben Simulationstools frei.</p>
+          <div class="tier-grid">
+            <div class="tier">
+              <span>Pioniere</span>
+              Wasser, Nahrung, Schutzkuppeln
+            </div>
+            <div class="tier">
+              <span>Kolonisten</span>
+              Stromnetz, Bildung, Grundkomfort
+            </div>
+            <div class="tier">
+              <span>Ingenieure</span>
+              Forschung, Versorgungsketten, Orbitalhafen
+            </div>
+            <div class="tier">
+              <span>Terraformer</span>
+              Atmosph&auml;re, Biome, Klima-Module
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Sektor-Detailpanel</h2>
+        <div class="card sector-panel">
+          <div>
+            <h3>Nordkuppe 07</h3>
+            <p class="lead">
+              Polarer Sektor mit Eisfeldern und seltenen Erzen. Gute Wasserlage, aber
+              regelm&auml;&szlig;ige St&uuml;rme.
+            </p>
+            <div class="stat-list">
+              <div class="stat-row"><span class="stat-label">Ressourcen</span><span class="stat-value">Eis, Erz, Gas</span></div>
+              <div class="stat-row"><span class="stat-label">Wetterlage</span><span class="stat-value">Sturm / 4d</span></div>
+              <div class="stat-row"><span class="stat-label">Industrie</span><span class="stat-value">+18% Output</span></div>
+              <div class="stat-row"><span class="stat-label">Wohnraum</span><span class="stat-value">+2.200</span></div>
+            </div>
+          </div>
+          <div>
+            <div class="sector-map" aria-hidden="true">
+              <span class="map-marker ore"></span>
+              <span class="map-marker water"></span>
+              <span class="map-marker risk"></span>
+            </div>
+            <div class="legend">Ressourcen, Risiko, Infrastruktur</div>
+            <div class="chip-row">
+              <span class="chip">Baufl&auml;che 62%</span>
+              <span class="chip">Energie +15%</span>
+              <span class="chip">Sturmzone</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>UI/UX Mockup</h2>
+        <div class="ui-layout">
+          <div class="ui-frame">
+            <div class="ui-top">Planet-Ansicht | Sektor-Ansicht | Handelsnetz</div>
+            <div class="ui-body">
+              <div class="ui-panel">
+                <strong>Tools</strong>
+                <div class="chip-row">
+                  <span class="chip">Siedlung</span>
+                  <span class="chip">Ketten</span>
+                  <span class="chip">Terraforming</span>
+                  <span class="chip">Ereignisse</span>
+                </div>
+              </div>
+              <div class="ui-center">
+                <div class="planet"></div>
+                <div>3D-Planet + Sektor-Overlay</div>
+              </div>
+              <div class="ui-panel">
+                <strong>Status</strong>
+                <ul>
+                  <li>Versorgung</li>
+                  <li>Zufriedenheit</li>
+                  <li>Emissionen</li>
+                  <li>Handelsrouten</li>
+                </ul>
+              </div>
+            </div>
+            <div class="ui-bottom">Pause | 1x | 4x | 10x | Warnungen</div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Planetare Simulation &amp; Systeme</h2>
+        <div class="grid-2">
+          <div class="card">
+            <ul>
+              <li>Atmosph&auml;re, Druck, Temperatur und Jahreszeiten.</li>
+              <li>Hydrologie mit Ozeanen, Niederschlag und Feuchtezonen.</li>
+              <li>Tektonik erzeugt Ressourcen und Risikozonen.</li>
+              <li>Biome wirken auf Ertr&auml;ge und Siedlungsstabilit&auml;t.</li>
+              <li>Ereignisse: Meteor, Supervulkan, Staubsturm.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Simulation trifft Wirtschaft</h3>
+            <ul>
+              <li>Klima beeinflusst Produktionsraten und Versorgung.</li>
+              <li>Emissionen k&ouml;nnen die Temperatur kippen.</li>
+              <li>Orbitale Module stabilisieren Wetter und Logistik.</li>
+              <li>Analyse-Overlays zeigen Engp&auml;sse klar.</li>
+            </ul>
+            <div class="chip-row">
+              <span class="chip">Temperatur</span>
+              <span class="chip">Druck</span>
+              <span class="chip">Biom</span>
+              <span class="chip">Handel</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Tools &amp; Eingriffe</h2>
+        <div class="grid-2">
+          <div class="card">
+            <ul>
+              <li>Terraforming-Pinsel f&uuml;r H&ouml;he, Feuchte, Vegetation.</li>
+              <li>Atmosph&auml;ren-Mixer f&uuml;r O2/CO2/N2.</li>
+              <li>Sonnenintensit&auml;t und Magnetfeld steuern.</li>
+              <li>Zeitraffer und Zeitsprung f&uuml;r Makroplanung.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Anno-typische Limits</h3>
+            <ul>
+              <li>Tools kosten Einfluss oder Ressourcen.</li>
+              <li>Cooldowns erzwingen Planung wie in Anno.</li>
+              <li>Events sind Risiko-Management, kein Reset.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Ereignisse &amp; Warnungen</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Timeline</h3>
+            <div class="timeline">
+              <div class="timeline-item">
+                <span class="timeline-dot"></span>
+                <div class="timeline-card">
+                  <strong>Staubsturm (Nordkuppe)</strong>
+                  <p>Logistik -20% f&uuml;r 4 Tage.</p>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <span class="timeline-dot"></span>
+                <div class="timeline-card">
+                  <strong>Orbit-Fenster offen</strong>
+                  <p>Bonus auf Handel f&uuml;r 2 Tage.</p>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <span class="timeline-dot"></span>
+                <div class="timeline-card">
+                  <strong>Vulkanische Aktivierung</strong>
+                  <p>CO2-Anstieg, neue Erzfelder.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Warnungen</h3>
+            <div class="warning-grid">
+              <div class="warning-card">
+                <div class="warning-icon">!</div>
+                <div>
+                  <strong>Versorgungsl&uuml;cke</strong>
+                  <p>Hydroponik fehlt 12t Wasser.</p>
+                </div>
+              </div>
+              <div class="warning-card">
+                <div class="warning-icon">!</div>
+                <div>
+                  <strong>Emissionslimit</strong>
+                  <p>CO2 n&auml;hert sich 60%.</p>
+                </div>
+              </div>
+              <div class="warning-card">
+                <div class="warning-icon">!</div>
+                <div>
+                  <strong>Routenstau</strong>
+                  <p>Orbit-Lane A &uuml;berlastet.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Planetenarchiv &amp; Seeds</h2>
+        <div class="grid-3">
+          <div class="card">
+            <h3>Seed-Generator</h3>
+            <p class="lead">
+              Jeder Planet entsteht aus einem Seed. Gleicher Seed bedeutet identische
+              Welt, ein neuer Seed erzeugt andere Klima-, Ressourcen- und Risiko-Kombinationen.
+            </p>
+            <div class="seed-form">
+              <label class="seed-tag" for="seed-input">Seed</label>
+              <input
+                id="seed-input"
+                class="seed-input"
+                type="text"
+                value="ORBIT-9A2"
+                autocomplete="off"
+              />
+            <div class="seed-actions">
+              <button class="seed-button" type="button" id="seed-apply">Seed anwenden</button>
+              <button class="seed-button secondary" type="button" id="seed-random">
+                Neu w&uuml;rfeln
+              </button>
+              <button class="seed-button secondary" type="button" id="seed-copy">
+                Link kopieren
+              </button>
+              <button class="seed-button secondary" type="button" id="seed-save">
+                Im Archiv speichern
+              </button>
+            </div>
+            <p class="seed-feedback" id="seed-feedback" role="status"></p>
+          </div>
+          <div class="seed-output">
+            <div class="seed-row"><span>Seed</span><strong data-seed-out="seed"></strong></div>
+            <div class="seed-row"><span>Planetentyp</span><strong data-seed-out="size"></strong></div>
+            <div class="seed-row"><span>Klima</span><strong data-seed-out="climate"></strong></div>
+              <div class="seed-row"><span>Ozeananteil</span><strong data-seed-out="ocean"></strong></div>
+              <div class="seed-row"><span>Schwerkraft</span><strong data-seed-out="gravity"></strong></div>
+              <div class="seed-row"><span>Ressourcen</span><strong data-seed-out="resources"></strong></div>
+              <div class="seed-row"><span>Risiko</span><strong data-seed-out="hazard"></strong></div>
+              <div class="seed-row"><span>Sektoren</span><strong data-seed-out="sectors"></strong></div>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Seed-Archiv</h3>
+            <p class="lead">
+              Favoriten bleiben oben. Lade gespeicherte Seeds, um identische Welten
+              zu rekonstruieren.
+            </p>
+            <div class="seed-actions">
+              <button class="seed-button secondary" type="button" id="seed-clear">
+                Archiv leeren
+              </button>
+            </div>
+            <div class="archive-list" id="seed-archive" aria-live="polite"></div>
+            <p class="archive-empty" id="seed-archive-empty">Noch keine Seeds gespeichert.</p>
+          </div>
+          <div class="card">
+            <h3>Preset-Galerie</h3>
+            <div class="planet-gallery">
+              <div class="planet-card" data-seed="DUNE-3C7" data-seed-bias="ocean-low">
+                <div class="planet-mini desert"></div>
+                <strong>&Ouml;dland</strong>
+                <p class="planet-note">Wenig Wasser, hohe Erze.</p>
+                <div class="seed-tag">Seed: <span data-seed-value></span></div>
+                <div class="planet-meta">
+                  <div class="meta-row"><span>Klima</span><span class="meta-value" data-seed-field="climate"></span></div>
+                  <div class="meta-row"><span>Ozean</span><span class="meta-value" data-seed-field="ocean"></span></div>
+                  <div class="meta-row"><span>Risiko</span><span class="meta-value" data-seed-field="hazard"></span></div>
+                </div>
+                <button class="seed-button secondary" type="button" data-seed-load>
+                  Seed laden
+                </button>
+              </div>
+              <div class="planet-card" data-seed="AQUA-91F" data-seed-bias="ocean-high">
+                <div class="planet-mini ocean"></div>
+                <strong>Wasserwelt</strong>
+                <p class="planet-note">Handel leicht, Land knapp.</p>
+                <div class="seed-tag">Seed: <span data-seed-value></span></div>
+                <div class="planet-meta">
+                  <div class="meta-row"><span>Klima</span><span class="meta-value" data-seed-field="climate"></span></div>
+                  <div class="meta-row"><span>Ozean</span><span class="meta-value" data-seed-field="ocean"></span></div>
+                  <div class="meta-row"><span>Risiko</span><span class="meta-value" data-seed-field="hazard"></span></div>
+                </div>
+                <button class="seed-button secondary" type="button" data-seed-load>
+                  Seed laden
+                </button>
+              </div>
+              <div class="planet-card" data-seed="NIVIS-22A" data-seed-bias="ice">
+                <div class="planet-mini ice"></div>
+                <strong>Eisplanet</strong>
+                <p class="planet-note">K&auml;lte, starke St&uuml;rme.</p>
+                <div class="seed-tag">Seed: <span data-seed-value></span></div>
+                <div class="planet-meta">
+                  <div class="meta-row"><span>Klima</span><span class="meta-value" data-seed-field="climate"></span></div>
+                  <div class="meta-row"><span>Ozean</span><span class="meta-value" data-seed-field="ocean"></span></div>
+                  <div class="meta-row"><span>Risiko</span><span class="meta-value" data-seed-field="hazard"></span></div>
+                </div>
+                <button class="seed-button secondary" type="button" data-seed-load>
+                  Seed laden
+                </button>
+              </div>
+              <div class="planet-card" data-seed="EMBER-7D1" data-seed-bias="ember">
+                <div class="planet-mini ember"></div>
+                <strong>Vulkanwelt</strong>
+                <p class="planet-note">Hohe Energie, riskante Zonen.</p>
+                <div class="seed-tag">Seed: <span data-seed-value></span></div>
+                <div class="planet-meta">
+                  <div class="meta-row"><span>Klima</span><span class="meta-value" data-seed-field="climate"></span></div>
+                  <div class="meta-row"><span>Ozean</span><span class="meta-value" data-seed-field="ocean"></span></div>
+                  <div class="meta-row"><span>Risiko</span><span class="meta-value" data-seed-field="hazard"></span></div>
+                </div>
+                <button class="seed-button secondary" type="button" data-seed-load>
+                  Seed laden
+                </button>
+              </div>
+              <div class="planet-card" data-seed="VERDE-58B" data-seed-bias="lush">
+                <div class="planet-mini forest"></div>
+                <strong>Dschungelwelt</strong>
+                <p class="planet-note">Biomasse stark, Wege schwer.</p>
+                <div class="seed-tag">Seed: <span data-seed-value></span></div>
+                <div class="planet-meta">
+                  <div class="meta-row"><span>Klima</span><span class="meta-value" data-seed-field="climate"></span></div>
+                  <div class="meta-row"><span>Ozean</span><span class="meta-value" data-seed-field="ocean"></span></div>
+                  <div class="meta-row"><span>Risiko</span><span class="meta-value" data-seed-field="hazard"></span></div>
+                </div>
+                <button class="seed-button secondary" type="button" data-seed-load>
+                  Seed laden
+                </button>
+              </div>
+              <div class="planet-card" data-seed="FERRA-4E8" data-seed-bias="metal">
+                <div class="planet-mini metal"></div>
+                <strong>Metallwelt</strong>
+                <p class="planet-note">Erzreich, Industriebonus.</p>
+                <div class="seed-tag">Seed: <span data-seed-value></span></div>
+                <div class="planet-meta">
+                  <div class="meta-row"><span>Klima</span><span class="meta-value" data-seed-field="climate"></span></div>
+                  <div class="meta-row"><span>Ozean</span><span class="meta-value" data-seed-field="ocean"></span></div>
+                  <div class="meta-row"><span>Risiko</span><span class="meta-value" data-seed-field="hazard"></span></div>
+                </div>
+                <button class="seed-button secondary" type="button" data-seed-load>
+                  Seed laden
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Challenges</h3>
+            <div class="challenge-grid">
+              <div class="challenge-card">
+                <strong>Balance</strong>
+                <p>Temperatur 0-30C f&uuml;r 20 Zyklen.</p>
+              </div>
+              <div class="challenge-card">
+                <strong>Blaue Welt</strong>
+                <p>Mindestens 30% Ozeananteil.</p>
+              </div>
+              <div class="challenge-card">
+                <strong>Autarkie</strong>
+                <p>Alle Bedarfe ohne Import decken.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Technische Umsetzung (Prototyp)</h2>
+        <div class="card">
+          <ol>
+            <li>Sektoren-Grid auf Kugel mappen, Ressourcen- und Klima-Layer speichern.</li>
+            <li>Produktionsketten-System mit Input/Output, Lager und Transportzeiten.</li>
+            <li>Orbit-Lanes als Graph mit Kosten, Zeit und Kapazit&auml;t.</li>
+            <li>Simulations-Update f&uuml;r Klima und Biome (vereinfacht).</li>
+            <li>UI mit drei Modi: Planet, Sektor, Handel.</li>
+          </ol>
+        </div>
+      </section>
+
+      <section>
+        <h2>Weitere Ideen (direkt umgesetzt)</h2>
+        <div class="idea-grid">
+          <div class="idea-card">
+            <h3>Ratsbeschl&uuml;sse</h3>
+            <p class="lead">
+              Politische Edikte als tempor&auml;re Buffs/Debuffs, z. B. Subventionen oder
+              Emissionsbremse.
+            </p>
+            <div class="chip-row">
+              <span class="chip">Subvention</span>
+              <span class="chip">Umweltabgabe</span>
+              <span class="chip">Forschung</span>
+            </div>
+          </div>
+          <div class="idea-card">
+            <h3>Orbitale Megaprojekte</h3>
+            <p class="lead">
+              Langzeitprojekte wie Raumhafen, Klima-Spiegel oder Exportturm als Endgame-Ziele.
+            </p>
+            <div class="chip-row">
+              <span class="chip">Raumhafen</span>
+              <span class="chip">Sonnenpiegel</span>
+            </div>
+          </div>
+          <div class="idea-card">
+            <h3>Szenario-Editor</h3>
+            <p class="lead">
+              Eigene Startbedingungen, Ereignisse und Handelsregeln f&uuml;r kreative
+              Herausforderungen.
+            </p>
+            <div class="chip-row">
+              <span class="chip">Preset bauen</span>
+              <span class="chip">Challenge teilen</span>
+            </div>
+          </div>
+          <div class="idea-card">
+            <h3>Fraktionen &amp; Diplomatie</h3>
+            <p class="lead">
+              KI-Fraktionen als Handelspartner oder Rivalen mit eigenen Umweltzielen.
+            </p>
+            <div class="chip-row">
+              <span class="chip">Allianzen</span>
+              <span class="chip">Konflikt</span>
+              <span class="chip">Vertrag</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Risiken &amp; Abgrenzungen</h2>
+        <div class="card">
+          <ul>
+            <li>Keine wissenschaftliche Genauigkeit - Fokus auf Lesbarkeit und Balance.</li>
+            <li>Begrenzte Tiefe bei Physik und Str&ouml;mungsmodellen.</li>
+            <li>Kein Multiplayer im Prototyp.</li>
+            <li>Visualisierung vor Realismus: klare Feedback-Schleifen.</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+    <script>
+      (() => {
+        const setupTabs = () => {
+          const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+          if (!tabs.length) return;
+          const activate = (tab) => {
+            tabs.forEach((btn) => {
+              const isActive = btn === tab;
+              btn.setAttribute("aria-selected", isActive ? "true" : "false");
+              btn.tabIndex = isActive ? 0 : -1;
+              const panelId = btn.getAttribute("aria-controls");
+              const panel = document.getElementById(panelId);
+              if (panel) {
+                panel.hidden = !isActive;
+              }
+            });
+          };
+
+          tabs.forEach((tab, index) => {
+            tab.addEventListener("click", () => activate(tab));
+            tab.addEventListener("keydown", (event) => {
+              if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") {
+                return;
+              }
+              event.preventDefault();
+              const direction = event.key === "ArrowRight" ? 1 : -1;
+              const nextIndex = (index + direction + tabs.length) % tabs.length;
+              tabs[nextIndex].focus();
+              activate(tabs[nextIndex]);
+            });
+          });
+
+          const defaultTab =
+            tabs.find((tab) => tab.getAttribute("aria-selected") === "true") || tabs[0];
+          activate(defaultTab);
+        };
+
+        const setupChains = () => {
+          const chainCards = document.querySelectorAll("[data-chain-card]");
+          chainCards.forEach((card) => {
+            const nodes = Array.from(card.querySelectorAll(".chain-node"));
+            const panels = Array.from(card.querySelectorAll(".subchain"));
+            if (!nodes.length || !panels.length) return;
+
+            const closeAll = () => {
+              nodes.forEach((node) => node.setAttribute("aria-expanded", "false"));
+              panels.forEach((panel) => panel.classList.remove("is-open"));
+            };
+
+            const openNode = (node) => {
+              const panelId = node.getAttribute("aria-controls");
+              const panel = panelId ? card.querySelector(`#${panelId}`) : null;
+              if (!panel) return;
+              node.setAttribute("aria-expanded", "true");
+              panel.classList.add("is-open");
+            };
+
+            nodes.forEach((node) => {
+              node.addEventListener("click", () => {
+                const isOpen = node.getAttribute("aria-expanded") === "true";
+                closeAll();
+                if (!isOpen) {
+                  openNode(node);
+                }
+              });
+            });
+
+            const defaultNode =
+              nodes.find((node) => node.getAttribute("aria-expanded") === "true") || nodes[0];
+            closeAll();
+            if (defaultNode) {
+              openNode(defaultNode);
+            }
+          });
+        };
+
+        const normalizeSeed = (seed) => {
+          if (!seed) return "";
+          return seed.toUpperCase().replace(/[^A-Z0-9-]/g, "").slice(0, 20);
+        };
+
+        const hashSeed = (seed) => {
+          let hash = 2166136261;
+          for (let i = 0; i < seed.length; i += 1) {
+            hash ^= seed.charCodeAt(i);
+            hash = Math.imul(hash, 16777619);
+          }
+          return hash >>> 0;
+        };
+
+        const mulberry32 = (seed) => () => {
+          let t = (seed += 0x6d2b79f5);
+          t = Math.imul(t ^ (t >>> 15), t | 1);
+          t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+
+        const randomSeed = () => {
+          const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+          const digits = "0123456789";
+          const pick = (pool) => pool[Math.floor(Math.random() * pool.length)];
+          return `${pick(letters)}${pick(letters)}${pick(letters)}-${pick(digits)}${pick(
+            letters
+          )}${pick(digits)}`;
+        };
+
+        const generatePlanet = (seed, bias = "") => {
+          const normalized = normalizeSeed(seed) || randomSeed();
+          const rng = mulberry32(hashSeed(normalized));
+          const pick = (items) => items[Math.floor(rng() * items.length)];
+          const sizes = ["Zwerg", "Standard", "Gross", "Super"];
+          const climates = ["Arid", "Temperiert", "Tropisch", "Polar", "Vulkanisch", "Stuermisch"];
+          const hazards = [
+            "Staubsturm",
+            "Meteorschauer",
+            "Magnetsturm",
+            "Ascheregen",
+            "Seismisch",
+            "Irradiert",
+          ];
+          const resources = [
+            "Erzreich",
+            "Gasfelder",
+            "Wasserreich",
+            "Biomasse",
+            "Metalle",
+            "Kristalladern",
+          ];
+
+          let size = pick(sizes);
+          let climate = pick(climates);
+          let hazard = pick(hazards);
+          let resource = pick(resources);
+          let ocean = Math.round(rng() * 70 + 10);
+          let gravity = (0.6 + rng() * 0.8).toFixed(1);
+          let sectors = Math.round(rng() * 12 + 8);
+
+          switch (bias) {
+            case "ocean-high":
+              ocean = Math.round(rng() * 25 + 70);
+              break;
+            case "ocean-low":
+              ocean = Math.round(rng() * 15 + 5);
+              break;
+            case "ice":
+              climate = "Polar";
+              hazard = "Eissturm";
+              break;
+            case "ember":
+              climate = "Vulkanisch";
+              hazard = "Ascheregen";
+              break;
+            case "lush":
+              climate = "Tropisch";
+              resource = "Biomasse";
+              ocean = Math.round(rng() * 30 + 40);
+              break;
+            case "metal":
+              resource = "Erzreich";
+              break;
+            default:
+              break;
+          }
+
+          return {
+            seed: normalized,
+            size,
+            climate,
+            ocean: `${ocean}%`,
+            gravity: `${gravity} g`,
+            hazard,
+            resources: resource,
+            sectors: `${sectors}`,
+          };
+        };
+
+        const copyToClipboard = (text) => {
+          if (navigator.clipboard && window.isSecureContext) {
+            return navigator.clipboard.writeText(text);
+          }
+          return new Promise((resolve, reject) => {
+            const textarea = document.createElement("textarea");
+            textarea.value = text;
+            textarea.setAttribute("readonly", "");
+            textarea.style.position = "fixed";
+            textarea.style.top = "-1000px";
+            textarea.style.opacity = "0";
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+              const success = document.execCommand("copy");
+              document.body.removeChild(textarea);
+              if (success) {
+                resolve();
+              } else {
+                reject(new Error("copy failed"));
+              }
+            } catch (error) {
+              document.body.removeChild(textarea);
+              reject(error);
+            }
+          });
+        };
+
+        const setupSeeds = () => {
+          const seedInput = document.getElementById("seed-input");
+          const seedApply = document.getElementById("seed-apply");
+          const seedRandom = document.getElementById("seed-random");
+          const seedCopy = document.getElementById("seed-copy");
+          const seedSave = document.getElementById("seed-save");
+          const seedClear = document.getElementById("seed-clear");
+          const seedFeedback = document.getElementById("seed-feedback");
+          const seedOutputs = Array.from(document.querySelectorAll("[data-seed-out]"));
+          const archiveContainer = document.getElementById("seed-archive");
+          const archiveEmpty = document.getElementById("seed-archive-empty");
+
+          const storageKey = "planetSeedArchive";
+          const maxArchive = 12;
+          const storageAvailable = (() => {
+            try {
+              const testKey = "__seed_test__";
+              localStorage.setItem(testKey, testKey);
+              localStorage.removeItem(testKey);
+              return true;
+            } catch (error) {
+              return false;
+            }
+          })();
+
+          const loadArchive = () => {
+            if (!storageAvailable) return [];
+            try {
+              const raw = localStorage.getItem(storageKey);
+              const data = raw ? JSON.parse(raw) : [];
+              return Array.isArray(data) ? data : [];
+            } catch (error) {
+              return [];
+            }
+          };
+
+          const saveArchive = (items) => {
+            if (!storageAvailable) return;
+            localStorage.setItem(storageKey, JSON.stringify(items));
+          };
+
+          const sortArchive = (items) =>
+            items
+              .slice()
+              .sort((a, b) => {
+                if (a.favorite !== b.favorite) {
+                  return a.favorite ? -1 : 1;
+                }
+                return (b.lastUsed || 0) - (a.lastUsed || 0);
+              })
+              .slice(0, maxArchive);
+
+          const upsertSeed = (seed) => {
+            if (!storageAvailable) return [];
+            const normalized = normalizeSeed(seed);
+            if (!normalized) return [];
+            const items = loadArchive();
+            const existing = items.find((item) => item.seed === normalized);
+            if (existing) {
+              existing.lastUsed = Date.now();
+            } else {
+              items.push({ seed: normalized, favorite: false, lastUsed: Date.now() });
+            }
+            const sorted = sortArchive(items);
+            saveArchive(sorted);
+            return sorted;
+          };
+
+          const removeSeed = (seed) => {
+            if (!storageAvailable) return [];
+            const normalized = normalizeSeed(seed);
+            const items = loadArchive().filter((item) => item.seed !== normalized);
+            const sorted = sortArchive(items);
+            saveArchive(sorted);
+            return sorted;
+          };
+
+          const toggleFavorite = (seed) => {
+            if (!storageAvailable) return [];
+            const normalized = normalizeSeed(seed);
+            const items = loadArchive();
+            const entry = items.find((item) => item.seed === normalized);
+            if (entry) {
+              entry.favorite = !entry.favorite;
+              entry.lastUsed = Date.now();
+            }
+            const sorted = sortArchive(items);
+            saveArchive(sorted);
+            return sorted;
+          };
+
+          const setFeedback = (message) => {
+            if (seedFeedback) {
+              seedFeedback.textContent = message;
+            }
+          };
+
+          const updateUrl = (seed) => {
+            if (!seed) return;
+            const url = new URL(window.location.href);
+            url.searchParams.set("seed", seed);
+            window.history.replaceState(null, "", url.toString());
+          };
+
+          const buildShareUrl = (seed) => {
+            const url = new URL(window.location.href);
+            url.searchParams.set("seed", seed);
+            return url.toString();
+          };
+
+          const renderSeed = (seed) => {
+            const data = generatePlanet(seed);
+            if (seedInput) {
+              seedInput.value = data.seed;
+            }
+            seedOutputs.forEach((el) => {
+              const key = el.dataset.seedOut;
+              el.textContent = key && data[key] ? data[key] : "";
+            });
+            return data;
+          };
+
+          const renderArchive = () => {
+            if (!archiveContainer || !archiveEmpty) return;
+            if (!storageAvailable) {
+              archiveEmpty.textContent = "Archiv nicht verfuegbar.";
+              archiveEmpty.hidden = false;
+              return;
+            }
+            const items = sortArchive(loadArchive());
+            archiveContainer.innerHTML = "";
+            if (!items.length) {
+              archiveEmpty.hidden = false;
+              return;
+            }
+            archiveEmpty.hidden = true;
+            items.forEach((entry) => {
+              const data = generatePlanet(entry.seed);
+              const item = document.createElement("div");
+              item.className = `archive-item${entry.favorite ? " is-favorite" : ""}`;
+              item.dataset.archiveSeed = entry.seed;
+
+              const info = document.createElement("div");
+              const seedLabel = document.createElement("div");
+              seedLabel.className = "archive-seed";
+              seedLabel.textContent = entry.seed;
+              const badge = document.createElement("div");
+              badge.className = "archive-badge";
+              badge.textContent = entry.favorite ? "Favorit" : "Archiv";
+              const meta = document.createElement("div");
+              meta.className = "archive-meta";
+              meta.textContent = `Klima: ${data.climate} | Ozean: ${data.ocean} | Ressourcen: ${data.resources}`;
+              info.append(seedLabel, badge, meta);
+
+              const actions = document.createElement("div");
+              actions.className = "archive-actions";
+              const loadButton = document.createElement("button");
+              loadButton.type = "button";
+              loadButton.className = "seed-button secondary";
+              loadButton.dataset.archiveAction = "load";
+              loadButton.textContent = "Laden";
+              const favoriteButton = document.createElement("button");
+              favoriteButton.type = "button";
+              favoriteButton.className = "seed-button secondary favorite-toggle";
+              favoriteButton.dataset.archiveAction = "favorite";
+              if (entry.favorite) {
+                favoriteButton.classList.add("is-favorite");
+                favoriteButton.textContent = "Favorit";
+              } else {
+                favoriteButton.textContent = "Fav";
+              }
+              const removeButton = document.createElement("button");
+              removeButton.type = "button";
+              removeButton.className = "seed-button secondary";
+              removeButton.dataset.archiveAction = "remove";
+              removeButton.textContent = "Entfernen";
+              actions.append(loadButton, favoriteButton, removeButton);
+
+              item.append(info, actions);
+              archiveContainer.appendChild(item);
+            });
+          };
+
+          const applySeed = (seed, options = {}) => {
+            const { save = true, feedback = "" } = options;
+            const data = renderSeed(seed);
+            updateUrl(data.seed);
+            if (save) {
+              upsertSeed(data.seed);
+              renderArchive();
+            }
+            if (feedback) {
+              setFeedback(feedback);
+            }
+            return data;
+          };
+
+          if (seedInput && seedOutputs.length) {
+            const urlSeed = new URLSearchParams(window.location.search).get("seed");
+            const initialSeed = urlSeed || seedInput.value;
+            applySeed(initialSeed, { save: false });
+            if (seedApply) {
+              seedApply.addEventListener("click", () =>
+                applySeed(seedInput.value, { save: true, feedback: "Seed angewendet." })
+              );
+            }
+            if (seedRandom) {
+              seedRandom.addEventListener("click", () =>
+                applySeed(randomSeed(), { save: true, feedback: "Neuer Seed gesetzt." })
+              );
+            }
+            if (seedSave) {
+              seedSave.addEventListener("click", () => {
+                const data = renderSeed(seedInput.value);
+                upsertSeed(data.seed);
+                renderArchive();
+                updateUrl(data.seed);
+                setFeedback("Seed gespeichert.");
+              });
+            }
+            if (seedCopy) {
+              seedCopy.addEventListener("click", () => {
+                const data = renderSeed(seedInput.value);
+                const shareUrl = buildShareUrl(data.seed);
+                copyToClipboard(shareUrl)
+                  .then(() => setFeedback("Link kopiert."))
+                  .catch(() => setFeedback("Kopieren fehlgeschlagen."));
+              });
+            }
+            seedInput.addEventListener("keydown", (event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                applySeed(seedInput.value, { save: true, feedback: "Seed angewendet." });
+              }
+            });
+          }
+
+          if (seedClear) {
+            seedClear.addEventListener("click", () => {
+              saveArchive([]);
+              renderArchive();
+              setFeedback("Archiv geleert.");
+            });
+          }
+
+          if (archiveContainer) {
+            archiveContainer.addEventListener("click", (event) => {
+              const button = event.target.closest("button[data-archive-action]");
+              if (!button) return;
+              const item = button.closest("[data-archive-seed]");
+              if (!item) return;
+              const seed = item.dataset.archiveSeed || "";
+              const action = button.dataset.archiveAction;
+              if (action === "load") {
+                applySeed(seed, { save: true, feedback: "Seed geladen." });
+              }
+              if (action === "favorite") {
+                toggleFavorite(seed);
+                renderArchive();
+              }
+              if (action === "remove") {
+                removeSeed(seed);
+                renderArchive();
+              }
+            });
+          }
+
+          const planetCards = Array.from(document.querySelectorAll("[data-seed]"));
+          planetCards.forEach((card) => {
+            const seed = card.dataset.seed || randomSeed();
+            const bias = card.dataset.seedBias || "";
+            const data = generatePlanet(seed, bias);
+            const seedValue = card.querySelector("[data-seed-value]");
+            if (seedValue) {
+              seedValue.textContent = data.seed;
+            }
+            card.querySelectorAll("[data-seed-field]").forEach((el) => {
+              const key = el.dataset.seedField;
+              el.textContent = key && data[key] ? data[key] : "";
+            });
+          });
+
+          const loadButtons = Array.from(document.querySelectorAll("[data-seed-load]"));
+          loadButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+              const card = button.closest("[data-seed]");
+              if (!card) return;
+              const seed = card.dataset.seed || "";
+              if (!seed) return;
+              applySeed(seed, { save: true, feedback: "Seed geladen." });
+            });
+          });
+
+          renderArchive();
+        };
+
+        setupTabs();
+        setupChains();
+        setupSeeds();
+      })();
+    </script>
+  </body>
+</html>
