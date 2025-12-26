@@ -26,6 +26,28 @@
         --stroke: rgba(29, 26, 22, 0.18);
         --shadow: 0 20px 45px rgba(19, 17, 15, 0.18);
         --shadow-soft: 0 12px 25px rgba(19, 17, 15, 0.12);
+        --success: #2f7a4b;
+        --warning: #c58f2a;
+        --danger: #b6422a;
+        --glow: rgba(177, 138, 85, 0.4);
+      }
+
+      [data-theme="dark"] {
+        --paper: #0d1117;
+        --paper-2: #161b22;
+        --ink: #e6edf3;
+        --muted: #8b949e;
+        --navy: #58a6ff;
+        --ocean: #79c0ff;
+        --brass: #d29922;
+        --brass-light: #e3b341;
+        --copper: #f78166;
+        --panel: rgba(22, 27, 34, 0.92);
+        --panel-strong: rgba(22, 27, 34, 0.98);
+        --stroke: rgba(240, 246, 252, 0.1);
+        --shadow: 0 20px 45px rgba(0, 0, 0, 0.4);
+        --shadow-soft: 0 12px 25px rgba(0, 0, 0, 0.3);
+        --glow: rgba(88, 166, 255, 0.3);
       }
 
       * {
@@ -1160,11 +1182,1727 @@
           animation: none;
         }
       }
+
+      /* Theme Toggle */
+      .theme-toggle {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: var(--panel-strong);
+        border: 1px solid var(--stroke);
+        box-shadow: var(--shadow-soft);
+        cursor: pointer;
+        font-size: 0.85rem;
+        color: var(--ink);
+        transition: all 0.3s ease;
+      }
+
+      .theme-toggle:hover {
+        transform: scale(1.05);
+        box-shadow: var(--shadow);
+      }
+
+      .theme-toggle svg {
+        width: 18px;
+        height: 18px;
+        fill: currentColor;
+      }
+
+      /* Floating Navigation */
+      .floating-nav {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        display: flex;
+        gap: 6px;
+        padding: 8px;
+        border-radius: 999px;
+        background: var(--panel-strong);
+        border: 1px solid var(--stroke);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(10px);
+      }
+
+      .floating-nav button {
+        padding: 8px 14px;
+        border-radius: 999px;
+        border: 1px solid transparent;
+        background: transparent;
+        color: var(--muted);
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .floating-nav button:hover,
+      .floating-nav button.active {
+        background: var(--navy);
+        color: #fff;
+        border-color: var(--navy);
+      }
+
+      /* 3D Planet */
+      .planet-3d-container {
+        perspective: 1000px;
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+      }
+
+      .planet-3d {
+        width: 200px;
+        height: 200px;
+        margin: 0 auto;
+        border-radius: 50%;
+        background: 
+          radial-gradient(circle at 25% 25%, rgba(255,255,255,0.5) 0%, transparent 50%),
+          radial-gradient(circle at 30% 30%, #fff5e2 0%, #f1d4a5 30%, #b5905b 70%, #5a4030 100%);
+        box-shadow: 
+          inset -30px -30px 60px rgba(0,0,0,0.4),
+          inset 10px 10px 40px rgba(255,255,255,0.2),
+          0 0 60px rgba(177, 138, 85, 0.3);
+        animation: planetRotate 60s linear infinite;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .planet-3d::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: 
+          repeating-linear-gradient(
+            0deg,
+            transparent 0%,
+            transparent 8%,
+            rgba(139, 90, 43, 0.15) 8%,
+            rgba(139, 90, 43, 0.15) 12%,
+            transparent 12%
+          );
+        animation: planetRotate 120s linear infinite reverse;
+      }
+
+      .planet-3d::after {
+        content: "";
+        position: absolute;
+        top: 20%;
+        left: 15%;
+        width: 25%;
+        height: 20%;
+        background: rgba(35, 75, 92, 0.4);
+        border-radius: 40% 60% 50% 50%;
+        filter: blur(3px);
+      }
+
+      .planet-3d .continent {
+        position: absolute;
+        background: rgba(90, 128, 60, 0.5);
+        border-radius: 40% 60% 50% 70%;
+        filter: blur(2px);
+      }
+
+      .planet-3d .continent:nth-child(1) { top: 35%; left: 50%; width: 30%; height: 25%; }
+      .planet-3d .continent:nth-child(2) { top: 60%; left: 25%; width: 20%; height: 15%; }
+      .planet-3d .continent:nth-child(3) { top: 15%; left: 60%; width: 15%; height: 12%; }
+
+      .planet-3d .clouds {
+        position: absolute;
+        inset: -5%;
+        border-radius: 50%;
+        background: 
+          radial-gradient(ellipse at 20% 30%, rgba(255,255,255,0.4) 0%, transparent 30%),
+          radial-gradient(ellipse at 70% 60%, rgba(255,255,255,0.3) 0%, transparent 25%),
+          radial-gradient(ellipse at 40% 80%, rgba(255,255,255,0.25) 0%, transparent 20%);
+        animation: cloudRotate 45s linear infinite;
+      }
+
+      .planet-atmosphere {
+        position: absolute;
+        inset: -8px;
+        border-radius: 50%;
+        background: radial-gradient(circle, transparent 60%, rgba(135, 206, 235, 0.15) 80%, rgba(135, 206, 235, 0.3) 100%);
+        pointer-events: none;
+      }
+
+      .planet-ring {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 320px;
+        height: 80px;
+        margin-left: -160px;
+        margin-top: -40px;
+        border: 2px solid rgba(177, 138, 85, 0.4);
+        border-radius: 50%;
+        transform: rotateX(75deg) rotateZ(-15deg);
+        box-shadow: 
+          0 0 0 8px rgba(177, 138, 85, 0.1),
+          0 0 0 16px rgba(177, 138, 85, 0.05);
+      }
+
+      .terminator {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: linear-gradient(90deg, rgba(0,0,0,0.5) 0%, transparent 50%, transparent 100%);
+        animation: terminatorMove 30s linear infinite;
+      }
+
+      @keyframes planetRotate {
+        from { transform: rotateY(0deg); }
+        to { transform: rotateY(360deg); }
+      }
+
+      @keyframes cloudRotate {
+        from { transform: rotateZ(0deg); }
+        to { transform: rotateZ(360deg); }
+      }
+
+      @keyframes terminatorMove {
+        from { transform: rotateY(0deg); }
+        to { transform: rotateY(360deg); }
+      }
+
+      /* Research Tree */
+      .research-tree {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        padding: 20px;
+        background: var(--panel);
+        border-radius: 20px;
+        border: 1px solid var(--stroke);
+        overflow-x: auto;
+      }
+
+      .research-tier {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        flex-wrap: wrap;
+      }
+
+      .research-tier-label {
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+        transform: rotate(180deg);
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--muted);
+        padding: 8px 4px;
+        background: rgba(27, 43, 58, 0.08);
+        border-radius: 8px;
+        min-height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .research-node {
+        position: relative;
+        padding: 12px 16px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.9);
+        border: 2px solid var(--stroke);
+        min-width: 140px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .research-node:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-soft);
+      }
+
+      .research-node.unlocked {
+        border-color: var(--success);
+        background: rgba(47, 122, 75, 0.1);
+      }
+
+      .research-node.available {
+        border-color: var(--brass);
+        background: rgba(177, 138, 85, 0.1);
+      }
+
+      .research-node.locked {
+        opacity: 0.5;
+        border-style: dashed;
+      }
+
+      .research-node .node-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--navy);
+        color: #fff;
+        display: grid;
+        place-items: center;
+        font-size: 0.9rem;
+        margin-bottom: 6px;
+      }
+
+      .research-node .node-title {
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: var(--ink);
+      }
+
+      .research-node .node-cost {
+        font-size: 0.75rem;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      .research-node .node-status {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--success);
+        color: #fff;
+        display: grid;
+        place-items: center;
+        font-size: 0.65rem;
+      }
+
+      .research-connector {
+        position: absolute;
+        height: 2px;
+        background: var(--stroke);
+        top: 50%;
+        right: -18px;
+        width: 16px;
+      }
+
+      /* Diplomacy Panel */
+      .diplomacy-grid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      }
+
+      .faction-card {
+        padding: 18px;
+        border-radius: 16px;
+        background: var(--panel);
+        border: 1px solid var(--stroke);
+        box-shadow: var(--shadow-soft);
+      }
+
+      .faction-header {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 14px;
+      }
+
+      .faction-emblem {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        font-size: 1.4rem;
+        color: #fff;
+      }
+
+      .faction-emblem.tech { background: linear-gradient(135deg, #3a7bd5, #00d2ff); }
+      .faction-emblem.eco { background: linear-gradient(135deg, #134e5e, #71b280); }
+      .faction-emblem.corp { background: linear-gradient(135deg, #b8860b, #ffd700); }
+      .faction-emblem.militant { background: linear-gradient(135deg, #8b0000, #dc143c); }
+
+      .faction-info h4 {
+        margin: 0 0 4px;
+        font-size: 1rem;
+      }
+
+      .faction-info span {
+        font-size: 0.8rem;
+        color: var(--muted);
+      }
+
+      .faction-relations {
+        margin: 12px 0;
+      }
+
+      .relation-bar {
+        height: 8px;
+        background: rgba(27, 43, 58, 0.15);
+        border-radius: 999px;
+        overflow: hidden;
+        margin-top: 6px;
+      }
+
+      .relation-fill {
+        height: 100%;
+        border-radius: 999px;
+        transition: width 0.5s ease;
+      }
+
+      .relation-fill.hostile { background: linear-gradient(90deg, var(--danger), #ff6b6b); }
+      .relation-fill.neutral { background: linear-gradient(90deg, var(--warning), #ffd93d); }
+      .relation-fill.friendly { background: linear-gradient(90deg, var(--success), #6bcb77); }
+      .relation-fill.allied { background: linear-gradient(90deg, var(--navy), var(--ocean)); }
+
+      .faction-treaties {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 10px;
+      }
+
+      .treaty-badge {
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 0.72rem;
+        background: rgba(47, 122, 75, 0.15);
+        color: var(--success);
+        border: 1px solid rgba(47, 122, 75, 0.3);
+      }
+
+      .treaty-badge.pending {
+        background: rgba(197, 143, 42, 0.15);
+        color: var(--warning);
+        border-color: rgba(197, 143, 42, 0.3);
+      }
+
+      /* Sankey / Flow Diagram */
+      .flow-diagram {
+        padding: 20px;
+        background: var(--panel);
+        border-radius: 18px;
+        border: 1px solid var(--stroke);
+        overflow-x: auto;
+      }
+
+      .flow-container {
+        display: flex;
+        gap: 40px;
+        align-items: stretch;
+        min-height: 300px;
+        position: relative;
+      }
+
+      .flow-column {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        justify-content: center;
+        min-width: 120px;
+      }
+
+      .flow-node {
+        padding: 10px 14px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid var(--stroke);
+        font-size: 0.85rem;
+        text-align: center;
+        position: relative;
+      }
+
+      .flow-node.source { border-left: 4px solid var(--ocean); }
+      .flow-node.process { border-left: 4px solid var(--brass); }
+      .flow-node.output { border-left: 4px solid var(--success); }
+      .flow-node.consumer { border-left: 4px solid var(--copper); }
+
+      .flow-node .flow-value {
+        font-size: 0.7rem;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      .flow-paths {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: visible;
+      }
+
+      .flow-paths svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+      }
+
+      .flow-path {
+        fill: none;
+        stroke: var(--brass);
+        stroke-width: 2;
+        opacity: 0.4;
+      }
+
+      /* Stats Dashboard */
+      .stats-dashboard {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      }
+
+      .stat-chart {
+        padding: 16px;
+        background: var(--panel);
+        border-radius: 16px;
+        border: 1px solid var(--stroke);
+      }
+
+      .stat-chart h4 {
+        margin: 0 0 12px;
+        font-size: 0.85rem;
+        color: var(--navy);
+      }
+
+      .chart-area {
+        height: 120px;
+        display: flex;
+        align-items: flex-end;
+        gap: 4px;
+        padding: 8px 0;
+        border-bottom: 1px solid var(--stroke);
+      }
+
+      .chart-bar {
+        flex: 1;
+        background: linear-gradient(to top, var(--brass), var(--brass-light));
+        border-radius: 4px 4px 0 0;
+        min-height: 4px;
+        transition: height 0.3s ease;
+        position: relative;
+      }
+
+      .chart-bar:hover {
+        opacity: 0.8;
+      }
+
+      .chart-bar::after {
+        content: attr(data-value);
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.65rem;
+        color: var(--muted);
+        opacity: 0;
+        transition: opacity 0.2s;
+        white-space: nowrap;
+      }
+
+      .chart-bar:hover::after {
+        opacity: 1;
+      }
+
+      .chart-labels {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.7rem;
+        color: var(--muted);
+        margin-top: 6px;
+      }
+
+      .line-chart {
+        height: 120px;
+        position: relative;
+        border-bottom: 1px solid var(--stroke);
+      }
+
+      .line-chart svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      .line-chart .chart-line {
+        fill: none;
+        stroke: var(--ocean);
+        stroke-width: 2;
+      }
+
+      .line-chart .chart-area-fill {
+        fill: url(#chartGradient);
+        opacity: 0.3;
+      }
+
+      /* Biome Gallery */
+      .biome-gallery {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      }
+
+      .biome-card {
+        padding: 16px;
+        border-radius: 16px;
+        border: 1px solid var(--stroke);
+        background: var(--panel);
+        text-align: center;
+        transition: transform 0.2s ease;
+      }
+
+      .biome-card:hover {
+        transform: translateY(-4px);
+      }
+
+      .biome-preview {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        margin: 0 auto 12px;
+        border: 3px solid rgba(255,255,255,0.5);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      }
+
+      .biome-preview.tundra { background: linear-gradient(135deg, #e8f4f8, #a8d8ea, #87ceeb); }
+      .biome-preview.desert { background: linear-gradient(135deg, #ffecd2, #d4a574, #c19a6b); }
+      .biome-preview.ocean { background: linear-gradient(135deg, #667db6, #0082c8, #0052d4); }
+      .biome-preview.jungle { background: linear-gradient(135deg, #56ab2f, #134e5e, #0f4c3a); }
+      .biome-preview.volcanic { background: linear-gradient(135deg, #ed4264, #ff6a00, #cc2b1d); }
+      .biome-preview.plains { background: linear-gradient(135deg, #a8e063, #56ab2f, #78a845); }
+      .biome-preview.mountain { background: linear-gradient(135deg, #757f9a, #d7dde8, #8e9eab); }
+      .biome-preview.swamp { background: linear-gradient(135deg, #134e5e, #3a6073, #2c5530); }
+
+      .biome-card h4 {
+        margin: 0 0 6px;
+        font-size: 0.95rem;
+      }
+
+      .biome-card p {
+        font-size: 0.8rem;
+        color: var(--muted);
+        margin: 0 0 10px;
+      }
+
+      .biome-stats {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        font-size: 0.75rem;
+      }
+
+      .biome-stats span {
+        padding: 3px 8px;
+        border-radius: 999px;
+        background: rgba(27, 43, 58, 0.08);
+      }
+
+      /* Build Editor */
+      .build-editor {
+        display: grid;
+        gap: 20px;
+        grid-template-columns: 200px 1fr;
+      }
+
+      .build-palette {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .build-item {
+        padding: 10px 12px;
+        border-radius: 10px;
+        background: var(--panel);
+        border: 1px solid var(--stroke);
+        cursor: grab;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        font-size: 0.85rem;
+        transition: all 0.2s ease;
+      }
+
+      .build-item:hover {
+        background: rgba(177, 138, 85, 0.15);
+        border-color: var(--brass);
+      }
+
+      .build-item.selected {
+        background: var(--navy);
+        color: #fff;
+        border-color: var(--navy);
+      }
+
+      .build-item .item-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        background: rgba(27, 43, 58, 0.1);
+        display: grid;
+        place-items: center;
+      }
+
+      .build-grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 2px;
+        padding: 16px;
+        background: var(--panel);
+        border-radius: 16px;
+        border: 1px solid var(--stroke);
+        aspect-ratio: 16/10;
+      }
+
+      .build-cell {
+        aspect-ratio: 1;
+        background: rgba(27, 43, 58, 0.05);
+        border: 1px solid rgba(27, 43, 58, 0.1);
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+
+      .build-cell:hover {
+        background: rgba(177, 138, 85, 0.2);
+        border-color: var(--brass);
+      }
+
+      .build-cell.occupied {
+        background: var(--ocean);
+        border-color: var(--navy);
+      }
+
+      .build-cell.radius {
+        background: rgba(47, 122, 75, 0.15);
+        border-color: rgba(47, 122, 75, 0.3);
+      }
+
+      /* Glossary Modal */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .modal-overlay.is-open {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .modal {
+        background: var(--panel-strong);
+        border-radius: 20px;
+        max-width: 600px;
+        width: 90%;
+        max-height: 80vh;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        transform: scale(0.9) translateY(20px);
+        transition: transform 0.3s ease;
+      }
+
+      .modal-overlay.is-open .modal {
+        transform: scale(1) translateY(0);
+      }
+
+      .modal-header {
+        padding: 18px 20px;
+        border-bottom: 1px solid var(--stroke);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .modal-header h3 {
+        margin: 0;
+        font-size: 1.1rem;
+      }
+
+      .modal-close {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(27, 43, 58, 0.1);
+        cursor: pointer;
+        display: grid;
+        place-items: center;
+        font-size: 1.2rem;
+        color: var(--muted);
+        transition: all 0.2s ease;
+      }
+
+      .modal-close:hover {
+        background: var(--danger);
+        color: #fff;
+      }
+
+      .modal-body {
+        padding: 20px;
+        overflow-y: auto;
+        max-height: calc(80vh - 80px);
+      }
+
+      .glossary-search {
+        width: 100%;
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.8);
+        font-size: 0.95rem;
+        margin-bottom: 16px;
+      }
+
+      .glossary-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .glossary-item {
+        padding: 12px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.6);
+        border: 1px solid var(--stroke);
+      }
+
+      .glossary-item dt {
+        font-weight: 600;
+        color: var(--navy);
+        margin-bottom: 4px;
+      }
+
+      .glossary-item dd {
+        margin: 0;
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      /* Achievements */
+      .achievement-grid {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      }
+
+      .achievement-card {
+        padding: 16px;
+        border-radius: 14px;
+        background: var(--panel);
+        border: 1px solid var(--stroke);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .achievement-card.locked {
+        opacity: 0.5;
+        filter: grayscale(0.8);
+      }
+
+      .achievement-card.unlocked {
+        border-color: var(--brass);
+        box-shadow: 0 0 20px rgba(177, 138, 85, 0.2);
+      }
+
+      .achievement-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin: 0 auto 10px;
+        display: grid;
+        place-items: center;
+        font-size: 1.5rem;
+        background: linear-gradient(135deg, var(--brass), var(--copper));
+        color: #fff;
+        box-shadow: 0 4px 12px rgba(177, 138, 85, 0.3);
+      }
+
+      .achievement-card.locked .achievement-icon {
+        background: rgba(27, 43, 58, 0.2);
+        box-shadow: none;
+      }
+
+      .achievement-card h4 {
+        margin: 0 0 6px;
+        font-size: 0.9rem;
+      }
+
+      .achievement-card p {
+        margin: 0;
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+
+      .achievement-rarity {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        padding: 3px 8px;
+        border-radius: 999px;
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .achievement-rarity.common { background: rgba(27, 43, 58, 0.1); color: var(--muted); }
+      .achievement-rarity.rare { background: rgba(88, 166, 255, 0.15); color: var(--navy); }
+      .achievement-rarity.epic { background: rgba(138, 43, 226, 0.15); color: #8a2be2; }
+      .achievement-rarity.legendary { background: rgba(255, 215, 0, 0.2); color: #b8860b; }
+
+      /* Roadmap */
+      .roadmap {
+        position: relative;
+        padding: 20px 0;
+      }
+
+      .roadmap::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: linear-gradient(to bottom, var(--brass), var(--ocean), var(--success));
+        border-radius: 999px;
+        transform: translateX(-50%);
+      }
+
+      .roadmap-phase {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        gap: 20px;
+        align-items: center;
+        margin-bottom: 30px;
+      }
+
+      .roadmap-phase:nth-child(odd) .phase-content { grid-column: 1; text-align: right; }
+      .roadmap-phase:nth-child(odd) .phase-marker { grid-column: 2; }
+      .roadmap-phase:nth-child(odd) .phase-details { grid-column: 3; }
+
+      .roadmap-phase:nth-child(even) .phase-content { grid-column: 3; }
+      .roadmap-phase:nth-child(even) .phase-marker { grid-column: 2; }
+      .roadmap-phase:nth-child(even) .phase-details { grid-column: 1; text-align: right; }
+
+      .phase-marker {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: var(--panel-strong);
+        border: 4px solid var(--brass);
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+        color: var(--navy);
+        z-index: 1;
+      }
+
+      .phase-marker.completed {
+        background: var(--success);
+        border-color: var(--success);
+        color: #fff;
+      }
+
+      .phase-marker.current {
+        background: var(--brass);
+        border-color: var(--brass);
+        color: #fff;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(177, 138, 85, 0.5); }
+        50% { box-shadow: 0 0 0 12px rgba(177, 138, 85, 0); }
+      }
+
+      .phase-content h4 {
+        margin: 0 0 4px;
+        font-size: 1rem;
+      }
+
+      .phase-content span {
+        font-size: 0.8rem;
+        color: var(--muted);
+      }
+
+      .phase-details {
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+
+      .phase-details ul {
+        margin: 0;
+        padding-left: 18px;
+      }
+
+      /* Community Seeds */
+      .community-seeds {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      }
+
+      .community-seed-card {
+        padding: 16px;
+        border-radius: 14px;
+        background: var(--panel);
+        border: 1px solid var(--stroke);
+        position: relative;
+      }
+
+      .seed-author {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .author-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--navy), var(--ocean));
+        color: #fff;
+        display: grid;
+        place-items: center;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+
+      .author-info {
+        flex: 1;
+      }
+
+      .author-info strong {
+        display: block;
+        font-size: 0.85rem;
+      }
+
+      .author-info span {
+        font-size: 0.75rem;
+        color: var(--muted);
+      }
+
+      .seed-difficulty {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+      }
+
+      .seed-difficulty.easy { background: rgba(47, 122, 75, 0.15); color: var(--success); }
+      .seed-difficulty.medium { background: rgba(197, 143, 42, 0.15); color: var(--warning); }
+      .seed-difficulty.hard { background: rgba(182, 66, 42, 0.15); color: var(--danger); }
+      .seed-difficulty.extreme { background: rgba(138, 43, 226, 0.15); color: #8a2be2; }
+
+      .community-seed-card .seed-code {
+        font-family: "Cinzel", serif;
+        font-size: 1.1rem;
+        color: var(--navy);
+        margin-bottom: 6px;
+      }
+
+      .community-seed-card .seed-desc {
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin-bottom: 10px;
+      }
+
+      .seed-stats {
+        display: flex;
+        gap: 12px;
+        font-size: 0.8rem;
+        color: var(--muted);
+      }
+
+      .seed-stats span {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      /* Soundtrack Player */
+      .soundtrack-player {
+        position: fixed;
+        bottom: 80px;
+        right: 20px;
+        z-index: 999;
+        padding: 12px 16px;
+        border-radius: 16px;
+        background: var(--panel-strong);
+        border: 1px solid var(--stroke);
+        box-shadow: var(--shadow);
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        min-width: 240px;
+      }
+
+      .player-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: none;
+        background: var(--navy);
+        color: #fff;
+        cursor: pointer;
+        display: grid;
+        place-items: center;
+        transition: all 0.2s ease;
+      }
+
+      .player-btn:hover {
+        transform: scale(1.1);
+      }
+
+      .player-info {
+        flex: 1;
+      }
+
+      .player-track {
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin-bottom: 4px;
+      }
+
+      .player-progress {
+        height: 4px;
+        background: rgba(27, 43, 58, 0.15);
+        border-radius: 999px;
+        overflow: hidden;
+      }
+
+      .player-progress span {
+        display: block;
+        height: 100%;
+        width: 35%;
+        background: var(--brass);
+        border-radius: 999px;
+      }
+
+      .player-volume {
+        width: 24px;
+        height: 24px;
+        color: var(--muted);
+        cursor: pointer;
+      }
+
+      /* Notifications */
+      .notification-center {
+        position: fixed;
+        top: 70px;
+        right: 20px;
+        z-index: 1001;
+        width: 320px;
+        max-height: calc(100vh - 100px);
+        overflow: hidden;
+        border-radius: 16px;
+        background: var(--panel-strong);
+        border: 1px solid var(--stroke);
+        box-shadow: var(--shadow);
+        transform: translateX(120%);
+        transition: transform 0.3s ease;
+      }
+
+      .notification-center.is-open {
+        transform: translateX(0);
+      }
+
+      .notification-header {
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--stroke);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .notification-header h4 {
+        margin: 0;
+        font-size: 0.95rem;
+      }
+
+      .notification-badge {
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: var(--danger);
+        color: #fff;
+        font-size: 0.75rem;
+      }
+
+      .notification-list {
+        max-height: 400px;
+        overflow-y: auto;
+        padding: 8px;
+      }
+
+      .notification-item {
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 6px;
+        background: rgba(255, 255, 255, 0.5);
+        border-left: 3px solid var(--brass);
+        font-size: 0.85rem;
+      }
+
+      .notification-item.warning { border-color: var(--warning); }
+      .notification-item.danger { border-color: var(--danger); }
+      .notification-item.success { border-color: var(--success); }
+
+      .notification-item time {
+        display: block;
+        font-size: 0.72rem;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      .notification-toggle {
+        position: fixed;
+        top: 20px;
+        right: 80px;
+        z-index: 1000;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 1px solid var(--stroke);
+        background: var(--panel-strong);
+        box-shadow: var(--shadow-soft);
+        cursor: pointer;
+        display: grid;
+        place-items: center;
+        font-size: 1.1rem;
+      }
+
+      .notification-toggle .badge {
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--danger);
+        color: #fff;
+        font-size: 0.7rem;
+        display: grid;
+        place-items: center;
+      }
+
+      /* Catastrophe Simulator */
+      .catastrophe-sim {
+        display: grid;
+        gap: 20px;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .catastrophe-controls {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .catastrophe-type {
+        padding: 12px;
+        border-radius: 12px;
+        background: var(--panel);
+        border: 2px solid var(--stroke);
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .catastrophe-type:hover,
+      .catastrophe-type.selected {
+        border-color: var(--danger);
+        background: rgba(182, 66, 42, 0.1);
+      }
+
+      .catastrophe-type h4 {
+        margin: 0 0 4px;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .catastrophe-type p {
+        margin: 0;
+        font-size: 0.8rem;
+        color: var(--muted);
+      }
+
+      .catastrophe-preview {
+        padding: 20px;
+        border-radius: 16px;
+        background: var(--panel);
+        border: 1px solid var(--stroke);
+        text-align: center;
+      }
+
+      .preview-comparison {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-top: 16px;
+      }
+
+      .preview-state {
+        padding: 14px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.6);
+        border: 1px solid var(--stroke);
+      }
+
+      .preview-state h5 {
+        margin: 0 0 10px;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+      }
+
+      .preview-state .stat {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.85rem;
+        margin-bottom: 6px;
+      }
+
+      .preview-state .stat.negative {
+        color: var(--danger);
+      }
+
+      .preview-state .stat.positive {
+        color: var(--success);
+      }
+
+      /* Export Panel */
+      .export-panel {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        padding: 16px;
+        background: var(--panel);
+        border-radius: 14px;
+        border: 1px solid var(--stroke);
+      }
+
+      .export-btn {
+        padding: 10px 18px;
+        border-radius: 10px;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.8);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+      }
+
+      .export-btn:hover {
+        background: var(--navy);
+        color: #fff;
+        border-color: var(--navy);
+      }
+
+      /* Multiplayer Concept */
+      .multiplayer-modes {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+
+      .mode-card {
+        padding: 20px;
+        border-radius: 16px;
+        background: var(--panel);
+        border: 1px solid var(--stroke);
+        text-align: center;
+      }
+
+      .mode-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        margin: 0 auto 14px;
+        display: grid;
+        place-items: center;
+        font-size: 1.6rem;
+      }
+
+      .mode-icon.coop { background: linear-gradient(135deg, var(--success), #6bcb77); color: #fff; }
+      .mode-icon.pvp { background: linear-gradient(135deg, var(--danger), #ff6b6b); color: #fff; }
+      .mode-icon.race { background: linear-gradient(135deg, var(--brass), var(--copper)); color: #fff; }
+      .mode-icon.trade { background: linear-gradient(135deg, var(--ocean), var(--navy)); color: #fff; }
+
+      .mode-card h4 {
+        margin: 0 0 8px;
+        font-size: 1rem;
+      }
+
+      .mode-card p {
+        margin: 0 0 12px;
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+
+      .mode-features {
+        text-align: left;
+        font-size: 0.8rem;
+      }
+
+      .mode-features li {
+        margin-bottom: 4px;
+      }
+
+      /* Modding Docs */
+      .modding-docs {
+        display: grid;
+        gap: 16px;
+      }
+
+      .code-block {
+        padding: 16px;
+        border-radius: 12px;
+        background: #1e1e1e;
+        color: #d4d4d4;
+        font-family: "Fira Code", "Consolas", monospace;
+        font-size: 0.82rem;
+        overflow-x: auto;
+      }
+
+      .code-block .keyword { color: #569cd6; }
+      .code-block .string { color: #ce9178; }
+      .code-block .number { color: #b5cea8; }
+      .code-block .comment { color: #6a9955; }
+
+      .api-endpoint {
+        padding: 14px;
+        border-radius: 12px;
+        background: var(--panel);
+        border: 1px solid var(--stroke);
+        margin-bottom: 12px;
+      }
+
+      .api-endpoint .method {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-right: 10px;
+      }
+
+      .api-endpoint .method.get { background: rgba(47, 122, 75, 0.15); color: var(--success); }
+      .api-endpoint .method.post { background: rgba(88, 166, 255, 0.15); color: var(--navy); }
+      .api-endpoint .method.put { background: rgba(197, 143, 42, 0.15); color: var(--warning); }
+
+      .api-endpoint .path {
+        font-family: monospace;
+        color: var(--navy);
+      }
+
+      .api-endpoint p {
+        margin: 8px 0 0;
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+
+      /* Weather Animation */
+      .weather-overlay {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+        border-radius: inherit;
+      }
+
+      .weather-storm {
+        position: absolute;
+        width: 60px;
+        height: 60px;
+        background: radial-gradient(circle, rgba(139, 69, 19, 0.4), transparent 70%);
+        border-radius: 50%;
+        animation: stormMove 8s linear infinite;
+      }
+
+      .weather-storm:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+      .weather-storm:nth-child(2) { top: 50%; left: 60%; animation-delay: 3s; animation-duration: 10s; }
+      .weather-storm:nth-child(3) { top: 70%; left: 30%; animation-delay: 5s; animation-duration: 12s; }
+
+      @keyframes stormMove {
+        0% { transform: translateX(0) scale(1); opacity: 0.5; }
+        50% { transform: translateX(30px) scale(1.2); opacity: 0.8; }
+        100% { transform: translateX(60px) scale(1); opacity: 0.5; }
+      }
+
+      .weather-rain {
+        position: absolute;
+        width: 2px;
+        height: 15px;
+        background: linear-gradient(to bottom, transparent, rgba(135, 206, 235, 0.6));
+        animation: rainFall 0.8s linear infinite;
+      }
+
+      @keyframes rainFall {
+        0% { transform: translateY(-20px); opacity: 0; }
+        50% { opacity: 1; }
+        100% { transform: translateY(180px); opacity: 0; }
+      }
+
+      /* Tutorial Overlay */
+      .tutorial-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 3000;
+        display: none;
+      }
+
+      .tutorial-overlay.is-active {
+        display: block;
+      }
+
+      .tutorial-highlight {
+        position: absolute;
+        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7);
+        border-radius: 8px;
+        pointer-events: none;
+      }
+
+      .tutorial-tooltip {
+        position: absolute;
+        padding: 16px 20px;
+        border-radius: 14px;
+        background: var(--panel-strong);
+        box-shadow: var(--shadow);
+        max-width: 300px;
+      }
+
+      .tutorial-tooltip h4 {
+        margin: 0 0 8px;
+        font-size: 1rem;
+      }
+
+      .tutorial-tooltip p {
+        margin: 0 0 14px;
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      .tutorial-nav {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+      }
+
+      .tutorial-nav button {
+        padding: 8px 14px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-size: 0.85rem;
+      }
+
+      .tutorial-nav .skip {
+        background: transparent;
+        color: var(--muted);
+      }
+
+      .tutorial-nav .next {
+        background: var(--navy);
+        color: #fff;
+      }
+
+      .tutorial-progress {
+        display: flex;
+        gap: 6px;
+        margin-top: 12px;
+      }
+
+      .tutorial-progress span {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(27, 43, 58, 0.2);
+      }
+
+      .tutorial-progress span.active {
+        background: var(--brass);
+      }
+
+      @media (max-width: 768px) {
+        .roadmap::before {
+          left: 20px;
+        }
+        .roadmap-phase {
+          grid-template-columns: auto 1fr;
+        }
+        .roadmap-phase .phase-marker { grid-column: 1 !important; grid-row: 1; }
+        .roadmap-phase .phase-content { grid-column: 2 !important; grid-row: 1; text-align: left !important; }
+        .roadmap-phase .phase-details { grid-column: 2 !important; grid-row: 2; text-align: left !important; }
+        
+        .build-editor {
+          grid-template-columns: 1fr;
+        }
+        
+        .catastrophe-sim {
+          grid-template-columns: 1fr;
+        }
+        
+        .floating-nav {
+          flex-wrap: wrap;
+          max-width: 90%;
+        }
+      }
     </style>
   </head>
   <body>
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="theme-toggle" aria-label="Theme wechseln">
+      <svg class="sun-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      <span>Theme</span>
+    </button>
+
+    <!-- Notification Toggle -->
+    <button class="notification-toggle" id="notification-toggle" aria-label="Benachrichtigungen">
+      🔔
+      <span class="badge">5</span>
+    </button>
+
+    <!-- Notification Center -->
+    <aside class="notification-center" id="notification-center">
+      <div class="notification-header">
+        <h4>Benachrichtigungen</h4>
+        <span class="notification-badge">5 neu</span>
+      </div>
+      <div class="notification-list">
+        <div class="notification-item danger">
+          <strong>Versorgungskrise!</strong>
+          <p>Hydroponik in Sektor 07 ohne Wasser.</p>
+          <time>vor 2 Minuten</time>
+        </div>
+        <div class="notification-item warning">
+          <strong>Staubsturm naht</strong>
+          <p>Nordkuppe in 4 Tagen betroffen.</p>
+          <time>vor 15 Minuten</time>
+        </div>
+        <div class="notification-item success">
+          <strong>Handelsroute etabliert</strong>
+          <p>Orbit-Lane A → Hub Delta aktiv.</p>
+          <time>vor 1 Stunde</time>
+        </div>
+        <div class="notification-item">
+          <strong>Forschung abgeschlossen</strong>
+          <p>Atmosphären-Prozessor Stufe 2 verfügbar.</p>
+          <time>vor 2 Stunden</time>
+        </div>
+        <div class="notification-item warning">
+          <strong>Emissionslimit</strong>
+          <p>CO₂ bei 58% – Limit: 60%</p>
+          <time>vor 3 Stunden</time>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Floating Navigation -->
+    <nav class="floating-nav" id="floating-nav">
+      <button class="active" data-section="hero">Start</button>
+      <button data-section="status">Status</button>
+      <button data-section="research">Forschung</button>
+      <button data-section="chains">Ketten</button>
+      <button data-section="diplomacy">Diplomatie</button>
+      <button data-section="biomes">Biome</button>
+      <button data-section="achievements">Erfolge</button>
+      <button data-section="seeds">Seeds</button>
+    </nav>
+
+    <!-- Soundtrack Player -->
+    <div class="soundtrack-player" id="soundtrack-player">
+      <button class="player-btn" id="player-toggle" aria-label="Play/Pause">▶</button>
+      <div class="player-info">
+        <div class="player-track">Ambient: Orbital Horizons</div>
+        <div class="player-progress"><span></span></div>
+      </div>
+      <button class="player-volume" aria-label="Lautstärke">🔊</button>
+    </div>
+
+    <!-- Glossary Modal -->
+    <div class="modal-overlay" id="glossary-modal">
+      <div class="modal">
+        <div class="modal-header">
+          <h3>📖 Glossar</h3>
+          <button class="modal-close" aria-label="Schließen">×</button>
+        </div>
+        <div class="modal-body">
+          <input type="text" class="glossary-search" placeholder="Begriff suchen..." id="glossary-search">
+          <dl class="glossary-list" id="glossary-list">
+            <div class="glossary-item">
+              <dt>Regolith</dt>
+              <dd>Lockeres Gesteinsmaterial auf der Planetenoberfläche, Grundlage für Erzabbau.</dd>
+            </div>
+            <div class="glossary-item">
+              <dt>Hydroponik</dt>
+              <dd>Anbau von Pflanzen in Nährlösungen ohne Erde – essentiell für Nahrungsproduktion.</dd>
+            </div>
+            <div class="glossary-item">
+              <dt>Orbit-Lane</dt>
+              <dd>Handelsroute zwischen Sektoren oder zu orbitalen Stationen.</dd>
+            </div>
+            <div class="glossary-item">
+              <dt>Terraforming</dt>
+              <dd>Umgestaltung eines Planeten für menschliche Besiedlung (Atmosphäre, Klima, Biome).</dd>
+            </div>
+            <div class="glossary-item">
+              <dt>Sektor</dt>
+              <dd>Abgegrenztes Gebiet auf der Planetenoberfläche mit eigenem Klima und Ressourcen.</dd>
+            </div>
+            <div class="glossary-item">
+              <dt>Emissionen</dt>
+              <dd>CO₂-Ausstoß durch Industrie – beeinflusst Klima und Zufriedenheit.</dd>
+            </div>
+            <div class="glossary-item">
+              <dt>Magnetfeld</dt>
+              <dd>Schützt vor kosmischer Strahlung – essenziell für Bevölkerungswachstum.</dd>
+            </div>
+            <div class="glossary-item">
+              <dt>Biom</dt>
+              <dd>Ökologische Zone mit charakteristischer Flora, Fauna und Klima.</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tutorial Overlay -->
+    <div class="tutorial-overlay" id="tutorial-overlay">
+      <div class="tutorial-highlight" id="tutorial-highlight"></div>
+      <div class="tutorial-tooltip" id="tutorial-tooltip">
+        <h4 id="tutorial-title">Willkommen!</h4>
+        <p id="tutorial-text">Entdecke die Grundlagen der Planetenbesiedlung.</p>
+        <div class="tutorial-nav">
+          <button class="skip" id="tutorial-skip">Überspringen</button>
+          <button class="next" id="tutorial-next">Weiter →</button>
+        </div>
+        <div class="tutorial-progress" id="tutorial-progress">
+          <span class="active"></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </div>
+
     <main class="page">
-      <header class="hero">
+      <header class="hero" id="hero">
         <div class="hero-text">
           <p class="eyebrow">Anno-inspirierte Planetensimulation</p>
           <h1>Planet Sandbox: Siedeln, Handeln, Terraformen</h1>
@@ -1186,21 +2924,26 @@
           </div>
         </div>
         <div class="hero-visual">
-          <div class="planet-diorama" aria-hidden="true">
-            <div class="orbit orbit-one"></div>
-            <div class="orbit orbit-two"></div>
-            <div class="orbit orbit-three"></div>
-            <div class="ring"></div>
-            <div class="planet"></div>
-            <div class="colony-dot"></div>
-            <div class="colony-dot second"></div>
-            <div class="colony-dot third"></div>
+          <div class="planet-3d-container">
+            <div class="planet-atmosphere"></div>
+            <div class="planet-3d" id="main-planet">
+              <div class="continent"></div>
+              <div class="continent"></div>
+              <div class="continent"></div>
+              <div class="clouds"></div>
+              <div class="terminator"></div>
+            </div>
+            <div class="planet-ring"></div>
           </div>
-          <div class="legend">Sektoren, Orbit-Lanes, Klima-Overlay</div>
+          <div class="legend">3D-Planet mit Tag-/Nacht-Zyklus, Wolken und Kontinenten</div>
+          <div class="chip-row" style="justify-content: center; margin-top: 12px;">
+            <button class="seed-button secondary" id="glossary-open">📖 Glossar</button>
+            <button class="seed-button secondary" id="tutorial-start">🎓 Tutorial</button>
+          </div>
         </div>
       </header>
 
-      <section>
+      <section id="status">
         <h2>Kolonie-Status</h2>
         <p class="lead">Die Anno-typische Statusleiste als schneller &Uuml;berblick.</p>
         <div class="kpi-grid">
@@ -1239,6 +2982,348 @@
             <div class="kpi-value">90%</div>
             <div class="kpi-sub">Reservoir stabil</div>
             <div class="kpi-meter"><span></span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="research">
+        <h2>🔬 Forschungsbaum</h2>
+        <p class="lead">Schalte neue Technologien frei und forme die Zukunft deines Planeten.</p>
+        <div class="research-tree">
+          <div class="research-tier">
+            <span class="research-tier-label">Basis</span>
+            <div class="research-node unlocked">
+              <div class="node-icon">⚡</div>
+              <div class="node-title">Solarenergie</div>
+              <div class="node-cost">✓ Erforscht</div>
+              <span class="node-status">✓</span>
+              <span class="research-connector"></span>
+            </div>
+            <div class="research-node unlocked">
+              <div class="node-icon">💧</div>
+              <div class="node-title">Wassergewinnung</div>
+              <div class="node-cost">✓ Erforscht</div>
+              <span class="node-status">✓</span>
+            </div>
+            <div class="research-node unlocked">
+              <div class="node-icon">🌱</div>
+              <div class="node-title">Hydroponik I</div>
+              <div class="node-cost">✓ Erforscht</div>
+              <span class="node-status">✓</span>
+            </div>
+          </div>
+          <div class="research-tier">
+            <span class="research-tier-label">Fortgeschritten</span>
+            <div class="research-node available">
+              <div class="node-icon">🔋</div>
+              <div class="node-title">Fusionsreaktor</div>
+              <div class="node-cost">2500 Forschung</div>
+            </div>
+            <div class="research-node available">
+              <div class="node-icon">🏭</div>
+              <div class="node-title">Erzraffinerie II</div>
+              <div class="node-cost">1800 Forschung</div>
+            </div>
+            <div class="research-node unlocked">
+              <div class="node-icon">🌡️</div>
+              <div class="node-title">Klima-Steuerung</div>
+              <div class="node-cost">✓ Erforscht</div>
+              <span class="node-status">✓</span>
+            </div>
+          </div>
+          <div class="research-tier">
+            <span class="research-tier-label">Experte</span>
+            <div class="research-node locked">
+              <div class="node-icon">🛸</div>
+              <div class="node-title">Orbit-Werft</div>
+              <div class="node-cost">5000 Forschung</div>
+            </div>
+            <div class="research-node locked">
+              <div class="node-icon">🌍</div>
+              <div class="node-title">Atmosphären-Prozessor</div>
+              <div class="node-cost">6500 Forschung</div>
+            </div>
+            <div class="research-node locked">
+              <div class="node-icon">🧬</div>
+              <div class="node-title">Gen-Anpassung</div>
+              <div class="node-cost">8000 Forschung</div>
+            </div>
+          </div>
+          <div class="research-tier">
+            <span class="research-tier-label">Endgame</span>
+            <div class="research-node locked">
+              <div class="node-icon">☀️</div>
+              <div class="node-title">Dyson-Spiegel</div>
+              <div class="node-cost">15000 Forschung</div>
+            </div>
+            <div class="research-node locked">
+              <div class="node-icon">🌐</div>
+              <div class="node-title">Planetares Netzwerk</div>
+              <div class="node-cost">12000 Forschung</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="diplomacy">
+        <h2>🤝 Diplomatie &amp; Fraktionen</h2>
+        <p class="lead">Baue Beziehungen zu anderen Kolonien auf oder konkurriere um Ressourcen.</p>
+        <div class="diplomacy-grid">
+          <div class="faction-card">
+            <div class="faction-header">
+              <div class="faction-emblem tech">🔧</div>
+              <div class="faction-info">
+                <h4>Technokraten-Union</h4>
+                <span>Fokus: Forschung & Innovation</span>
+              </div>
+            </div>
+            <div class="faction-relations">
+              <small>Beziehung: Freundlich (72%)</small>
+              <div class="relation-bar">
+                <div class="relation-fill friendly" style="width: 72%;"></div>
+              </div>
+            </div>
+            <div class="faction-treaties">
+              <span class="treaty-badge">Forschungsabkommen</span>
+              <span class="treaty-badge">Technologie-Tausch</span>
+            </div>
+          </div>
+          <div class="faction-card">
+            <div class="faction-header">
+              <div class="faction-emblem eco">🌿</div>
+              <div class="faction-info">
+                <h4>Öko-Kollektiv</h4>
+                <span>Fokus: Nachhaltigkeit & Biome</span>
+              </div>
+            </div>
+            <div class="faction-relations">
+              <small>Beziehung: Neutral (45%)</small>
+              <div class="relation-bar">
+                <div class="relation-fill neutral" style="width: 45%;"></div>
+              </div>
+            </div>
+            <div class="faction-treaties">
+              <span class="treaty-badge pending">Handelsabkommen (ausstehend)</span>
+            </div>
+          </div>
+          <div class="faction-card">
+            <div class="faction-header">
+              <div class="faction-emblem corp">💰</div>
+              <div class="faction-info">
+                <h4>Stellar Industries</h4>
+                <span>Fokus: Handel & Produktion</span>
+              </div>
+            </div>
+            <div class="faction-relations">
+              <small>Beziehung: Alliiert (89%)</small>
+              <div class="relation-bar">
+                <div class="relation-fill allied" style="width: 89%;"></div>
+              </div>
+            </div>
+            <div class="faction-treaties">
+              <span class="treaty-badge">Handelsallianz</span>
+              <span class="treaty-badge">Ressourcen-Pakt</span>
+              <span class="treaty-badge">Militärbeistand</span>
+            </div>
+          </div>
+          <div class="faction-card">
+            <div class="faction-header">
+              <div class="faction-emblem militant">⚔️</div>
+              <div class="faction-info">
+                <h4>Frontier-Miliz</h4>
+                <span>Fokus: Expansion & Kontrolle</span>
+              </div>
+            </div>
+            <div class="faction-relations">
+              <small>Beziehung: Feindlich (18%)</small>
+              <div class="relation-bar">
+                <div class="relation-fill hostile" style="width: 18%;"></div>
+              </div>
+            </div>
+            <div class="faction-treaties">
+              <span class="treaty-badge" style="background: rgba(182,66,42,0.15); color: var(--danger); border-color: rgba(182,66,42,0.3);">Handelsembargo</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="flow">
+        <h2>📊 Ressourcen-Fluss</h2>
+        <p class="lead">Visualisierung aller Warenströme – von der Quelle bis zum Verbraucher.</p>
+        <div class="flow-diagram">
+          <div class="flow-container">
+            <div class="flow-column">
+              <div class="flow-node source">Eisfelder<div class="flow-value">120t/Tag</div></div>
+              <div class="flow-node source">Regolith<div class="flow-value">85t/Tag</div></div>
+              <div class="flow-node source">Solarpark<div class="flow-value">450 MW</div></div>
+            </div>
+            <div class="flow-column">
+              <div class="flow-node process">Wasserwerk<div class="flow-value">95t/Tag</div></div>
+              <div class="flow-node process">Raffinerie<div class="flow-value">60t/Tag</div></div>
+              <div class="flow-node process">Energienetz<div class="flow-value">420 MW</div></div>
+            </div>
+            <div class="flow-column">
+              <div class="flow-node output">Trinkwasser<div class="flow-value">80t/Tag</div></div>
+              <div class="flow-node output">Metallbarren<div class="flow-value">45t/Tag</div></div>
+              <div class="flow-node output">Nahrung<div class="flow-value">35t/Tag</div></div>
+            </div>
+            <div class="flow-column">
+              <div class="flow-node consumer">🏠 Wohngebiete<div class="flow-value">128k Einwohner</div></div>
+              <div class="flow-node consumer">🏭 Industrie<div class="flow-value">45 Betriebe</div></div>
+              <div class="flow-node consumer">🚀 Raumhafen<div class="flow-value">Export: 25t/Tag</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="stats">
+        <h2>📈 Statistik-Dashboard</h2>
+        <p class="lead">Entwicklung über Zeit – erkenne Trends und optimiere frühzeitig.</p>
+        <div class="stats-dashboard">
+          <div class="stat-chart">
+            <h4>Bevölkerungswachstum</h4>
+            <div class="chart-area">
+              <div class="chart-bar" style="height: 20%;" data-value="25k"></div>
+              <div class="chart-bar" style="height: 35%;" data-value="45k"></div>
+              <div class="chart-bar" style="height: 45%;" data-value="58k"></div>
+              <div class="chart-bar" style="height: 55%;" data-value="71k"></div>
+              <div class="chart-bar" style="height: 62%;" data-value="80k"></div>
+              <div class="chart-bar" style="height: 70%;" data-value="90k"></div>
+              <div class="chart-bar" style="height: 78%;" data-value="101k"></div>
+              <div class="chart-bar" style="height: 85%;" data-value="110k"></div>
+              <div class="chart-bar" style="height: 90%;" data-value="118k"></div>
+              <div class="chart-bar" style="height: 100%;" data-value="128k"></div>
+            </div>
+            <div class="chart-labels"><span>Monat 1</span><span>Monat 10</span></div>
+          </div>
+          <div class="stat-chart">
+            <h4>CO₂-Emissionen</h4>
+            <div class="chart-area">
+              <div class="chart-bar" style="height: 15%; background: linear-gradient(to top, var(--success), #6bcb77);" data-value="12%"></div>
+              <div class="chart-bar" style="height: 18%; background: linear-gradient(to top, var(--success), #6bcb77);" data-value="14%"></div>
+              <div class="chart-bar" style="height: 22%; background: linear-gradient(to top, var(--success), #6bcb77);" data-value="18%"></div>
+              <div class="chart-bar" style="height: 28%; background: linear-gradient(to top, var(--warning), #ffd93d);" data-value="22%"></div>
+              <div class="chart-bar" style="height: 32%; background: linear-gradient(to top, var(--warning), #ffd93d);" data-value="26%"></div>
+              <div class="chart-bar" style="height: 35%; background: linear-gradient(to top, var(--warning), #ffd93d);" data-value="28%"></div>
+              <div class="chart-bar" style="height: 38%; background: linear-gradient(to top, var(--warning), #ffd93d);" data-value="30%"></div>
+              <div class="chart-bar" style="height: 40%; background: linear-gradient(to top, var(--warning), #ffd93d);" data-value="32%"></div>
+            </div>
+            <div class="chart-labels"><span>Woche 1</span><span>Woche 8</span></div>
+          </div>
+          <div class="stat-chart">
+            <h4>Handelsvolumen</h4>
+            <div class="chart-area">
+              <div class="chart-bar" style="height: 30%; background: linear-gradient(to top, var(--ocean), var(--navy));" data-value="450t"></div>
+              <div class="chart-bar" style="height: 45%; background: linear-gradient(to top, var(--ocean), var(--navy));" data-value="680t"></div>
+              <div class="chart-bar" style="height: 40%; background: linear-gradient(to top, var(--ocean), var(--navy));" data-value="610t"></div>
+              <div class="chart-bar" style="height: 60%; background: linear-gradient(to top, var(--ocean), var(--navy));" data-value="910t"></div>
+              <div class="chart-bar" style="height: 55%; background: linear-gradient(to top, var(--ocean), var(--navy));" data-value="835t"></div>
+              <div class="chart-bar" style="height: 75%; background: linear-gradient(to top, var(--ocean), var(--navy));" data-value="1.1k"></div>
+              <div class="chart-bar" style="height: 85%; background: linear-gradient(to top, var(--ocean), var(--navy));" data-value="1.3k"></div>
+              <div class="chart-bar" style="height: 95%; background: linear-gradient(to top, var(--ocean), var(--navy));" data-value="1.4k"></div>
+            </div>
+            <div class="chart-labels"><span>Q1</span><span>Q4</span></div>
+          </div>
+          <div class="stat-chart">
+            <h4>Zufriedenheit</h4>
+            <div class="chart-area">
+              <div class="chart-bar" style="height: 60%;" data-value="60%"></div>
+              <div class="chart-bar" style="height: 58%;" data-value="58%"></div>
+              <div class="chart-bar" style="height: 62%;" data-value="62%"></div>
+              <div class="chart-bar" style="height: 65%;" data-value="65%"></div>
+              <div class="chart-bar" style="height: 68%;" data-value="68%"></div>
+              <div class="chart-bar" style="height: 66%;" data-value="66%"></div>
+              <div class="chart-bar" style="height: 70%;" data-value="70%"></div>
+              <div class="chart-bar" style="height: 71%;" data-value="71%"></div>
+            </div>
+            <div class="chart-labels"><span>Tag 1</span><span>Tag 60</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="biomes">
+        <h2>🌍 Biom-Galerie</h2>
+        <p class="lead">Jedes Biom hat einzigartige Eigenschaften, Boni und Herausforderungen.</p>
+        <div class="biome-gallery">
+          <div class="biome-card">
+            <div class="biome-preview tundra"></div>
+            <h4>Tundra</h4>
+            <p>Eisige Weiten mit reichen Wasservorkommen</p>
+            <div class="biome-stats">
+              <span>❄️ -20°C</span>
+              <span>💧 +40%</span>
+              <span>🌱 -60%</span>
+            </div>
+          </div>
+          <div class="biome-card">
+            <div class="biome-preview desert"></div>
+            <h4>Wüste</h4>
+            <p>Extreme Hitze, reich an Mineralien</p>
+            <div class="biome-stats">
+              <span>🌡️ +45°C</span>
+              <span>⛏️ +50%</span>
+              <span>💧 -80%</span>
+            </div>
+          </div>
+          <div class="biome-card">
+            <div class="biome-preview ocean"></div>
+            <h4>Ozean</h4>
+            <p>Unbegrenzte Wasserressourcen, Handelsbonus</p>
+            <div class="biome-stats">
+              <span>🌊 100%</span>
+              <span>🚢 +30%</span>
+              <span>🏗️ -70%</span>
+            </div>
+          </div>
+          <div class="biome-card">
+            <div class="biome-preview jungle"></div>
+            <h4>Dschungel</h4>
+            <p>Üppige Vegetation, Biomasse-Bonus</p>
+            <div class="biome-stats">
+              <span>🌴 +80%</span>
+              <span>💨 Feucht</span>
+              <span>🦠 +20%</span>
+            </div>
+          </div>
+          <div class="biome-card">
+            <div class="biome-preview volcanic"></div>
+            <h4>Vulkanisch</h4>
+            <p>Geothermie, aber gefährlich</p>
+            <div class="biome-stats">
+              <span>🔥 +60%</span>
+              <span>⚠️ Risiko</span>
+              <span>⛏️ +35%</span>
+            </div>
+          </div>
+          <div class="biome-card">
+            <div class="biome-preview plains"></div>
+            <h4>Ebenen</h4>
+            <p>Ideales Siedlungsgebiet, ausbalanciert</p>
+            <div class="biome-stats">
+              <span>🏠 +40%</span>
+              <span>🌾 +30%</span>
+              <span>⚖️ Balance</span>
+            </div>
+          </div>
+          <div class="biome-card">
+            <div class="biome-preview mountain"></div>
+            <h4>Gebirge</h4>
+            <p>Schwer zugänglich, aber erzreich</p>
+            <div class="biome-stats">
+              <span>🏔️ +2000m</span>
+              <span>⛏️ +70%</span>
+              <span>🚗 -50%</span>
+            </div>
+          </div>
+          <div class="biome-card">
+            <div class="biome-preview swamp"></div>
+            <h4>Sumpf</h4>
+            <p>Gasgewinnung, aber instabil</p>
+            <div class="biome-stats">
+              <span>💨 +55%</span>
+              <span>🏗️ -40%</span>
+              <span>🦟 +30%</span>
+            </div>
           </div>
         </div>
       </section>
@@ -1322,11 +3407,16 @@
                   Versorgung sind auf einen Blick sichtbar.
                 </p>
                 <div class="sector-map" aria-hidden="true">
+                  <div class="weather-overlay">
+                    <div class="weather-storm"></div>
+                    <div class="weather-storm"></div>
+                    <div class="weather-storm"></div>
+                  </div>
                   <span class="map-marker ore"></span>
                   <span class="map-marker water"></span>
                   <span class="map-marker risk"></span>
                 </div>
-                <div class="legend">Erz, Wasser, Risiko-Hotspots</div>
+                <div class="legend">Erz, Wasser, Risiko + Live-Wetter</div>
               </div>
               <div class="card">
                 <h3>Detailpanel</h3>
@@ -1448,7 +3538,7 @@
         </div>
       </section>
 
-      <section>
+      <section id="chains">
         <h2>Warenketten &amp; Gesellschaft</h2>
         <p class="lead">
           Klicke auf einen Knoten, um Unterketten, Effekte und Engp&auml;sse sichtbar zu
@@ -2005,7 +4095,7 @@
         </div>
       </section>
 
-      <section>
+      <section id="seeds">
         <h2>Planetenarchiv &amp; Seeds</h2>
         <div class="grid-3">
           <div class="card">
@@ -2168,6 +4258,401 @@
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section id="achievements">
+        <h2>🏆 Achievements</h2>
+        <p class="lead">Sammle Erfolge und zeige deine Errungenschaften.</p>
+        <div class="achievement-grid">
+          <div class="achievement-card unlocked">
+            <span class="achievement-rarity common">Häufig</span>
+            <div class="achievement-icon">🚀</div>
+            <h4>Erste Siedlung</h4>
+            <p>Gründe deine erste Kolonie</p>
+          </div>
+          <div class="achievement-card unlocked">
+            <span class="achievement-rarity common">Häufig</span>
+            <div class="achievement-icon">👥</div>
+            <h4>Wachstum</h4>
+            <p>Erreiche 10.000 Einwohner</p>
+          </div>
+          <div class="achievement-card unlocked">
+            <span class="achievement-rarity rare">Selten</span>
+            <div class="achievement-icon">🌡️</div>
+            <h4>Klimakontrolle</h4>
+            <p>Stabilisiere die Temperatur für 30 Tage</p>
+          </div>
+          <div class="achievement-card locked">
+            <span class="achievement-rarity rare">Selten</span>
+            <div class="achievement-icon">💰</div>
+            <h4>Handelsmagnat</h4>
+            <p>Exportiere 10.000t Waren</p>
+          </div>
+          <div class="achievement-card locked">
+            <span class="achievement-rarity epic">Episch</span>
+            <div class="achievement-icon">🌍</div>
+            <h4>Terraformer</h4>
+            <p>Schaffe ein bewohnbares Biom</p>
+          </div>
+          <div class="achievement-card locked">
+            <span class="achievement-rarity epic">Episch</span>
+            <div class="achievement-icon">🤝</div>
+            <h4>Diplomat</h4>
+            <p>Schließe Allianzen mit 3 Fraktionen</p>
+          </div>
+          <div class="achievement-card locked">
+            <span class="achievement-rarity legendary">Legendär</span>
+            <div class="achievement-icon">🌟</div>
+            <h4>Utopia</h4>
+            <p>100% Zufriedenheit bei 1M Einwohnern</p>
+          </div>
+          <div class="achievement-card locked">
+            <span class="achievement-rarity legendary">Legendär</span>
+            <div class="achievement-icon">♻️</div>
+            <h4>Null-Emission</h4>
+            <p>Industrie ohne CO₂-Ausstoß</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="build-editor">
+        <h2>🏗️ Interaktiver Baueditor</h2>
+        <p class="lead">Platziere Gebäude und sieh Versorgungsradien in Echtzeit.</p>
+        <div class="build-editor">
+          <div class="build-palette">
+            <div class="build-item selected">
+              <span class="item-icon">🏠</span>
+              <span>Wohnkuppel</span>
+            </div>
+            <div class="build-item">
+              <span class="item-icon">⚡</span>
+              <span>Solarfeld</span>
+            </div>
+            <div class="build-item">
+              <span class="item-icon">💧</span>
+              <span>Wasserwerk</span>
+            </div>
+            <div class="build-item">
+              <span class="item-icon">🌱</span>
+              <span>Hydroponik</span>
+            </div>
+            <div class="build-item">
+              <span class="item-icon">🏭</span>
+              <span>Raffinerie</span>
+            </div>
+            <div class="build-item">
+              <span class="item-icon">🔬</span>
+              <span>Labor</span>
+            </div>
+            <div class="build-item">
+              <span class="item-icon">🚀</span>
+              <span>Raumhafen</span>
+            </div>
+          </div>
+          <div class="build-grid" id="build-grid">
+            <!-- Grid wird per JS generiert -->
+          </div>
+        </div>
+        <div class="callout" style="margin-top: 16px;">
+          <strong>Tipp:</strong> Klicke auf ein Gebäude links, dann auf eine Zelle im Grid. Der grüne Bereich zeigt den Versorgungsradius.
+        </div>
+      </section>
+
+      <section id="catastrophe">
+        <h2>💥 Katastrophen-Simulator</h2>
+        <p class="lead">Simuliere Naturkatastrophen und plane deine Verteidigung.</p>
+        <div class="catastrophe-sim">
+          <div class="catastrophe-controls">
+            <div class="catastrophe-type selected">
+              <h4>☄️ Meteoriteneinschlag</h4>
+              <p>Zerstört Infrastruktur, neue Erzvorkommen</p>
+            </div>
+            <div class="catastrophe-type">
+              <h4>🌋 Supervulkan</h4>
+              <p>CO₂-Anstieg, Temperaturänderung, Asche</p>
+            </div>
+            <div class="catastrophe-type">
+              <h4>🌪️ Megasturm</h4>
+              <p>Logistik unterbrochen, Gebäudeschäden</p>
+            </div>
+            <div class="catastrophe-type">
+              <h4>☀️ Sonneneruption</h4>
+              <p>Elektronik ausgefallen, Strahlung</p>
+            </div>
+          </div>
+          <div class="catastrophe-preview">
+            <h3>Vorschau: Meteoriteneinschlag</h3>
+            <p class="lead">Sektor Nordkuppe 07</p>
+            <div class="preview-comparison">
+              <div class="preview-state">
+                <h5>Vorher</h5>
+                <div class="stat"><span>Bevölkerung</span><span>24.500</span></div>
+                <div class="stat"><span>Industrie</span><span>12 Betriebe</span></div>
+                <div class="stat"><span>Erz</span><span>45%</span></div>
+                <div class="stat"><span>Wasser</span><span>78%</span></div>
+              </div>
+              <div class="preview-state">
+                <h5>Nachher</h5>
+                <div class="stat negative"><span>Bevölkerung</span><span>-8.200 ⚠️</span></div>
+                <div class="stat negative"><span>Industrie</span><span>-5 Betriebe</span></div>
+                <div class="stat positive"><span>Erz</span><span>+25% 📈</span></div>
+                <div class="stat negative"><span>Wasser</span><span>-15%</span></div>
+              </div>
+            </div>
+            <button class="seed-button" style="margin-top: 16px;">Simulation starten</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="community-seeds">
+        <h2>🌐 Community Seeds</h2>
+        <p class="lead">Entdecke von Spielern geteilte Welten mit einzigartigen Herausforderungen.</p>
+        <div class="community-seeds">
+          <div class="community-seed-card">
+            <span class="seed-difficulty hard">Schwer</span>
+            <div class="seed-author">
+              <div class="author-avatar">TF</div>
+              <div class="author-info">
+                <strong>TerraFormer_42</strong>
+                <span>Vor 2 Tagen</span>
+              </div>
+            </div>
+            <div class="seed-code">HELL-666</div>
+            <p class="seed-desc">Vulkanwelt ohne Wasservorkommen. Kannst du überleben?</p>
+            <div class="seed-stats">
+              <span>⬇️ 1.2k Downloads</span>
+              <span>⭐ 4.8</span>
+              <span>💬 47</span>
+            </div>
+          </div>
+          <div class="community-seed-card">
+            <span class="seed-difficulty easy">Einfach</span>
+            <div class="seed-author">
+              <div class="author-avatar">SB</div>
+              <div class="author-info">
+                <strong>SpaceBuilder</strong>
+                <span>Vor 5 Tagen</span>
+              </div>
+            </div>
+            <div class="seed-code">EDEN-001</div>
+            <p class="seed-desc">Perfekte Startbedingungen für Anfänger. Viel Wasser!</p>
+            <div class="seed-stats">
+              <span>⬇️ 3.4k Downloads</span>
+              <span>⭐ 4.9</span>
+              <span>💬 89</span>
+            </div>
+          </div>
+          <div class="community-seed-card">
+            <span class="seed-difficulty extreme">Extrem</span>
+            <div class="seed-author">
+              <div class="author-avatar">HC</div>
+              <div class="author-info">
+                <strong>HardcoreColonist</strong>
+                <span>Vor 1 Woche</span>
+              </div>
+            </div>
+            <div class="seed-code">VOID-X99</div>
+            <p class="seed-desc">Kein Magnetfeld, ständige Strahlung, minimale Ressourcen.</p>
+            <div class="seed-stats">
+              <span>⬇️ 890 Downloads</span>
+              <span>⭐ 4.6</span>
+              <span>💬 156</span>
+            </div>
+          </div>
+          <div class="community-seed-card">
+            <span class="seed-difficulty medium">Mittel</span>
+            <div class="seed-author">
+              <div class="author-avatar">WW</div>
+              <div class="author-info">
+                <strong>WaterWorld</strong>
+                <span>Vor 3 Tagen</span>
+              </div>
+            </div>
+            <div class="seed-code">OCEAN-42</div>
+            <p class="seed-desc">90% Ozean. Baue schwimmende Kolonien!</p>
+            <div class="seed-stats">
+              <span>⬇️ 2.1k Downloads</span>
+              <span>⭐ 4.7</span>
+              <span>💬 72</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="roadmap">
+        <h2>🗺️ Entwickler-Roadmap</h2>
+        <p class="lead">Die Zukunft von Planet Sandbox – von der Idee bis zum Release.</p>
+        <div class="roadmap">
+          <div class="roadmap-phase">
+            <div class="phase-content">
+              <h4>Konzept & Design</h4>
+              <span>Q1 2024</span>
+            </div>
+            <div class="phase-marker completed">✓</div>
+            <div class="phase-details">
+              <ul>
+                <li>Game Design Document</li>
+                <li>UI/UX Konzept</li>
+                <li>Erste Prototypen</li>
+              </ul>
+            </div>
+          </div>
+          <div class="roadmap-phase">
+            <div class="phase-content">
+              <h4>Alpha</h4>
+              <span>Q2 2024</span>
+            </div>
+            <div class="phase-marker current">α</div>
+            <div class="phase-details">
+              <ul>
+                <li>Kernmechaniken</li>
+                <li>Warenketten</li>
+                <li>Erste Spielbarkeit</li>
+              </ul>
+            </div>
+          </div>
+          <div class="roadmap-phase">
+            <div class="phase-content">
+              <h4>Beta</h4>
+              <span>Q4 2024</span>
+            </div>
+            <div class="phase-marker">β</div>
+            <div class="phase-details">
+              <ul>
+                <li>Multiplayer</li>
+                <li>Vollständige Kampagne</li>
+                <li>Modding-Support</li>
+              </ul>
+            </div>
+          </div>
+          <div class="roadmap-phase">
+            <div class="phase-content">
+              <h4>Release</h4>
+              <span>Q2 2025</span>
+            </div>
+            <div class="phase-marker">1.0</div>
+            <div class="phase-details">
+              <ul>
+                <li>Vollversion</li>
+                <li>Steam Release</li>
+                <li>Konsolen-Ports</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="multiplayer">
+        <h2>🎮 Multiplayer-Konzept</h2>
+        <p class="lead">Verschiedene Modi für kooperatives und kompetitives Spiel.</p>
+        <div class="multiplayer-modes">
+          <div class="mode-card">
+            <div class="mode-icon coop">🤝</div>
+            <h4>Kooperativ</h4>
+            <p>Gemeinsam einen Planeten besiedeln und terraformen.</p>
+            <ul class="mode-features">
+              <li>Geteilte Ressourcen</li>
+              <li>Spezialisierung möglich</li>
+              <li>Gemeinsame Ziele</li>
+            </ul>
+          </div>
+          <div class="mode-card">
+            <div class="mode-icon pvp">⚔️</div>
+            <h4>Kompetitiv</h4>
+            <p>Wettstreit um Sektoren und Handelsrouten.</p>
+            <ul class="mode-features">
+              <li>Territorialkämpfe</li>
+              <li>Handelskriege</li>
+              <li>Sabotage möglich</li>
+            </ul>
+          </div>
+          <div class="mode-card">
+            <div class="mode-icon race">🏁</div>
+            <h4>Wettrennen</h4>
+            <p>Wer erreicht zuerst die Terraforming-Stufe?</p>
+            <ul class="mode-features">
+              <li>Zeitdruck</li>
+              <li>Meilenstein-Boni</li>
+              <li>Ranglisten</li>
+            </ul>
+          </div>
+          <div class="mode-card">
+            <div class="mode-icon trade">💹</div>
+            <h4>Handelsnetzwerk</h4>
+            <p>Reine Wirtschaftssimulation zwischen Spielern.</p>
+            <ul class="mode-features">
+              <li>Globaler Markt</li>
+              <li>Verträge & Abkommen</li>
+              <li>Wirtschaftskrisen</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="modding">
+        <h2>🔧 Modding-API</h2>
+        <p class="lead">Erweitere das Spiel mit eigenen Inhalten und Mechaniken.</p>
+        <div class="modding-docs">
+          <div class="card">
+            <h3>Eigene Warenketten definieren</h3>
+            <div class="code-block">
+<span class="comment">// Beispiel: Neue Produktionskette</span>
+{
+  <span class="string">"id"</span>: <span class="string">"luxus_nahrung"</span>,
+  <span class="string">"name"</span>: <span class="string">"Gourmet-Mahlzeiten"</span>,
+  <span class="string">"inputs"</span>: [
+    { <span class="string">"resource"</span>: <span class="string">"nahrung"</span>, <span class="string">"amount"</span>: <span class="number">2</span> },
+    { <span class="string">"resource"</span>: <span class="string">"wasser"</span>, <span class="string">"amount"</span>: <span class="number">1</span> }
+  ],
+  <span class="string">"outputs"</span>: [
+    { <span class="string">"resource"</span>: <span class="string">"luxus_nahrung"</span>, <span class="string">"amount"</span>: <span class="number">1</span> }
+  ],
+  <span class="string">"productionTime"</span>: <span class="number">120</span>,
+  <span class="string">"requiredTech"</span>: <span class="string">"advanced_farming"</span>
+}
+            </div>
+          </div>
+          <div class="card">
+            <h3>API-Endpunkte</h3>
+            <div class="api-endpoint">
+              <span class="method get">GET</span>
+              <span class="path">/api/planet/{id}/sectors</span>
+              <p>Gibt alle Sektoren eines Planeten zurück.</p>
+            </div>
+            <div class="api-endpoint">
+              <span class="method post">POST</span>
+              <span class="path">/api/buildings/place</span>
+              <p>Platziert ein Gebäude an gegebenen Koordinaten.</p>
+            </div>
+            <div class="api-endpoint">
+              <span class="method put">PUT</span>
+              <span class="path">/api/traderoutes/{id}</span>
+              <p>Aktualisiert eine bestehende Handelsroute.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="export">
+        <h2>📤 Export & Teilen</h2>
+        <p class="lead">Speichere und teile deine Planetenkonfiguration.</p>
+        <div class="export-panel">
+          <button class="export-btn" id="export-json">
+            <span>📄</span> Als JSON exportieren
+          </button>
+          <button class="export-btn" id="export-png">
+            <span>🖼️</span> Als PNG speichern
+          </button>
+          <button class="export-btn" id="export-link">
+            <span>🔗</span> Teilbarer Link
+          </button>
+          <button class="export-btn" id="export-clipboard">
+            <span>📋</span> In Zwischenablage
+          </button>
+        </div>
+        <div class="callout" style="margin-top: 16px;">
+          <strong>Tipp:</strong> Exportierte JSON-Dateien können später wieder importiert oder mit anderen Spielern geteilt werden.
         </div>
       </section>
 
@@ -2749,6 +5234,365 @@
         setupTabs();
         setupChains();
         setupSeeds();
+
+        // Theme Toggle
+        const setupTheme = () => {
+          const toggle = document.getElementById('theme-toggle');
+          if (!toggle) return;
+          
+          const savedTheme = localStorage.getItem('planetTheme') || 'light';
+          if (savedTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            toggle.innerHTML = '<svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><span>Theme</span>';
+          }
+          
+          toggle.addEventListener('click', () => {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            if (isDark) {
+              document.documentElement.removeAttribute('data-theme');
+              localStorage.setItem('planetTheme', 'light');
+              toggle.innerHTML = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg><span>Theme</span>';
+            } else {
+              document.documentElement.setAttribute('data-theme', 'dark');
+              localStorage.setItem('planetTheme', 'dark');
+              toggle.innerHTML = '<svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><span>Theme</span>';
+            }
+          });
+        };
+
+        // Notification Center
+        const setupNotifications = () => {
+          const toggle = document.getElementById('notification-toggle');
+          const center = document.getElementById('notification-center');
+          if (!toggle || !center) return;
+          
+          toggle.addEventListener('click', () => {
+            center.classList.toggle('is-open');
+          });
+          
+          document.addEventListener('click', (e) => {
+            if (!center.contains(e.target) && !toggle.contains(e.target)) {
+              center.classList.remove('is-open');
+            }
+          });
+        };
+
+        // Floating Navigation
+        const setupFloatingNav = () => {
+          const nav = document.getElementById('floating-nav');
+          if (!nav) return;
+          
+          const buttons = nav.querySelectorAll('button');
+          buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+              const sectionId = btn.dataset.section;
+              const section = document.getElementById(sectionId) || 
+                             document.querySelector(`.hero`);
+              if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+              }
+              buttons.forEach(b => b.classList.remove('active'));
+              btn.classList.add('active');
+            });
+          });
+        };
+
+        // Glossary Modal
+        const setupGlossary = () => {
+          const openBtn = document.getElementById('glossary-open');
+          const modal = document.getElementById('glossary-modal');
+          const closeBtn = modal?.querySelector('.modal-close');
+          const searchInput = document.getElementById('glossary-search');
+          const list = document.getElementById('glossary-list');
+          
+          if (!openBtn || !modal) return;
+          
+          openBtn.addEventListener('click', () => {
+            modal.classList.add('is-open');
+          });
+          
+          closeBtn?.addEventListener('click', () => {
+            modal.classList.remove('is-open');
+          });
+          
+          modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+              modal.classList.remove('is-open');
+            }
+          });
+          
+          if (searchInput && list) {
+            searchInput.addEventListener('input', () => {
+              const query = searchInput.value.toLowerCase();
+              const items = list.querySelectorAll('.glossary-item');
+              items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(query) ? 'block' : 'none';
+              });
+            });
+          }
+        };
+
+        // Tutorial System
+        const setupTutorial = () => {
+          const startBtn = document.getElementById('tutorial-start');
+          const overlay = document.getElementById('tutorial-overlay');
+          const tooltip = document.getElementById('tutorial-tooltip');
+          const skipBtn = document.getElementById('tutorial-skip');
+          const nextBtn = document.getElementById('tutorial-next');
+          const progress = document.getElementById('tutorial-progress');
+          
+          if (!startBtn || !overlay) return;
+          
+          const steps = [
+            { selector: '.hero', title: 'Willkommen!', text: 'Dies ist dein Planeten-Übersichtspanel. Hier siehst du den aktuellen Status deiner Kolonie.' },
+            { selector: '#status', title: 'Kolonie-Status', text: 'Behalte Bevölkerung, Versorgung und Emissionen im Blick.' },
+            { selector: '#research', title: 'Forschung', text: 'Schalte neue Technologien frei, um deine Kolonie zu verbessern.' },
+            { selector: '#diplomacy', title: 'Diplomatie', text: 'Baue Beziehungen zu anderen Fraktionen auf oder führe Handelskriege.' },
+            { selector: '#seeds', title: 'Seeds & Welten', text: 'Generiere einzigartige Planeten mit Seeds oder lade Community-Welten.' }
+          ];
+          
+          let currentStep = 0;
+          
+          const showStep = (index) => {
+            if (index >= steps.length) {
+              overlay.classList.remove('is-active');
+              return;
+            }
+            
+            const step = steps[index];
+            const el = document.querySelector(step.selector);
+            
+            document.getElementById('tutorial-title').textContent = step.title;
+            document.getElementById('tutorial-text').textContent = step.text;
+            
+            if (el) {
+              el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            
+            // Update progress
+            const dots = progress.querySelectorAll('span');
+            dots.forEach((dot, i) => {
+              dot.classList.toggle('active', i <= index);
+            });
+            
+            nextBtn.textContent = index === steps.length - 1 ? 'Fertig ✓' : 'Weiter →';
+          };
+          
+          startBtn.addEventListener('click', () => {
+            currentStep = 0;
+            overlay.classList.add('is-active');
+            showStep(0);
+          });
+          
+          skipBtn?.addEventListener('click', () => {
+            overlay.classList.remove('is-active');
+          });
+          
+          nextBtn?.addEventListener('click', () => {
+            currentStep++;
+            showStep(currentStep);
+          });
+        };
+
+        // Build Editor
+        const setupBuildEditor = () => {
+          const grid = document.getElementById('build-grid');
+          const palette = document.querySelector('.build-palette');
+          
+          if (!grid || !palette) return;
+          
+          // Generate grid cells
+          for (let i = 0; i < 96; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'build-cell';
+            cell.dataset.index = i;
+            grid.appendChild(cell);
+          }
+          
+          let selectedBuilding = 'home';
+          const buildingRadius = {
+            'home': 1,
+            'solar': 2,
+            'water': 3,
+            'hydro': 2,
+            'refinery': 1,
+            'lab': 2,
+            'spaceport': 4
+          };
+          
+          palette.querySelectorAll('.build-item').forEach((item, index) => {
+            item.addEventListener('click', () => {
+              palette.querySelectorAll('.build-item').forEach(i => i.classList.remove('selected'));
+              item.classList.add('selected');
+              selectedBuilding = ['home', 'solar', 'water', 'hydro', 'refinery', 'lab', 'spaceport'][index];
+            });
+          });
+          
+          grid.addEventListener('click', (e) => {
+            const cell = e.target.closest('.build-cell');
+            if (!cell) return;
+            
+            // Clear previous radius
+            grid.querySelectorAll('.radius').forEach(c => c.classList.remove('radius'));
+            
+            // Toggle occupied
+            if (cell.classList.contains('occupied')) {
+              cell.classList.remove('occupied');
+              return;
+            }
+            
+            cell.classList.add('occupied');
+            
+            // Show radius
+            const index = parseInt(cell.dataset.index);
+            const row = Math.floor(index / 12);
+            const col = index % 12;
+            const radius = buildingRadius[selectedBuilding] || 1;
+            
+            for (let r = -radius; r <= radius; r++) {
+              for (let c = -radius; c <= radius; c++) {
+                const newRow = row + r;
+                const newCol = col + c;
+                if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 12) {
+                  const newIndex = newRow * 12 + newCol;
+                  const targetCell = grid.querySelector(`[data-index="${newIndex}"]`);
+                  if (targetCell && !targetCell.classList.contains('occupied')) {
+                    targetCell.classList.add('radius');
+                  }
+                }
+              }
+            }
+          });
+        };
+
+        // Catastrophe Simulator
+        const setupCatastrophe = () => {
+          const types = document.querySelectorAll('.catastrophe-type');
+          types.forEach(type => {
+            type.addEventListener('click', () => {
+              types.forEach(t => t.classList.remove('selected'));
+              type.classList.add('selected');
+            });
+          });
+        };
+
+        // Soundtrack Player
+        const setupSoundtrack = () => {
+          const player = document.getElementById('soundtrack-player');
+          const toggleBtn = document.getElementById('player-toggle');
+          
+          if (!player || !toggleBtn) return;
+          
+          let isPlaying = false;
+          const tracks = [
+            'Ambient: Orbital Horizons',
+            'Ambient: Stellar Winds',
+            'Ambient: Colony Dreams',
+            'Ambient: Deep Space'
+          ];
+          let currentTrack = 0;
+          
+          toggleBtn.addEventListener('click', () => {
+            isPlaying = !isPlaying;
+            toggleBtn.textContent = isPlaying ? '⏸' : '▶';
+            
+            if (isPlaying) {
+              // Simulate progress
+              const progress = player.querySelector('.player-progress span');
+              let width = 0;
+              const interval = setInterval(() => {
+                if (!isPlaying) {
+                  clearInterval(interval);
+                  return;
+                }
+                width += 0.5;
+                if (width >= 100) {
+                  width = 0;
+                  currentTrack = (currentTrack + 1) % tracks.length;
+                  player.querySelector('.player-track').textContent = tracks[currentTrack];
+                }
+                progress.style.width = width + '%';
+              }, 100);
+            }
+          });
+        };
+
+        // Export Functions
+        const setupExport = () => {
+          const jsonBtn = document.getElementById('export-json');
+          const pngBtn = document.getElementById('export-png');
+          const linkBtn = document.getElementById('export-link');
+          const clipboardBtn = document.getElementById('export-clipboard');
+          
+          const seedInput = document.getElementById('seed-input');
+          
+          if (jsonBtn) {
+            jsonBtn.addEventListener('click', () => {
+              const data = {
+                seed: seedInput?.value || 'DEFAULT',
+                timestamp: new Date().toISOString(),
+                version: '1.0.0'
+              };
+              const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `planet-${data.seed}.json`;
+              a.click();
+              URL.revokeObjectURL(url);
+            });
+          }
+          
+          if (linkBtn) {
+            linkBtn.addEventListener('click', () => {
+              const url = new URL(window.location.href);
+              url.searchParams.set('seed', seedInput?.value || 'DEFAULT');
+              navigator.clipboard?.writeText(url.toString()).then(() => {
+                alert('Link kopiert!');
+              });
+            });
+          }
+          
+          if (clipboardBtn) {
+            clipboardBtn.addEventListener('click', () => {
+              const seed = seedInput?.value || 'DEFAULT';
+              navigator.clipboard?.writeText(seed).then(() => {
+                alert('Seed kopiert: ' + seed);
+              });
+            });
+          }
+        };
+
+        // Research Tree interactions
+        const setupResearch = () => {
+          const nodes = document.querySelectorAll('.research-node:not(.locked)');
+          nodes.forEach(node => {
+            node.addEventListener('click', () => {
+              if (node.classList.contains('available')) {
+                node.classList.remove('available');
+                node.classList.add('unlocked');
+                node.querySelector('.node-cost').textContent = '✓ Erforscht';
+                const status = document.createElement('span');
+                status.className = 'node-status';
+                status.textContent = '✓';
+                node.appendChild(status);
+              }
+            });
+          });
+        };
+
+        // Initialize all new features
+        setupTheme();
+        setupNotifications();
+        setupFloatingNav();
+        setupGlossary();
+        setupTutorial();
+        setupBuildEditor();
+        setupCatastrophe();
+        setupSoundtrack();
+        setupExport();
+        setupResearch();
       })();
     </script>
   </body>
