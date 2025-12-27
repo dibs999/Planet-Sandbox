@@ -3,6 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#1b2b3a" />
+    <meta name="description" content="Anno-inspirierte Planetensimulation – Siedeln, Handeln, Terraformen" />
+    <link rel="manifest" href="manifest.json" />
     <title>Planet Sandbox - Anno im Orbit</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -2762,9 +2765,1003 @@
           max-width: 90%;
         }
       }
+
+      /* Toasts (statt alert) */
+      .toast-container {
+        position: fixed;
+        left: 20px;
+        bottom: 20px;
+        z-index: 6000;
+        display: grid;
+        gap: 10px;
+        width: min(420px, calc(100vw - 40px));
+        pointer-events: none;
+      }
+
+      .toast {
+        pointer-events: auto;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 10px;
+        align-items: start;
+        padding: 12px;
+        border-radius: 14px;
+        background: var(--panel-strong);
+        border: 1px solid var(--stroke);
+        box-shadow: var(--shadow-soft);
+        transform: translateY(10px);
+        opacity: 0;
+        animation: toastIn 240ms ease forwards;
+      }
+
+      .toast .toast-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.9rem;
+        margin-top: 1px;
+      }
+
+      .toast .toast-title {
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: var(--ink);
+      }
+
+      .toast .toast-message {
+        margin-top: 2px;
+        font-size: 0.85rem;
+        color: var(--muted);
+        line-height: 1.35;
+      }
+
+      .toast .toast-close {
+        border: none;
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+        padding: 6px;
+        border-radius: 10px;
+      }
+
+      .toast .toast-close:hover {
+        background: rgba(27, 43, 58, 0.08);
+        color: var(--ink);
+      }
+
+      .toast[data-type="success"] .toast-icon {
+        background: var(--success);
+      }
+
+      .toast[data-type="warning"] .toast-icon {
+        background: var(--warning);
+      }
+
+      .toast[data-type="danger"] .toast-icon {
+        background: var(--danger);
+      }
+
+      .toast[data-type="info"] .toast-icon {
+        background: var(--navy);
+      }
+
+      @keyframes toastIn {
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes toastOut {
+        to {
+          transform: translateY(8px);
+          opacity: 0;
+        }
+      }
+
+      /* Sim Controls */
+      .sim-controls {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1000;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        padding: 8px 10px;
+        border-radius: 999px;
+        background: var(--panel-strong);
+        border: 1px solid var(--stroke);
+        box-shadow: var(--shadow-soft);
+      }
+
+      .sim-controls .sim-label {
+        font-size: 0.78rem;
+        color: var(--muted);
+        margin-right: 6px;
+        white-space: nowrap;
+      }
+
+      .sim-controls .sim-btn {
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.8);
+        color: var(--navy);
+        padding: 7px 10px;
+        border-radius: 999px;
+        font-size: 0.82rem;
+        cursor: pointer;
+      }
+
+      .sim-controls .sim-btn[aria-pressed="true"] {
+        background: var(--navy);
+        color: #fff;
+        border-color: var(--navy);
+      }
+
+      .sim-controls .sim-btn:focus-visible {
+        outline: 2px solid var(--brass);
+        outline-offset: 2px;
+      }
+
+      /* Seed-getriebene Highlights */
+      .biome-card.is-dominant {
+        border-color: rgba(177, 138, 85, 0.65);
+        box-shadow: 0 0 0 1px rgba(177, 138, 85, 0.15), var(--shadow-soft);
+      }
+
+      /* Time Display */
+      .sim-time {
+        font-family: "Cinzel", serif;
+        font-size: 0.85rem;
+        color: var(--navy);
+        margin-left: 10px;
+        padding-left: 10px;
+        border-left: 1px solid var(--stroke);
+        white-space: nowrap;
+      }
+
+      /* Command Palette */
+      .command-palette-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 5000;
+        display: none;
+        align-items: flex-start;
+        justify-content: center;
+        padding-top: 15vh;
+      }
+
+      .command-palette-overlay.is-open {
+        display: flex;
+      }
+
+      .command-palette {
+        width: min(560px, 90vw);
+        background: var(--panel-strong);
+        border: 1px solid var(--stroke);
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+
+      .command-input {
+        width: 100%;
+        padding: 16px 20px;
+        border: none;
+        border-bottom: 1px solid var(--stroke);
+        background: transparent;
+        font-size: 1rem;
+        color: var(--ink);
+        outline: none;
+      }
+
+      .command-input::placeholder {
+        color: var(--muted);
+      }
+
+      .command-list {
+        max-height: 320px;
+        overflow-y: auto;
+        padding: 8px;
+      }
+
+      .command-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 0.9rem;
+      }
+
+      .command-item:hover,
+      .command-item.is-selected {
+        background: rgba(27, 43, 58, 0.08);
+      }
+
+      .command-item .cmd-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        background: var(--navy);
+        color: #fff;
+        display: grid;
+        place-items: center;
+        font-size: 0.85rem;
+      }
+
+      .command-item .cmd-label {
+        flex: 1;
+      }
+
+      .command-item .cmd-shortcut {
+        font-size: 0.75rem;
+        padding: 3px 8px;
+        border-radius: 6px;
+        background: rgba(27, 43, 58, 0.08);
+        color: var(--muted);
+        font-family: monospace;
+      }
+
+      /* Settings Panel */
+      .settings-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 4500;
+        display: none;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .settings-overlay.is-open {
+        display: flex;
+      }
+
+      .settings-panel {
+        width: min(480px, 90vw);
+        max-height: 80vh;
+        background: var(--panel-strong);
+        border: 1px solid var(--stroke);
+        border-radius: 20px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+
+      .settings-header {
+        padding: 18px 20px;
+        border-bottom: 1px solid var(--stroke);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .settings-header h3 {
+        margin: 0;
+        font-size: 1.1rem;
+      }
+
+      .settings-body {
+        padding: 20px;
+        overflow-y: auto;
+        max-height: calc(80vh - 70px);
+      }
+
+      .setting-group {
+        margin-bottom: 20px;
+      }
+
+      .setting-group h4 {
+        margin: 0 0 12px;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+      }
+
+      .setting-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--stroke);
+      }
+
+      .setting-row:last-child {
+        border-bottom: none;
+      }
+
+      .setting-label {
+        font-size: 0.9rem;
+      }
+
+      .setting-control input[type="range"] {
+        width: 120px;
+        accent-color: var(--brass);
+      }
+
+      .setting-control input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: var(--brass);
+      }
+
+      .setting-control select {
+        padding: 6px 10px;
+        border-radius: 8px;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.8);
+        font-size: 0.85rem;
+      }
+
+      /* Dark Mode Starfield */
+      [data-theme="dark"] body::before {
+        background-image:
+          radial-gradient(1px 1px at 20px 30px, white, transparent),
+          radial-gradient(1px 1px at 40px 70px, rgba(255,255,255,0.8), transparent),
+          radial-gradient(1px 1px at 50px 160px, rgba(255,255,255,0.6), transparent),
+          radial-gradient(1px 1px at 90px 40px, white, transparent),
+          radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.7), transparent),
+          radial-gradient(1.5px 1.5px at 160px 120px, white, transparent),
+          radial-gradient(1px 1px at 200px 50px, rgba(255,255,255,0.5), transparent),
+          radial-gradient(1px 1px at 220px 90px, white, transparent),
+          radial-gradient(1px 1px at 260px 140px, rgba(255,255,255,0.6), transparent);
+        background-size: 280px 180px;
+        background-position: 0 0;
+        opacity: 1;
+        animation: starTwinkle 4s ease-in-out infinite alternate;
+      }
+
+      @keyframes starTwinkle {
+        0% { opacity: 0.8; }
+        100% { opacity: 1; }
+      }
+
+      /* Overlay System */
+      .overlay-controls {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 12px;
+      }
+
+      .overlay-btn {
+        padding: 6px 12px;
+        border-radius: 999px;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.8);
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .overlay-btn[aria-pressed="true"] {
+        background: var(--navy);
+        color: #fff;
+        border-color: var(--navy);
+      }
+
+      .sector-map .overlay-layer {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        border-radius: inherit;
+      }
+
+      .sector-map .overlay-layer.is-active {
+        opacity: 1;
+      }
+
+      .overlay-layer.temp {
+        background: linear-gradient(135deg, 
+          rgba(59, 130, 246, 0.3) 0%, 
+          rgba(34, 197, 94, 0.3) 40%, 
+          rgba(234, 179, 8, 0.3) 70%, 
+          rgba(239, 68, 68, 0.3) 100%);
+      }
+
+      .overlay-layer.emissions {
+        background: radial-gradient(circle at 70% 30%, rgba(139, 69, 19, 0.5), transparent 50%),
+                    radial-gradient(circle at 40% 60%, rgba(139, 69, 19, 0.3), transparent 40%);
+      }
+
+      .overlay-layer.risk {
+        background: repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 20px,
+          rgba(239, 68, 68, 0.15) 20px,
+          rgba(239, 68, 68, 0.15) 40px
+        );
+      }
+
+      .overlay-layer.water {
+        background: radial-gradient(circle at 30% 50%, rgba(59, 130, 246, 0.4), transparent 50%),
+                    radial-gradient(circle at 70% 70%, rgba(59, 130, 246, 0.3), transparent 40%);
+      }
+
+      /* Flow SVG Paths */
+      .flow-diagram {
+        position: relative;
+      }
+
+      .flow-svg {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: visible;
+      }
+
+      .flow-path {
+        fill: none;
+        stroke: var(--brass);
+        stroke-width: 2;
+        opacity: 0.4;
+        transition: opacity 0.2s ease, stroke-width 0.2s ease;
+      }
+
+      .flow-path.is-highlighted {
+        opacity: 0.9;
+        stroke-width: 4;
+      }
+
+      .flow-node {
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .flow-node:hover {
+        transform: scale(1.03);
+        box-shadow: var(--shadow-soft);
+        z-index: 10;
+      }
+
+      .flow-node.is-highlighted {
+        border-color: var(--brass);
+        box-shadow: 0 0 0 3px rgba(177, 138, 85, 0.3);
+      }
+
+      /* Build Grid: Building Icons */
+      .build-cell.occupied {
+        position: relative;
+      }
+
+      .build-cell .building-icon {
+        position: absolute;
+        inset: 2px;
+        display: grid;
+        place-items: center;
+        font-size: 0.7rem;
+        background: var(--panel);
+        border-radius: 3px;
+      }
+
+      .build-cell[data-building="home"] { background: #4ade80; }
+      .build-cell[data-building="solar"] { background: #fbbf24; }
+      .build-cell[data-building="water"] { background: #60a5fa; }
+      .build-cell[data-building="hydro"] { background: #34d399; }
+      .build-cell[data-building="refinery"] { background: #f87171; }
+      .build-cell[data-building="lab"] { background: #a78bfa; }
+      .build-cell[data-building="spaceport"] { background: #818cf8; }
+
+      .build-palette .build-item[data-action="delete"] {
+        border-color: var(--danger);
+        color: var(--danger);
+      }
+
+      .build-palette .build-item[data-action="delete"]:hover {
+        background: rgba(182, 66, 42, 0.15);
+      }
+
+      /* Research Dependencies */
+      .research-node[data-prereq] {
+        position: relative;
+      }
+
+      .research-node .prereq-line {
+        position: absolute;
+        left: -20px;
+        top: 50%;
+        width: 18px;
+        height: 2px;
+        background: var(--stroke);
+      }
+
+      .research-progress {
+        height: 4px;
+        background: rgba(27, 43, 58, 0.15);
+        border-radius: 999px;
+        margin-top: 8px;
+        overflow: hidden;
+      }
+
+      .research-progress span {
+        display: block;
+        height: 100%;
+        background: linear-gradient(90deg, var(--brass), var(--copper));
+        border-radius: 999px;
+        width: 0%;
+        transition: width 0.3s ease;
+      }
+
+      /* Diplomacy Interactive */
+      .faction-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .faction-btn {
+        flex: 1;
+        padding: 8px 12px;
+        border-radius: 10px;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.8);
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .faction-btn:hover {
+        background: var(--navy);
+        color: #fff;
+        border-color: var(--navy);
+      }
+
+      .faction-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      /* Orbit Lane Editor */
+      .route-editor {
+        margin-top: 16px;
+        padding: 14px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.6);
+        border: 1px solid var(--stroke);
+      }
+
+      .route-form {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: 1fr 1fr auto;
+        align-items: end;
+      }
+
+      .route-form label {
+        display: block;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        margin-bottom: 4px;
+      }
+
+      .route-form input,
+      .route-form select {
+        width: 100%;
+        padding: 8px 10px;
+        border-radius: 8px;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.9);
+        font-size: 0.85rem;
+      }
+
+      .route.editable {
+        position: relative;
+      }
+
+      .route .route-actions {
+        display: flex;
+        gap: 6px;
+      }
+
+      .route .route-action {
+        padding: 4px 8px;
+        border-radius: 6px;
+        border: none;
+        background: rgba(27, 43, 58, 0.08);
+        font-size: 0.75rem;
+        cursor: pointer;
+      }
+
+      .route .route-action:hover {
+        background: var(--navy);
+        color: #fff;
+      }
+
+      .route .route-action.delete:hover {
+        background: var(--danger);
+      }
+
+      /* JSON Import */
+      .import-zone {
+        margin-top: 12px;
+        padding: 20px;
+        border: 2px dashed var(--stroke);
+        border-radius: 12px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .import-zone:hover,
+      .import-zone.drag-over {
+        border-color: var(--brass);
+        background: rgba(177, 138, 85, 0.08);
+      }
+
+      .import-zone input {
+        display: none;
+      }
+
+      .import-zone p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      /* Print Report */
+      @media print {
+        .theme-toggle,
+        .notification-toggle,
+        .notification-center,
+        .floating-nav,
+        .soundtrack-player,
+        .sim-controls,
+        .toast-container,
+        .command-palette-overlay,
+        .settings-overlay,
+        .tutorial-overlay,
+        .modal-overlay {
+          display: none !important;
+        }
+
+        body {
+          background: white !important;
+        }
+
+        body::before {
+          display: none !important;
+        }
+
+        .page {
+          padding: 20px;
+          max-width: 100%;
+        }
+
+        .hero,
+        .card,
+        .kpi-card,
+        section {
+          break-inside: avoid;
+          box-shadow: none !important;
+          border: 1px solid #ddd !important;
+        }
+
+        @page {
+          margin: 1cm;
+        }
+      }
+
+      /* Keyboard Hint */
+      .keyboard-hint {
+        position: fixed;
+        bottom: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 8px 14px;
+        border-radius: 10px;
+        background: var(--panel-strong);
+        border: 1px solid var(--stroke);
+        box-shadow: var(--shadow-soft);
+        font-size: 0.8rem;
+        color: var(--muted);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        z-index: 500;
+      }
+
+      .keyboard-hint.is-visible {
+        opacity: 1;
+      }
+
+      .keyboard-hint kbd {
+        padding: 2px 6px;
+        border-radius: 4px;
+        background: rgba(27, 43, 58, 0.1);
+        font-family: monospace;
+        margin: 0 2px;
+      }
+
+      /* Multi-Planet System */
+      .planet-manager {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .planet-switcher {
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: var(--panel-strong);
+        border: 1px solid var(--stroke);
+        box-shadow: var(--shadow-soft);
+        font-size: 0.85rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .planet-switcher:hover {
+        background: rgba(177, 138, 85, 0.15);
+      }
+
+      .planet-list-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 4500;
+        display: none;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .planet-list-overlay.is-open {
+        display: flex;
+      }
+
+      .planet-list-panel {
+        width: min(600px, 90vw);
+        max-height: 80vh;
+        background: var(--panel-strong);
+        border: 1px solid var(--stroke);
+        border-radius: 20px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+      }
+
+      .planet-list-header {
+        padding: 18px 20px;
+        border-bottom: 1px solid var(--stroke);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .planet-list-body {
+        padding: 20px;
+        overflow-y: auto;
+        display: grid;
+        gap: 12px;
+      }
+
+      .planet-item {
+        padding: 14px;
+        border-radius: 12px;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.6);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .planet-item:hover {
+        background: rgba(177, 138, 85, 0.15);
+        border-color: var(--brass);
+      }
+
+      .planet-item.is-active {
+        border-color: var(--brass);
+        background: rgba(177, 138, 85, 0.2);
+      }
+
+      .planet-item-actions {
+        display: flex;
+        gap: 6px;
+      }
+
+      .planet-item-btn {
+        padding: 4px 8px;
+        border-radius: 6px;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.8);
+        font-size: 0.75rem;
+        cursor: pointer;
+      }
+
+      /* Pixel Art Planet Canvas */
+      .planet-canvas-container {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        margin: 0 auto;
+      }
+
+      .planet-canvas {
+        image-rendering: pixelated;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: crisp-edges;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Pixel Art UI */
+      .pixel-art {
+        image-rendering: pixelated;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: crisp-edges;
+      }
+
+      .pixel-button {
+        image-rendering: pixelated;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: crisp-edges;
+        border: 2px solid;
+        border-color: var(--ink) var(--muted) var(--muted) var(--ink);
+        box-shadow: inset -2px -2px 0 var(--muted), inset 2px 2px 0 var(--ink);
+      }
+
+      .pixel-button:active {
+        border-color: var(--muted) var(--ink) var(--ink) var(--muted);
+        box-shadow: inset 2px 2px 0 var(--muted), inset -2px -2px 0 var(--ink);
+      }
     </style>
   </head>
   <body>
+    <!-- Simulation Controls -->
+    <div class="sim-controls" id="sim-controls" aria-label="Simulation">
+      <span class="sim-label">Simulation</span>
+      <button class="sim-btn" id="sim-pause" type="button" aria-pressed="false">Pause</button>
+      <button class="sim-btn" id="sim-1x" type="button" aria-pressed="true">1×</button>
+      <button class="sim-btn" id="sim-4x" type="button" aria-pressed="false">4×</button>
+      <button class="sim-btn" id="sim-10x" type="button" aria-pressed="false">10×</button>
+      <span class="sim-time" id="sim-time">Tag 1, Jahr 1</span>
+    </div>
+
+    <!-- Planet Manager -->
+    <div class="planet-manager">
+      <button class="planet-switcher" id="planet-switcher" aria-label="Planeten wechseln">
+        <span>🌍</span>
+        <span id="current-planet-name">Planet 1</span>
+        <span>▼</span>
+      </button>
+      <button class="planet-switcher" id="planet-add" aria-label="Neuen Planet hinzufügen" title="Neuer Planet">
+        ➕
+      </button>
+    </div>
+
+    <!-- Planet List Overlay -->
+    <div class="planet-list-overlay" id="planet-list-overlay" role="dialog" aria-modal="true" aria-label="Planetenliste">
+      <div class="planet-list-panel">
+        <div class="planet-list-header">
+          <h3>🌍 Planeten</h3>
+          <button class="modal-close" id="planet-list-close" aria-label="Schließen">×</button>
+        </div>
+        <div class="planet-list-body" id="planet-list-body">
+          <!-- Dynamisch generiert -->
+        </div>
+        <div class="planet-list-header" style="border-top: 1px solid var(--stroke); border-bottom: none;">
+          <button class="seed-button" id="planet-compare" style="width: 100%;">Vergleichen</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Command Palette -->
+    <div class="command-palette-overlay" id="command-palette" role="dialog" aria-modal="true" aria-label="Befehlspalette">
+      <div class="command-palette">
+        <input type="text" class="command-input" id="command-input" placeholder="Suche Aktionen, Sektionen, Seeds... (Esc zum Schließen)" autocomplete="off">
+        <div class="command-list" id="command-list" role="listbox"></div>
+      </div>
+    </div>
+
+    <!-- Settings Panel -->
+    <div class="settings-overlay" id="settings-overlay" role="dialog" aria-modal="true" aria-label="Einstellungen">
+      <div class="settings-panel">
+        <div class="settings-header">
+          <h3>⚙️ Einstellungen</h3>
+          <button class="modal-close" id="settings-close" aria-label="Schließen">×</button>
+        </div>
+        <div class="settings-body">
+          <div class="setting-group">
+            <h4>Audio</h4>
+            <div class="setting-row">
+              <span class="setting-label">Lautstärke</span>
+              <div class="setting-control">
+                <input type="range" id="setting-volume" min="0" max="100" value="70">
+              </div>
+            </div>
+            <div class="setting-row">
+              <span class="setting-label">Musik an</span>
+              <div class="setting-control">
+                <input type="checkbox" id="setting-music" checked>
+              </div>
+            </div>
+          </div>
+          <div class="setting-group">
+            <h4>Darstellung</h4>
+            <div class="setting-row">
+              <span class="setting-label">UI-Skalierung</span>
+              <div class="setting-control">
+                <select id="setting-scale">
+                  <option value="0.9">90%</option>
+                  <option value="1" selected>100%</option>
+                  <option value="1.1">110%</option>
+                  <option value="1.2">120%</option>
+                </select>
+              </div>
+            </div>
+            <div class="setting-row">
+              <span class="setting-label">Reduzierte Bewegung</span>
+              <div class="setting-control">
+                <input type="checkbox" id="setting-reduced-motion">
+              </div>
+            </div>
+            <div class="setting-row">
+              <span class="setting-label">Automatischer Dark Mode</span>
+              <div class="setting-control">
+                <input type="checkbox" id="setting-auto-dark">
+              </div>
+            </div>
+          </div>
+          <div class="setting-group">
+            <h4>Simulation</h4>
+            <div class="setting-row">
+              <span class="setting-label">Auto-Pause bei Tab-Wechsel</span>
+              <div class="setting-control">
+                <input type="checkbox" id="setting-auto-pause" checked>
+              </div>
+            </div>
+            <div class="setting-row">
+              <span class="setting-label">Benachrichtigungen</span>
+              <div class="setting-control">
+                <input type="checkbox" id="setting-notifications" checked>
+              </div>
+            </div>
+          </div>
+          <div class="setting-group">
+            <h4>Daten</h4>
+            <div class="setting-row">
+              <span class="setting-label">Alle Daten löschen</span>
+              <div class="setting-control">
+                <button class="seed-button secondary" id="setting-clear-data" style="padding: 6px 12px; font-size: 0.8rem;">Zurücksetzen</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Keyboard Hint -->
+    <div class="keyboard-hint" id="keyboard-hint">
+      <kbd>⌘</kbd>+<kbd>K</kbd> Befehlspalette · <kbd>T</kbd> Theme · <kbd>G</kbd> Glossar · <kbd>Space</kbd> Pause
+    </div>
+
+    <!-- Toasts -->
+    <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="false"></div>
+
     <!-- Theme Toggle -->
     <button class="theme-toggle" id="theme-toggle" aria-label="Theme wechseln">
       <svg class="sun-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
@@ -2822,6 +3819,7 @@
       <button data-section="biomes">Biome</button>
       <button data-section="achievements">Erfolge</button>
       <button data-section="seeds">Seeds</button>
+      <button id="settings-toggle" aria-label="Einstellungen">⚙️</button>
     </nav>
 
     <!-- Soundtrack Player -->
@@ -2924,18 +3922,10 @@
           </div>
         </div>
         <div class="hero-visual">
-          <div class="planet-3d-container">
-            <div class="planet-atmosphere"></div>
-            <div class="planet-3d" id="main-planet">
-              <div class="continent"></div>
-              <div class="continent"></div>
-              <div class="continent"></div>
-              <div class="clouds"></div>
-              <div class="terminator"></div>
-            </div>
-            <div class="planet-ring"></div>
+          <div class="planet-canvas-container">
+            <canvas class="planet-canvas pixel-art" id="main-planet-canvas" width="200" height="200"></canvas>
           </div>
-          <div class="legend">3D-Planet mit Tag-/Nacht-Zyklus, Wolken und Kontinenten</div>
+          <div class="legend">Pixel Art Planet mit Seed-generierten Kontinenten</div>
           <div class="chip-row" style="justify-content: center; margin-top: 12px;">
             <button class="seed-button secondary" id="glossary-open">📖 Glossar</button>
             <button class="seed-button secondary" id="tutorial-start">🎓 Tutorial</button>
@@ -2947,37 +3937,37 @@
         <h2>Kolonie-Status</h2>
         <p class="lead">Die Anno-typische Statusleiste als schneller &Uuml;berblick.</p>
         <div class="kpi-grid">
-          <div class="kpi-card" style="--value: 72%;">
+          <div class="kpi-card" data-kpi="population" style="--value: 72%;">
             <div class="kpi-title">Bev&ouml;lkerung</div>
             <div class="kpi-value">128k</div>
             <div class="kpi-sub">Stufe: Kolonisten</div>
             <div class="kpi-meter"><span></span></div>
           </div>
-          <div class="kpi-card" style="--value: 84%;">
+          <div class="kpi-card" data-kpi="supply" style="--value: 84%;">
             <div class="kpi-title">Versorgung</div>
             <div class="kpi-value">84%</div>
             <div class="kpi-sub">Engpass: Verbundmaterial</div>
             <div class="kpi-meter"><span></span></div>
           </div>
-          <div class="kpi-card" style="--value: 71%;">
+          <div class="kpi-card" data-kpi="satisfaction" style="--value: 71%;">
             <div class="kpi-title">Zufriedenheit</div>
             <div class="kpi-value">71%</div>
             <div class="kpi-sub">Steuern stabil</div>
             <div class="kpi-meter"><span></span></div>
           </div>
-          <div class="kpi-card" style="--value: 32%;">
+          <div class="kpi-card" data-kpi="emissions" style="--value: 32%;">
             <div class="kpi-title">Emissionen</div>
             <div class="kpi-value">32%</div>
             <div class="kpi-sub">Limit: 60%</div>
             <div class="kpi-meter"><span></span></div>
           </div>
-          <div class="kpi-card" style="--value: 55%;">
+          <div class="kpi-card" data-kpi="energy" style="--value: 55%;">
             <div class="kpi-title">Energie</div>
             <div class="kpi-value">55%</div>
             <div class="kpi-sub">Puffer: 2 Tage</div>
             <div class="kpi-meter"><span></span></div>
           </div>
-          <div class="kpi-card" style="--value: 90%;">
+          <div class="kpi-card" data-kpi="water" style="--value: 90%;">
             <div class="kpi-title">Wasser</div>
             <div class="kpi-value">90%</div>
             <div class="kpi-sub">Reservoir stabil</div>
@@ -3069,7 +4059,7 @@
         <h2>🤝 Diplomatie &amp; Fraktionen</h2>
         <p class="lead">Baue Beziehungen zu anderen Kolonien auf oder konkurriere um Ressourcen.</p>
         <div class="diplomacy-grid">
-          <div class="faction-card">
+          <div class="faction-card" data-faction="tech">
             <div class="faction-header">
               <div class="faction-emblem tech">🔧</div>
               <div class="faction-info">
@@ -3078,7 +4068,7 @@
               </div>
             </div>
             <div class="faction-relations">
-              <small>Beziehung: Freundlich (72%)</small>
+              <small>Beziehung: <span class="relation-status">Freundlich</span> (<span class="relation-value">72</span>%)</small>
               <div class="relation-bar">
                 <div class="relation-fill friendly" style="width: 72%;"></div>
               </div>
@@ -3087,8 +4077,13 @@
               <span class="treaty-badge">Forschungsabkommen</span>
               <span class="treaty-badge">Technologie-Tausch</span>
             </div>
+            <div class="faction-actions">
+              <button class="faction-btn" data-action="gift">🎁 Geschenk</button>
+              <button class="faction-btn" data-action="trade">📦 Handeln</button>
+              <button class="faction-btn" data-action="treaty">📜 Vertrag</button>
+            </div>
           </div>
-          <div class="faction-card">
+          <div class="faction-card" data-faction="eco">
             <div class="faction-header">
               <div class="faction-emblem eco">🌿</div>
               <div class="faction-info">
@@ -3097,13 +4092,18 @@
               </div>
             </div>
             <div class="faction-relations">
-              <small>Beziehung: Neutral (45%)</small>
+              <small>Beziehung: <span class="relation-status">Neutral</span> (<span class="relation-value">45</span>%)</small>
               <div class="relation-bar">
                 <div class="relation-fill neutral" style="width: 45%;"></div>
               </div>
             </div>
             <div class="faction-treaties">
               <span class="treaty-badge pending">Handelsabkommen (ausstehend)</span>
+            </div>
+            <div class="faction-actions">
+              <button class="faction-btn" data-action="gift">🎁 Geschenk</button>
+              <button class="faction-btn" data-action="trade">📦 Handeln</button>
+              <button class="faction-btn" data-action="treaty">📜 Vertrag</button>
             </div>
           </div>
           <div class="faction-card">
@@ -3245,7 +4245,7 @@
         <h2>🌍 Biom-Galerie</h2>
         <p class="lead">Jedes Biom hat einzigartige Eigenschaften, Boni und Herausforderungen.</p>
         <div class="biome-gallery">
-          <div class="biome-card">
+          <div class="biome-card" data-biome="tundra">
             <div class="biome-preview tundra"></div>
             <h4>Tundra</h4>
             <p>Eisige Weiten mit reichen Wasservorkommen</p>
@@ -3255,7 +4255,7 @@
               <span>🌱 -60%</span>
             </div>
           </div>
-          <div class="biome-card">
+          <div class="biome-card" data-biome="desert">
             <div class="biome-preview desert"></div>
             <h4>Wüste</h4>
             <p>Extreme Hitze, reich an Mineralien</p>
@@ -3265,7 +4265,7 @@
               <span>💧 -80%</span>
             </div>
           </div>
-          <div class="biome-card">
+          <div class="biome-card" data-biome="ocean">
             <div class="biome-preview ocean"></div>
             <h4>Ozean</h4>
             <p>Unbegrenzte Wasserressourcen, Handelsbonus</p>
@@ -3275,7 +4275,7 @@
               <span>🏗️ -70%</span>
             </div>
           </div>
-          <div class="biome-card">
+          <div class="biome-card" data-biome="jungle">
             <div class="biome-preview jungle"></div>
             <h4>Dschungel</h4>
             <p>Üppige Vegetation, Biomasse-Bonus</p>
@@ -3285,7 +4285,7 @@
               <span>🦠 +20%</span>
             </div>
           </div>
-          <div class="biome-card">
+          <div class="biome-card" data-biome="volcanic">
             <div class="biome-preview volcanic"></div>
             <h4>Vulkanisch</h4>
             <p>Geothermie, aber gefährlich</p>
@@ -3295,7 +4295,7 @@
               <span>⛏️ +35%</span>
             </div>
           </div>
-          <div class="biome-card">
+          <div class="biome-card" data-biome="plains">
             <div class="biome-preview plains"></div>
             <h4>Ebenen</h4>
             <p>Ideales Siedlungsgebiet, ausbalanciert</p>
@@ -3305,7 +4305,7 @@
               <span>⚖️ Balance</span>
             </div>
           </div>
-          <div class="biome-card">
+          <div class="biome-card" data-biome="mountain">
             <div class="biome-preview mountain"></div>
             <h4>Gebirge</h4>
             <p>Schwer zugänglich, aber erzreich</p>
@@ -3315,7 +4315,7 @@
               <span>🚗 -50%</span>
             </div>
           </div>
-          <div class="biome-card">
+          <div class="biome-card" data-biome="swamp">
             <div class="biome-preview swamp"></div>
             <h4>Sumpf</h4>
             <p>Gasgewinnung, aber instabil</p>
@@ -3406,7 +4406,18 @@
                   Lokale Planung wie in Anno: Baufl&auml;chen, Ressourcen, Risiko und
                   Versorgung sind auf einen Blick sichtbar.
                 </p>
-                <div class="sector-map" aria-hidden="true">
+                <div class="overlay-controls">
+                  <button class="overlay-btn" data-overlay="none" aria-pressed="true">Keine</button>
+                  <button class="overlay-btn" data-overlay="temp" aria-pressed="false">🌡️ Temperatur</button>
+                  <button class="overlay-btn" data-overlay="emissions" aria-pressed="false">💨 Emissionen</button>
+                  <button class="overlay-btn" data-overlay="risk" aria-pressed="false">⚠️ Risiko</button>
+                  <button class="overlay-btn" data-overlay="water" aria-pressed="false">💧 Wasser</button>
+                </div>
+                <div class="sector-map" id="sector-map-main" aria-hidden="true">
+                  <div class="overlay-layer temp"></div>
+                  <div class="overlay-layer emissions"></div>
+                  <div class="overlay-layer risk"></div>
+                  <div class="overlay-layer water"></div>
                   <div class="weather-overlay">
                     <div class="weather-storm"></div>
                     <div class="weather-storm"></div>
@@ -3416,7 +4427,7 @@
                   <span class="map-marker water"></span>
                   <span class="map-marker risk"></span>
                 </div>
-                <div class="legend">Erz, Wasser, Risiko + Live-Wetter</div>
+                <div class="legend">Erz, Wasser, Risiko + Live-Wetter + Overlays</div>
               </div>
               <div class="card">
                 <h3>Detailpanel</h3>
@@ -3443,10 +4454,55 @@
                   Routen verbinden Sektoren und orbitale Hubs. Distanz, Wetter und
                   Gravitation beeinflussen die Laufzeit.
                 </p>
-                <div class="route-list">
-                  <div class="route">Nordkuppe 07 &rarr; Orbit-Hub A <span>8d / 120t</span></div>
-                  <div class="route">S&uuml;dg&uuml;rtel 02 &rarr; Raffinerie 4 <span>5d / 80t</span></div>
-                  <div class="route">Ozeanring &rarr; Terra-Knoten <span>6d / 95t</span></div>
+                <div class="route-list" id="route-list">
+                  <div class="route editable" data-route-id="1">
+                    <span>Nordkuppe 07 → Orbit-Hub A</span>
+                    <span>8d / 120t</span>
+                    <div class="route-actions">
+                      <button class="route-action" data-action="edit">✏️</button>
+                      <button class="route-action delete" data-action="delete">🗑️</button>
+                    </div>
+                  </div>
+                  <div class="route editable" data-route-id="2">
+                    <span>Südgürtel 02 → Raffinerie 4</span>
+                    <span>5d / 80t</span>
+                    <div class="route-actions">
+                      <button class="route-action" data-action="edit">✏️</button>
+                      <button class="route-action delete" data-action="delete">🗑️</button>
+                    </div>
+                  </div>
+                  <div class="route editable" data-route-id="3">
+                    <span>Ozeanring → Terra-Knoten</span>
+                    <span>6d / 95t</span>
+                    <div class="route-actions">
+                      <button class="route-action" data-action="edit">✏️</button>
+                      <button class="route-action delete" data-action="delete">🗑️</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="route-editor">
+                  <h4 style="margin: 0 0 10px; font-size: 0.85rem;">Neue Route erstellen</h4>
+                  <div class="route-form">
+                    <div>
+                      <label>Von</label>
+                      <select id="route-from">
+                        <option>Nordkuppe 07</option>
+                        <option>Südgürtel 02</option>
+                        <option>Ozeanring</option>
+                        <option>Polarbecken</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label>Nach</label>
+                      <select id="route-to">
+                        <option>Orbit-Hub A</option>
+                        <option>Orbit-Hub B</option>
+                        <option>Raffinerie 4</option>
+                        <option>Terra-Knoten</option>
+                      </select>
+                    </div>
+                    <button class="seed-button" id="route-add">+ Hinzufügen</button>
+                  </div>
                 </div>
               </div>
               <div class="card">
@@ -4321,33 +5377,37 @@
         <p class="lead">Platziere Gebäude und sieh Versorgungsradien in Echtzeit.</p>
         <div class="build-editor">
           <div class="build-palette">
-            <div class="build-item selected">
+            <div class="build-item selected" data-building="home">
               <span class="item-icon">🏠</span>
               <span>Wohnkuppel</span>
             </div>
-            <div class="build-item">
+            <div class="build-item" data-building="solar">
               <span class="item-icon">⚡</span>
               <span>Solarfeld</span>
             </div>
-            <div class="build-item">
+            <div class="build-item" data-building="water">
               <span class="item-icon">💧</span>
               <span>Wasserwerk</span>
             </div>
-            <div class="build-item">
+            <div class="build-item" data-building="hydro">
               <span class="item-icon">🌱</span>
               <span>Hydroponik</span>
             </div>
-            <div class="build-item">
+            <div class="build-item" data-building="refinery">
               <span class="item-icon">🏭</span>
               <span>Raffinerie</span>
             </div>
-            <div class="build-item">
+            <div class="build-item" data-building="lab">
               <span class="item-icon">🔬</span>
               <span>Labor</span>
             </div>
-            <div class="build-item">
+            <div class="build-item" data-building="spaceport">
               <span class="item-icon">🚀</span>
               <span>Raumhafen</span>
+            </div>
+            <div class="build-item" data-action="delete">
+              <span class="item-icon">🗑️</span>
+              <span>Löschen</span>
             </div>
           </div>
           <div class="build-grid" id="build-grid">
@@ -4650,9 +5710,28 @@
           <button class="export-btn" id="export-clipboard">
             <span>📋</span> In Zwischenablage
           </button>
+          <button class="export-btn" id="export-print">
+            <span>🖨️</span> Drucken / PDF
+          </button>
         </div>
-        <div class="callout" style="margin-top: 16px;">
-          <strong>Tipp:</strong> Exportierte JSON-Dateien können später wieder importiert oder mit anderen Spielern geteilt werden.
+        <div class="grid-2" style="margin-top: 20px;">
+          <div class="card">
+            <h3>📥 Import</h3>
+            <p class="lead">Lade einen gespeicherten Spielstand oder Seed.</p>
+            <div class="import-zone" id="import-zone">
+              <input type="file" id="import-file" accept=".json">
+              <p>📁 JSON-Datei hierher ziehen oder klicken</p>
+            </div>
+          </div>
+          <div class="card">
+            <h3>💾 Spielstand</h3>
+            <p class="lead">Speichere den kompletten Fortschritt lokal.</p>
+            <div class="seed-actions" style="margin-top: 12px;">
+              <button class="seed-button" id="save-game">Spielstand speichern</button>
+              <button class="seed-button secondary" id="load-game">Spielstand laden</button>
+            </div>
+            <p class="seed-feedback" id="save-feedback" role="status" style="margin-top: 10px;"></p>
+          </div>
         </div>
       </section>
 
@@ -4733,6 +5812,35 @@
     </main>
     <script>
       (() => {
+        // --- Utilities: Toasts ---
+        const toast = ({ type = "info", title = "Info", message = "", timeout = 2500 } = {}) => {
+          const container = document.getElementById("toast-container");
+          if (!container) return;
+
+          const icon = type === "success" ? "✓" : type === "warning" ? "!" : type === "danger" ? "×" : "i";
+
+          const el = document.createElement("div");
+          el.className = "toast";
+          el.dataset.type = type;
+          el.innerHTML = `
+            <div class="toast-icon" aria-hidden="true">${icon}</div>
+            <div class="toast-body">
+              <div class="toast-title">${title}</div>
+              ${message ? `<div class="toast-message">${message}</div>` : ""}
+            </div>
+            <button type="button" class="toast-close" aria-label="Schließen">×</button>
+          `;
+
+          const close = () => {
+            el.style.animation = "toastOut 180ms ease forwards";
+            window.setTimeout(() => el.remove(), 180);
+          };
+          el.querySelector(".toast-close")?.addEventListener("click", close);
+
+          container.appendChild(el);
+          window.setTimeout(close, timeout);
+        };
+
         const setupTabs = () => {
           const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
           if (!tabs.length) return;
@@ -4905,6 +6013,260 @@
             resources: resource,
             sectors: `${sectors}`,
           };
+        };
+
+        // --- Seed -> UI (KPIs / Charts / Flows / Routes / Biome highlight) ---
+        const deriveColonyFromPlanet = (planet) => {
+          const rng = mulberry32(hashSeed(planet.seed));
+          const oceanPct = parseInt(String(planet.ocean).replace("%", ""), 10) || 0;
+          const basePop =
+            planet.size === "Zwerg" ? 60000 : planet.size === "Standard" ? 128000 : planet.size === "Gross" ? 220000 : 380000;
+
+          const climatePenalty =
+            planet.climate === "Polar" ? 0.85 :
+            planet.climate === "Vulkanisch" ? 0.9 :
+            planet.climate === "Arid" ? 0.88 :
+            planet.climate === "Stuermisch" ? 0.92 :
+            planet.climate === "Tropisch" ? 0.98 :
+            1.0;
+
+          const pop = Math.round(basePop * climatePenalty * (0.85 + rng() * 0.4));
+
+          const water = Math.round(Math.min(98, Math.max(15, oceanPct * 0.85 + rng() * 25)));
+          const energy = Math.round(Math.min(98, Math.max(15, 45 + rng() * 55)));
+          const emissions = Math.round(Math.min(85, Math.max(5, 12 + rng() * 55 + (planet.resources === "Erzreich" ? 8 : 0))));
+          const supply = Math.round(Math.min(96, Math.max(35, 55 + rng() * 40 - (planet.hazard.includes("Sturm") ? 8 : 0))));
+          const satisfaction = Math.round(Math.min(92, Math.max(30, 40 + supply * 0.45 - emissions * 0.15 + rng() * 12)));
+
+          const stage =
+            pop > 280000 ? "Ingenieure" :
+            pop > 140000 ? "Kolonisten" :
+            pop > 80000 ? "Pioniere" :
+            "Siedler";
+
+          const bottleneck =
+            water < 35 ? "Wasser" :
+            energy < 35 ? "Energie" :
+            supply < 55 ? "Nahrung" :
+            emissions > 60 ? "Emissionen" :
+            "Keiner";
+
+          const sectors = parseInt(planet.sectors, 10) || 12;
+          const tradeVolume = Math.round(400 + rng() * 1200);
+
+          return {
+            population: pop,
+            stage,
+            supply,
+            satisfaction,
+            emissions,
+            emissionsLimit: 60,
+            energy,
+            water,
+            bottleneck,
+            sectors,
+            tradeVolume,
+            rng,
+          };
+        };
+
+        const formatNumberShort = (n) => {
+          if (n >= 1000000) return `${(n / 1000000).toFixed(1).replace(".0", "")}M`;
+          if (n >= 1000) return `${Math.round(n / 1000)}k`;
+          return String(n);
+        };
+
+        const setKpi = (key, { valueText, subText, percent }) => {
+          const card = document.querySelector(`[data-kpi="${key}"]`);
+          if (!card) return;
+          const valueEl = card.querySelector(".kpi-value");
+          const subEl = card.querySelector(".kpi-sub");
+          if (valueEl) valueEl.textContent = valueText;
+          if (subEl && subText != null) subEl.textContent = subText;
+          if (typeof percent === "number") {
+            card.style.setProperty("--value", `${Math.max(0, Math.min(100, percent))}%`);
+          }
+        };
+
+        const setBiomeDominant = (planet) => {
+          const oceanPct = parseInt(String(planet.ocean).replace("%", ""), 10) || 0;
+          const dominant =
+            oceanPct >= 70 ? "ocean" :
+            planet.climate === "Polar" ? "tundra" :
+            planet.climate === "Tropisch" ? "jungle" :
+            planet.climate === "Vulkanisch" ? "volcanic" :
+            planet.climate === "Arid" ? "desert" :
+            "plains";
+
+          document.querySelectorAll(".biome-card").forEach((card) => {
+            card.classList.toggle("is-dominant", card.dataset.biome === dominant);
+          });
+        };
+
+        const renderFlows = (colony) => {
+          const container = document.querySelector("#flow .flow-container");
+          if (!container) return;
+
+          const ice = Math.round(60 + colony.water * 1.2);
+          const regolith = Math.round(40 + colony.emissions * 0.9);
+          const solar = Math.round(220 + colony.energy * 4.5);
+
+          const waterworks = Math.round(ice * 0.8);
+          const refinery = Math.round(regolith * 0.7);
+          const grid = Math.round(solar * 0.92);
+
+          const drink = Math.round(waterworks * 0.85);
+          const metal = Math.round(refinery * 0.75);
+          const food = Math.round(20 + colony.supply * 0.5);
+
+          container.innerHTML = `
+            <div class="flow-column">
+              <div class="flow-node source">Eisfelder<div class="flow-value">${ice}t/Tag</div></div>
+              <div class="flow-node source">Regolith<div class="flow-value">${regolith}t/Tag</div></div>
+              <div class="flow-node source">Solarpark<div class="flow-value">${solar} MW</div></div>
+            </div>
+            <div class="flow-column">
+              <div class="flow-node process">Wasserwerk<div class="flow-value">${waterworks}t/Tag</div></div>
+              <div class="flow-node process">Raffinerie<div class="flow-value">${refinery}t/Tag</div></div>
+              <div class="flow-node process">Energienetz<div class="flow-value">${grid} MW</div></div>
+            </div>
+            <div class="flow-column">
+              <div class="flow-node output">Trinkwasser<div class="flow-value">${drink}t/Tag</div></div>
+              <div class="flow-node output">Metallbarren<div class="flow-value">${metal}t/Tag</div></div>
+              <div class="flow-node output">Nahrung<div class="flow-value">${food}t/Tag</div></div>
+            </div>
+            <div class="flow-column">
+              <div class="flow-node consumer">🏠 Wohngebiete<div class="flow-value">${formatNumberShort(colony.population)} Einwohner</div></div>
+              <div class="flow-node consumer">🏭 Industrie<div class="flow-value">${Math.max(8, Math.round(colony.emissions / 2))} Betriebe</div></div>
+              <div class="flow-node consumer">🚀 Raumhafen<div class="flow-value">Export: ${Math.round(colony.tradeVolume / 20)}t/Tag</div></div>
+            </div>
+          `;
+        };
+
+        const renderRoutes = (planet, colony) => {
+          const list = document.querySelector("#panel-handel .route-list");
+          if (!list) return;
+
+          // Only render seed routes if no manual routes exist
+          const existingEditable = list.querySelectorAll('.route.editable');
+          if (existingEditable.length > 0) {
+            // User has manual routes, don't overwrite
+            return;
+          }
+
+          const rng = colony.rng;
+          const grav = parseFloat(String(planet.gravity).replace(" g", "")) || 1.0;
+          const hazardSlow = planet.hazard.includes("Sturm") ? 1.15 : planet.hazard.includes("Magnet") ? 1.08 : 1.0;
+          const base = 4 + Math.round(rng() * 5);
+          const daysA = Math.round(base * grav * hazardSlow);
+          const daysB = Math.round((base - 1) * grav * (0.95 + rng() * 0.12));
+          const daysC = Math.round((base - 0) * grav * (0.9 + rng() * 0.2));
+
+          const capA = Math.round(60 + colony.tradeVolume / 10);
+          const capB = Math.round(40 + colony.tradeVolume / 14);
+          const capC = Math.round(50 + colony.tradeVolume / 12);
+
+          // Clear only non-editable routes
+          list.querySelectorAll('.route:not(.editable)').forEach(r => r.remove());
+          
+          // Add seed-generated routes (non-editable, for display only)
+          const routeA = document.createElement('div');
+          routeA.className = 'route';
+          routeA.innerHTML = `Nordkuppe 07 → Orbit-Hub A <span>${daysA}d / ${capA}t</span>`;
+          list.appendChild(routeA);
+          
+          const routeB = document.createElement('div');
+          routeB.className = 'route';
+          routeB.innerHTML = `Südgürtel 02 → Raffinerie 4 <span>${daysB}d / ${capB}t</span>`;
+          list.appendChild(routeB);
+          
+          const routeC = document.createElement('div');
+          routeC.className = 'route';
+          routeC.innerHTML = `Ozeanring → Terra-Knoten <span>${daysC}d / ${capC}t</span>`;
+          list.appendChild(routeC);
+        };
+
+        const renderCharts = (colony) => {
+          const charts = document.querySelectorAll("#stats .stat-chart");
+          if (!charts.length) return;
+          charts.forEach((chart) => {
+            const title = chart.querySelector("h4")?.textContent || "";
+            const bars = Array.from(chart.querySelectorAll(".chart-bar"));
+            if (!bars.length) return;
+
+            const rng = colony.rng;
+            const values =
+              title.includes("Bevölkerungs") ? bars.map((_, i) => Math.round(colony.population * (0.2 + (i + 1) / bars.length * 0.8) * (0.92 + rng() * 0.12))) :
+              title.includes("CO₂") ? bars.map((_, i) => Math.round(colony.emissions * (0.5 + (i + 1) / bars.length * 0.6) * (0.92 + rng() * 0.12))) :
+              title.includes("Handels") ? bars.map((_, i) => Math.round(colony.tradeVolume * (0.35 + (i + 1) / bars.length * 0.8) * (0.9 + rng() * 0.15))) :
+              bars.map((_, i) => Math.round(colony.satisfaction * (0.8 + rng() * 0.3)));
+
+            const max = Math.max(...values, 1);
+            bars.forEach((bar, i) => {
+              const pct = Math.round((values[i] / max) * 100);
+              bar.style.height = `${Math.max(6, Math.min(100, pct))}%`;
+              if (title.includes("Bevölkerungs")) bar.dataset.value = `${formatNumberShort(values[i])}`;
+              else if (title.includes("Handels")) bar.dataset.value = `${formatNumberShort(values[i])}`;
+              else bar.dataset.value = `${values[i]}${title.includes("CO₂") || title.includes("Zufrieden") ? "%" : ""}`;
+            });
+          });
+        };
+
+        const applyPlanetToUI = (planet) => {
+          const colony = deriveColonyFromPlanet(planet);
+
+          setKpi("population", {
+            valueText: `${formatNumberShort(colony.population)}`,
+            subText: `Stufe: ${colony.stage}`,
+            percent: Math.min(100, Math.round((colony.population / 380000) * 100)),
+          });
+          setKpi("supply", { valueText: `${colony.supply}%`, subText: `Engpass: ${colony.bottleneck}`, percent: colony.supply });
+          setKpi("satisfaction", { valueText: `${colony.satisfaction}%`, subText: colony.satisfaction >= 60 ? "Wachstum möglich" : "Wachstum gebremst", percent: colony.satisfaction });
+          setKpi("emissions", { valueText: `${colony.emissions}%`, subText: `Limit: ${colony.emissionsLimit}%`, percent: colony.emissions });
+          setKpi("energy", { valueText: `${colony.energy}%`, subText: `Puffer: ${Math.max(1, Math.round(colony.energy / 25))} Tage`, percent: colony.energy });
+          setKpi("water", { valueText: `${colony.water}%`, subText: colony.water > 60 ? "Reservoir stabil" : "Reservoir knapp", percent: colony.water });
+
+          // Planet visuals: Pixel Art rendering
+          renderPixelPlanet(planet.seed);
+
+          setBiomeDominant(planet);
+          renderFlows(colony);
+          renderRoutes(planet, colony);
+          renderCharts(colony);
+
+          // Notifications (lightweight)
+          const badge = document.querySelector("#notification-toggle .badge");
+          const headerBadge = document.querySelector("#notification-center .notification-badge");
+          const list = document.querySelector("#notification-center .notification-list");
+          if (badge && headerBadge && list) {
+            const notifs = [];
+            if (colony.supply < 55) notifs.push({ type: "warning", t: "Versorgung knapp", m: `Engpass: ${colony.bottleneck}.` });
+            if (colony.water < 40) notifs.push({ type: "danger", t: "Wasserkrise", m: "Reservoir kritisch – importieren oder Wasserwerke ausbauen." });
+            if (colony.emissions > colony.emissionsLimit) notifs.push({ type: "danger", t: "Emissionslimit überschritten", m: `CO₂ bei ${colony.emissions}% (Limit ${colony.emissionsLimit}%).` });
+            if (colony.satisfaction > 75) notifs.push({ type: "success", t: "Gute Stimmung", m: `Zufriedenheit ${colony.satisfaction}%.` });
+
+            const count = Math.min(9, notifs.length);
+            badge.textContent = String(count);
+            headerBadge.textContent = `${count} neu`;
+
+            list.innerHTML = notifs
+              .map((n) => {
+                return `
+                  <div class="notification-item ${n.type}">
+                    <strong>${n.t}</strong>
+                    <p>${n.m}</p>
+                    <time>Seed: ${planet.seed}</time>
+                  </div>
+                `;
+              })
+              .join("") || `
+                <div class="notification-item success">
+                  <strong>Alles stabil</strong>
+                  <p>Keine kritischen Meldungen.</p>
+                  <time>Seed: ${planet.seed}</time>
+                </div>
+              `;
+          }
         };
 
         const copyToClipboard = (text) => {
@@ -5122,6 +6484,7 @@
             const { save = true, feedback = "" } = options;
             const data = renderSeed(seed);
             updateUrl(data.seed);
+            applyPlanetToUI(data);
             if (save) {
               upsertSeed(data.seed);
               renderArchive();
@@ -5395,40 +6758,55 @@
           });
         };
 
-        // Build Editor
+        // Unified Build Editor (replaces both old functions)
+        const buildingIcons = { home: '🏠', solar: '☀️', water: '💧', hydro: '🌱', refinery: '🏭', lab: '🔬', spaceport: '🚀' };
+        const buildingRadius = { home: 1, solar: 2, water: 3, hydro: 2, refinery: 1, lab: 2, spaceport: 4 };
+        
+        const renderBuildingIcon = (building) => {
+          return `<span class="building-icon">${buildingIcons[building] || '🏗️'}</span>`;
+        };
+        
         const setupBuildEditor = () => {
           const grid = document.getElementById('build-grid');
           const palette = document.querySelector('.build-palette');
           
           if (!grid || !palette) return;
           
-          // Generate grid cells
-          for (let i = 0; i < 96; i++) {
-            const cell = document.createElement('div');
-            cell.className = 'build-cell';
-            cell.dataset.index = i;
-            grid.appendChild(cell);
+          // Generate grid cells if not already present
+          if (grid.children.length === 0) {
+            for (let i = 0; i < 96; i++) {
+              const cell = document.createElement('div');
+              cell.className = 'build-cell';
+              cell.dataset.index = i;
+              grid.appendChild(cell);
+            }
           }
           
-          let selectedBuilding = 'home';
-          const buildingRadius = {
-            'home': 1,
-            'solar': 2,
-            'water': 3,
-            'hydro': 2,
-            'refinery': 1,
-            'lab': 2,
-            'spaceport': 4
-          };
+          let selectedTool = null;
+          let deleteMode = false;
           
-          palette.querySelectorAll('.build-item').forEach((item, index) => {
+          // Palette selection
+          palette.querySelectorAll('.build-item').forEach(item => {
+            const building = item.dataset.building;
+            const action = item.dataset.action;
+            
             item.addEventListener('click', () => {
-              palette.querySelectorAll('.build-item').forEach(i => i.classList.remove('selected'));
-              item.classList.add('selected');
-              selectedBuilding = ['home', 'solar', 'water', 'hydro', 'refinery', 'lab', 'spaceport'][index];
+              palette.querySelectorAll('.build-item').forEach(i => {
+                i.classList.remove('selected', 'is-selected');
+              });
+              item.classList.add('selected', 'is-selected');
+              
+              if (action === 'delete') {
+                deleteMode = true;
+                selectedTool = null;
+              } else if (building) {
+                deleteMode = false;
+                selectedTool = building;
+              }
             });
           });
           
+          // Grid click handler
           grid.addEventListener('click', (e) => {
             const cell = e.target.closest('.build-cell');
             if (!cell) return;
@@ -5436,32 +6814,39 @@
             // Clear previous radius
             grid.querySelectorAll('.radius').forEach(c => c.classList.remove('radius'));
             
-            // Toggle occupied
-            if (cell.classList.contains('occupied')) {
+            if (deleteMode && cell.dataset.building) {
+              // Delete building
+              delete cell.dataset.building;
               cell.classList.remove('occupied');
-              return;
-            }
-            
-            cell.classList.add('occupied');
-            
-            // Show radius
-            const index = parseInt(cell.dataset.index);
-            const row = Math.floor(index / 12);
-            const col = index % 12;
-            const radius = buildingRadius[selectedBuilding] || 1;
-            
-            for (let r = -radius; r <= radius; r++) {
-              for (let c = -radius; c <= radius; c++) {
-                const newRow = row + r;
-                const newCol = col + c;
-                if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 12) {
-                  const newIndex = newRow * 12 + newCol;
-                  const targetCell = grid.querySelector(`[data-index="${newIndex}"]`);
-                  if (targetCell && !targetCell.classList.contains('occupied')) {
-                    targetCell.classList.add('radius');
+              cell.innerHTML = '';
+              toast({ type: 'info', title: 'Gebäude entfernt', message: '' });
+            } else if (selectedTool && !cell.dataset.building) {
+              // Place building
+              cell.dataset.building = selectedTool;
+              cell.classList.add('occupied');
+              cell.innerHTML = renderBuildingIcon(selectedTool);
+              
+              // Show radius
+              const index = parseInt(cell.dataset.index);
+              const row = Math.floor(index / 12);
+              const col = index % 12;
+              const radius = buildingRadius[selectedTool] || 1;
+              
+              for (let r = -radius; r <= radius; r++) {
+                for (let c = -radius; c <= radius; c++) {
+                  const newRow = row + r;
+                  const newCol = col + c;
+                  if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 12) {
+                    const newIndex = newRow * 12 + newCol;
+                    const targetCell = grid.querySelector(`[data-index="${newIndex}"]`);
+                    if (targetCell && !targetCell.classList.contains('occupied')) {
+                      targetCell.classList.add('radius');
+                    }
                   }
                 }
               }
+            } else if (!selectedTool && !deleteMode && cell.classList.contains('occupied')) {
+              // Click on occupied cell without tool selected: clear radius only
             }
           });
         };
@@ -5518,29 +6903,219 @@
           });
         };
 
+        // Full Game State
+        const getGameState = () => {
+          const seedInput = document.getElementById('seed-input');
+          const buildGrid = document.getElementById('build-grid');
+          const buildings = [];
+          if (buildGrid) {
+            buildGrid.querySelectorAll('.build-cell[data-building]').forEach(cell => {
+              buildings.push({ index: parseInt(cell.dataset.index), building: cell.dataset.building });
+            });
+          }
+          const research = [];
+          document.querySelectorAll('.research-node.unlocked').forEach(node => {
+            const title = node.querySelector('h4')?.textContent || '';
+            if (title) research.push(title);
+          });
+          const routes = [];
+          document.querySelectorAll('#route-list .route.editable').forEach(r => {
+            const routeId = r.dataset.routeId || '';
+            const spans = r.querySelectorAll('span');
+            const routeText = spans[0]?.textContent || '';
+            const routeMeta = spans[1]?.textContent || '';
+            if (routeText) {
+              routes.push({ id: routeId, text: routeText, meta: routeMeta });
+            }
+          });
+          return {
+            version: '2.1.0',
+            seed: seedInput?.value || 'DEFAULT',
+            simulation: { day: simState.day, year: simState.year, speed: simState.speed, paused: simState.paused },
+            buildings,
+            research,
+            routes,
+            settings: getSettings(),
+            timestamp: new Date().toISOString()
+          };
+        };
+
+        // Route Actions Helper (needed for loadGameState)
+        const setupRouteActions = (route) => {
+          route.querySelectorAll('.route-action').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              if (btn.dataset.action === 'delete') {
+                route.remove();
+                toast({ type: 'info', title: 'Route gelöscht', message: '' });
+              } else if (btn.dataset.action === 'edit') {
+                const nameSpan = route.querySelector('span');
+                const newName = prompt('Route umbenennen:', nameSpan.textContent);
+                if (newName) {
+                  nameSpan.textContent = newName;
+                  toast({ type: 'info', title: 'Route aktualisiert', message: '' });
+                }
+              }
+            });
+          });
+        };
+
+        const loadGameState = (state) => {
+          try {
+            if (!state?.seed) throw new Error('Ungültiger Spielstand');
+            const seedInput = document.getElementById('seed-input');
+            if (seedInput) {
+              seedInput.value = state.seed;
+              seedInput.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+            if (state.simulation) {
+              simState.day = state.simulation.day || 1;
+              simState.year = state.simulation.year || 1;
+              simState.speed = state.simulation.speed || 1;
+              simState.paused = state.simulation.paused || false;
+              updateTimeDisplay();
+            }
+            if (state.buildings?.length) {
+              const buildGrid = document.getElementById('build-grid');
+              // Clear all first
+              buildGrid?.querySelectorAll('.build-cell').forEach(cell => {
+                cell.classList.remove('occupied');
+                cell.innerHTML = '';
+                delete cell.dataset.building;
+              });
+              // Restore buildings
+              state.buildings.forEach(b => {
+                const cell = buildGrid?.querySelector(`[data-index="${b.index}"]`);
+                if (cell && b.building) {
+                  cell.dataset.building = b.building;
+                  cell.classList.add('occupied');
+                  cell.innerHTML = renderBuildingIcon(b.building);
+                }
+              });
+            }
+            
+            // Restore research
+            if (state.research?.length) {
+              document.querySelectorAll('.research-node').forEach(node => {
+                const title = node.querySelector('h4')?.textContent || '';
+                if (state.research.includes(title)) {
+                  node.classList.remove('available', 'locked');
+                  node.classList.add('unlocked');
+                  const costEl = node.querySelector('.node-cost');
+                  if (costEl) costEl.textContent = '✓ Erforscht';
+                  const prog = node.querySelector('.research-progress span');
+                  if (prog) prog.style.width = '100%';
+                }
+              });
+            }
+            
+            // Restore routes (only if not empty, to avoid overwriting manual edits)
+            if (state.routes?.length) {
+              const routeList = document.getElementById('route-list');
+              if (routeList) {
+                // Clear existing editable routes
+                routeList.querySelectorAll('.route.editable').forEach(r => r.remove());
+                
+                // Restore saved routes
+                state.routes.forEach((route, idx) => {
+                  const routeEl = document.createElement('div');
+                  routeEl.className = 'route editable';
+                  routeEl.dataset.routeId = route.id || `restored-${idx}`;
+                  routeEl.innerHTML = `
+                    <span>${route.text || route}</span>
+                    <span>${route.meta || '5d / 80t'}</span>
+                    <div class="route-actions">
+                      <button class="route-action" data-action="edit">✏️</button>
+                      <button class="route-action delete" data-action="delete">🗑️</button>
+                    </div>
+                  `;
+                  routeList.appendChild(routeEl);
+                });
+                // Re-setup route actions
+                routeList.querySelectorAll('.route.editable').forEach(setupRouteActions);
+              }
+            }
+            
+            if (state.settings) applySettings(state.settings);
+            toast({ type: 'success', title: 'Geladen', message: `Spielstand vom ${new Date(state.timestamp).toLocaleDateString('de-DE')}` });
+          } catch (e) {
+            toast({ type: 'danger', title: 'Fehler', message: e.message });
+          }
+        };
+
         // Export Functions
         const setupExport = () => {
           const jsonBtn = document.getElementById('export-json');
           const pngBtn = document.getElementById('export-png');
           const linkBtn = document.getElementById('export-link');
           const clipboardBtn = document.getElementById('export-clipboard');
+          const printBtn = document.getElementById('export-print');
+          const saveBtn = document.getElementById('save-game');
+          const loadBtn = document.getElementById('load-game');
+          const importZone = document.getElementById('import-zone');
+          const importFile = document.getElementById('import-file');
           
           const seedInput = document.getElementById('seed-input');
           
+          // JSON Export (full state)
           if (jsonBtn) {
             jsonBtn.addEventListener('click', () => {
-              const data = {
-                seed: seedInput?.value || 'DEFAULT',
-                timestamp: new Date().toISOString(),
-                version: '1.0.0'
-              };
+              const data = getGameState();
               const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
               const url = URL.createObjectURL(blob);
               const a = document.createElement('a');
               a.href = url;
-              a.download = `planet-${data.seed}.json`;
+              a.download = `planet-${data.seed}-${simState.year}.json`;
               a.click();
               URL.revokeObjectURL(url);
+              toast({ type: "success", title: "Export", message: "Spielstand als JSON gespeichert." });
+            });
+          }
+          
+          // PNG Export via Canvas
+          if (pngBtn) {
+            pngBtn.addEventListener('click', async () => {
+              try {
+                const planet = document.querySelector('.planet-3d-container');
+                if (!planet) throw new Error('Planet nicht gefunden');
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = 400;
+                canvas.height = 400;
+                ctx.fillStyle = document.documentElement.dataset.theme === 'dark' ? '#0d1117' : '#f8efe0';
+                ctx.fillRect(0, 0, 400, 400);
+                ctx.beginPath();
+                ctx.arc(200, 200, 150, 0, Math.PI * 2);
+                const grad = ctx.createRadialGradient(160, 160, 20, 200, 200, 180);
+                grad.addColorStop(0, '#4ade80');
+                grad.addColorStop(0.5, '#3b82f6');
+                grad.addColorStop(1, '#1e3a5f');
+                ctx.fillStyle = grad;
+                ctx.fill();
+                ctx.font = '16px Cinzel';
+                ctx.fillStyle = document.documentElement.dataset.theme === 'dark' ? '#e6edf3' : '#1d1a16';
+                ctx.textAlign = 'center';
+                ctx.fillText(`Seed: ${seedInput?.value || 'DEFAULT'}`, 200, 380);
+                ctx.fillText(`Jahr ${simState.year}, Tag ${simState.day}`, 200, 30);
+                canvas.toBlob(blob => {
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `planet-${seedInput?.value || 'snapshot'}.png`;
+                  a.click();
+                  URL.revokeObjectURL(url);
+                  toast({ type: 'success', title: 'PNG Export', message: 'Bild gespeichert.' });
+                });
+              } catch (e) {
+                toast({ type: 'danger', title: 'Export fehlgeschlagen', message: e.message });
+              }
+            });
+          }
+          
+          // Print
+          if (printBtn) {
+            printBtn.addEventListener('click', () => {
+              window.print();
             });
           }
           
@@ -5548,41 +7123,925 @@
             linkBtn.addEventListener('click', () => {
               const url = new URL(window.location.href);
               url.searchParams.set('seed', seedInput?.value || 'DEFAULT');
-              navigator.clipboard?.writeText(url.toString()).then(() => {
-                alert('Link kopiert!');
-              });
+              copyToClipboard(url.toString())
+                .then(() => toast({ type: "success", title: "Link kopiert", message: "Der Share-Link ist in der Zwischenablage." }))
+                .catch(() => toast({ type: "danger", title: "Kopieren fehlgeschlagen", message: "Zwischenablage nicht verfügbar." }));
             });
           }
           
           if (clipboardBtn) {
             clipboardBtn.addEventListener('click', () => {
               const seed = seedInput?.value || 'DEFAULT';
-              navigator.clipboard?.writeText(seed).then(() => {
-                alert('Seed kopiert: ' + seed);
-              });
+              copyToClipboard(seed)
+                .then(() => toast({ type: "success", title: "Seed kopiert", message: seed }))
+                .catch(() => toast({ type: "danger", title: "Kopieren fehlgeschlagen", message: "Zwischenablage nicht verfügbar." }));
+            });
+          }
+          
+          // Save to LocalStorage
+          if (saveBtn) {
+            saveBtn.addEventListener('click', () => {
+              const state = getGameState();
+              // Update active planet state
+              const active = getActivePlanet();
+              if (active) {
+                Object.assign(active, {
+                  seed: state.seed,
+                  simulation: state.simulation,
+                  buildings: state.buildings,
+                  research: state.research,
+                  routes: state.routes
+                });
+                savePlanetsToStorage();
+              }
+              localStorage.setItem('planet-sandbox-save', JSON.stringify(state));
+              const feedback = document.getElementById('save-feedback');
+              if (feedback) feedback.textContent = `Gespeichert: Jahr ${state.simulation.year}, Tag ${state.simulation.day}`;
+              toast({ type: 'success', title: 'Gespeichert', message: 'Spielstand in Browser gespeichert.' });
+            });
+          }
+          
+          // Load from LocalStorage
+          if (loadBtn) {
+            loadBtn.addEventListener('click', () => {
+              const saved = localStorage.getItem('planet-sandbox-save');
+              if (saved) {
+                loadGameState(JSON.parse(saved));
+              } else {
+                toast({ type: 'warning', title: 'Kein Spielstand', message: 'Es ist kein Spielstand gespeichert.' });
+              }
+            });
+          }
+          
+          // Import Zone (drag & drop + click)
+          if (importZone && importFile) {
+            importZone.addEventListener('click', () => importFile.click());
+            importZone.addEventListener('dragover', (e) => { e.preventDefault(); importZone.classList.add('drag-over'); });
+            importZone.addEventListener('dragleave', () => importZone.classList.remove('drag-over'));
+            importZone.addEventListener('drop', (e) => {
+              e.preventDefault();
+              importZone.classList.remove('drag-over');
+              const file = e.dataTransfer.files[0];
+              if (file) handleImportFile(file);
+            });
+            importFile.addEventListener('change', (e) => {
+              const file = e.target.files[0];
+              if (file) handleImportFile(file);
             });
           }
         };
 
-        // Research Tree interactions
+        const handleImportFile = (file) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            try {
+              const state = JSON.parse(e.target.result);
+              loadGameState(state);
+            } catch (err) {
+              toast({ type: 'danger', title: 'Import fehlgeschlagen', message: 'Ungültige JSON-Datei.' });
+            }
+          };
+          reader.readAsText(file);
+        };
+
+        // Simulation State & Tick
+        const simState = {
+          paused: false,
+          speed: 1,
+          day: 1,
+          year: 1,
+          tickInterval: null
+        };
+
+        const updateTimeDisplay = () => {
+          const el = document.getElementById("sim-time");
+          if (el) el.textContent = `Tag ${simState.day}, Jahr ${simState.year}`;
+        };
+
+        const simTick = () => {
+          if (simState.paused) return;
+          simState.day += simState.speed;
+          if (simState.day > 365) {
+            simState.day = 1;
+            simState.year++;
+          }
+          updateTimeDisplay();
+          
+          // Slight KPI variations over time (demo) - using CSS --value instead of inline styles
+          const kpiCards = document.querySelectorAll("[data-kpi]");
+          kpiCards.forEach(card => {
+            const currentValue = parseFloat(card.style.getPropertyValue('--value')) || 50;
+            const delta = (Math.random() - 0.48) * simState.speed * 0.3;
+            const next = Math.max(5, Math.min(100, currentValue + delta));
+            card.style.setProperty('--value', `${next}%`);
+          });
+        };
+
+        const startSimulation = () => {
+          if (simState.tickInterval) clearInterval(simState.tickInterval);
+          simState.tickInterval = setInterval(simTick, 1000);
+        };
+
+        const setupSimulationControls = () => {
+          const pause = document.getElementById("sim-pause");
+          const b1 = document.getElementById("sim-1x");
+          const b4 = document.getElementById("sim-4x");
+          const b10 = document.getElementById("sim-10x");
+          if (!pause || !b1 || !b4 || !b10) return;
+
+          const setPressed = (active) => {
+            [b1, b4, b10].forEach((b) => b.setAttribute("aria-pressed", b === active ? "true" : "false"));
+          };
+
+          pause.addEventListener("click", () => {
+            simState.paused = !simState.paused;
+            pause.setAttribute("aria-pressed", simState.paused ? "true" : "false");
+            pause.textContent = simState.paused ? "Weiter" : "Pause";
+            toast({ type: "info", title: "Simulation", message: simState.paused ? "Pausiert." : "Fortgesetzt." });
+          });
+          
+          b1.addEventListener("click", () => { simState.speed = 1; setPressed(b1); toast({ type: "info", title: "Speed", message: "1×" }); });
+          b4.addEventListener("click", () => { simState.speed = 4; setPressed(b4); toast({ type: "info", title: "Speed", message: "4×" }); });
+          b10.addEventListener("click", () => { simState.speed = 10; setPressed(b10); toast({ type: "info", title: "Speed", message: "10×" }); });
+          
+          updateTimeDisplay();
+          startSimulation();
+        };
+
+        // Research Tree interactions with dependencies
         const setupResearch = () => {
           const nodes = document.querySelectorAll('.research-node:not(.locked)');
           nodes.forEach(node => {
+            // Add progress bar
+            if (!node.querySelector('.research-progress')) {
+              const prog = document.createElement('div');
+              prog.className = 'research-progress';
+              prog.innerHTML = '<span></span>';
+              node.appendChild(prog);
+            }
+            
             node.addEventListener('click', () => {
               if (node.classList.contains('available')) {
-                node.classList.remove('available');
-                node.classList.add('unlocked');
-                node.querySelector('.node-cost').textContent = '✓ Erforscht';
-                const status = document.createElement('span');
-                status.className = 'node-status';
-                status.textContent = '✓';
-                node.appendChild(status);
+                const progressBar = node.querySelector('.research-progress span');
+                let progress = 0;
+                const interval = setInterval(() => {
+                  progress += 10;
+                  if (progressBar) progressBar.style.width = progress + '%';
+                  if (progress >= 100) {
+                    clearInterval(interval);
+                    node.classList.remove('available');
+                    node.classList.add('unlocked');
+                    node.querySelector('.node-cost').textContent = '✓ Erforscht';
+                    toast({ type: 'success', title: 'Forschung abgeschlossen', message: node.querySelector('h4')?.textContent || '' });
+                  }
+                }, 100);
               }
             });
           });
         };
 
-        // Initialize all new features
+        // Settings
+        const getSettings = () => ({
+          volume: parseInt(document.getElementById('setting-volume')?.value || 70),
+          music: document.getElementById('setting-music')?.checked ?? true,
+          scale: parseFloat(document.getElementById('setting-scale')?.value || 1),
+          reducedMotion: document.getElementById('setting-reduced-motion')?.checked ?? false,
+          autoDark: document.getElementById('setting-auto-dark')?.checked ?? false,
+          autoPause: document.getElementById('setting-auto-pause')?.checked ?? true,
+          notifications: document.getElementById('setting-notifications')?.checked ?? true
+        });
+
+        const applySettings = (s) => {
+          if (!s) return;
+          const volumeInput = document.getElementById('setting-volume');
+          if (volumeInput) {
+            volumeInput.value = s.volume || 70;
+            volumeInput.dispatchEvent(new Event('input', { bubbles: true }));
+          }
+          if (document.getElementById('setting-music')) document.getElementById('setting-music').checked = s.music ?? true;
+          if (document.getElementById('setting-scale')) document.getElementById('setting-scale').value = s.scale || 1;
+          if (document.getElementById('setting-reduced-motion')) document.getElementById('setting-reduced-motion').checked = s.reducedMotion ?? false;
+          if (document.getElementById('setting-auto-dark')) document.getElementById('setting-auto-dark').checked = s.autoDark ?? false;
+          if (document.getElementById('setting-auto-pause')) document.getElementById('setting-auto-pause').checked = s.autoPause ?? true;
+          if (document.getElementById('setting-notifications')) document.getElementById('setting-notifications').checked = s.notifications ?? true;
+          
+          document.body.style.fontSize = (s.scale || 1) + 'rem';
+          if (s.reducedMotion) document.documentElement.style.setProperty('--transition-speed', '0s');
+        };
+
+        const setupSettings = () => {
+          const overlay = document.getElementById('settings-overlay');
+          const toggle = document.getElementById('settings-toggle');
+          const close = document.getElementById('settings-close');
+          const clearData = document.getElementById('setting-clear-data');
+          const scaleSelect = document.getElementById('setting-scale');
+          const reducedMotion = document.getElementById('setting-reduced-motion');
+          const autoDark = document.getElementById('setting-auto-dark');
+          const autoPause = document.getElementById('setting-auto-pause');
+
+          if (toggle && overlay) {
+            toggle.addEventListener('click', () => overlay.classList.add('is-open'));
+          }
+          if (close && overlay) {
+            close.addEventListener('click', () => overlay.classList.remove('is-open'));
+          }
+          
+          if (scaleSelect) {
+            scaleSelect.addEventListener('change', () => {
+              document.body.style.fontSize = scaleSelect.value + 'rem';
+              localStorage.setItem('planet-sandbox-scale', scaleSelect.value);
+            });
+            const savedScale = localStorage.getItem('planet-sandbox-scale');
+            if (savedScale) {
+              scaleSelect.value = savedScale;
+              document.body.style.fontSize = savedScale + 'rem';
+            }
+          }
+          
+          if (reducedMotion) {
+            reducedMotion.addEventListener('change', () => {
+              if (reducedMotion.checked) {
+                document.documentElement.style.setProperty('--transition-speed', '0s');
+              } else {
+                document.documentElement.style.removeProperty('--transition-speed');
+              }
+            });
+          }
+          
+          if (autoDark) {
+            autoDark.addEventListener('change', () => {
+              if (autoDark.checked) {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.dataset.theme = prefersDark ? 'dark' : 'light';
+              }
+            });
+          }
+          
+          if (autoPause) {
+            document.addEventListener('visibilitychange', () => {
+              if (autoPause.checked && document.hidden) {
+                simState.paused = true;
+                document.getElementById('sim-pause')?.setAttribute('aria-pressed', 'true');
+              }
+            });
+          }
+          
+          if (clearData) {
+            clearData.addEventListener('click', () => {
+              if (confirm('Alle Daten löschen? (Spielstände, Einstellungen)')) {
+                localStorage.clear();
+                toast({ type: 'warning', title: 'Daten gelöscht', message: 'Alle Spielstände wurden entfernt.' });
+              }
+            });
+          }
+        };
+
+        // Command Palette
+        const commands = [
+          { id: 'new-seed', icon: '🎲', label: 'Neuen Seed generieren', shortcut: 'N', action: () => document.getElementById('random-seed-btn')?.click() },
+          { id: 'toggle-theme', icon: '🌓', label: 'Theme wechseln', shortcut: 'T', action: () => document.getElementById('theme-toggle')?.click() },
+          { id: 'open-glossary', icon: '📖', label: 'Glossar öffnen', shortcut: 'G', action: () => document.getElementById('glossary-modal')?.classList.add('is-open') },
+          { id: 'start-tutorial', icon: '📚', label: 'Tutorial starten', shortcut: 'H', action: () => document.getElementById('tutorial-overlay')?.classList.add('is-open') },
+          { id: 'toggle-pause', icon: '⏸️', label: 'Pause/Weiter', shortcut: 'Space', action: () => document.getElementById('sim-pause')?.click() },
+          { id: 'speed-1x', icon: '▶️', label: 'Geschwindigkeit 1×', shortcut: '1', action: () => document.getElementById('sim-1x')?.click() },
+          { id: 'speed-4x', icon: '⏩', label: 'Geschwindigkeit 4×', shortcut: '2', action: () => document.getElementById('sim-4x')?.click() },
+          { id: 'speed-10x', icon: '⏭️', label: 'Geschwindigkeit 10×', shortcut: '3', action: () => document.getElementById('sim-10x')?.click() },
+          { id: 'save-game', icon: '💾', label: 'Spielstand speichern', shortcut: 'S', action: () => document.getElementById('save-game')?.click() },
+          { id: 'load-game', icon: '📂', label: 'Spielstand laden', shortcut: 'L', action: () => document.getElementById('load-game')?.click() },
+          { id: 'export-json', icon: '📄', label: 'Als JSON exportieren', shortcut: 'E', action: () => document.getElementById('export-json')?.click() },
+          { id: 'settings', icon: '⚙️', label: 'Einstellungen', shortcut: ',', action: () => document.getElementById('settings-overlay')?.classList.add('is-open') },
+          { id: 'go-status', icon: '📊', label: 'Zum Status', action: () => document.getElementById('status')?.scrollIntoView({ behavior: 'smooth' }) },
+          { id: 'go-research', icon: '🔬', label: 'Zur Forschung', action: () => document.getElementById('research')?.scrollIntoView({ behavior: 'smooth' }) },
+          { id: 'go-biomes', icon: '🌍', label: 'Zu den Biomen', action: () => document.getElementById('biomes')?.scrollIntoView({ behavior: 'smooth' }) },
+          { id: 'print', icon: '🖨️', label: 'Drucken / PDF', shortcut: 'P', action: () => window.print() }
+        ];
+
+        const setupCommandPalette = () => {
+          const overlay = document.getElementById('command-palette');
+          const input = document.getElementById('command-input');
+          const list = document.getElementById('command-list');
+          let selectedIndex = 0;
+
+          const renderCommands = (filter = '') => {
+            const filtered = commands.filter(c => 
+              c.label.toLowerCase().includes(filter.toLowerCase()) || 
+              c.shortcut?.toLowerCase().includes(filter.toLowerCase())
+            );
+            list.innerHTML = filtered.map((c, i) => `
+              <div class="command-item ${i === selectedIndex ? 'is-selected' : ''}" data-cmd="${c.id}" role="option">
+                <span class="cmd-icon">${c.icon}</span>
+                <span class="cmd-label">${c.label}</span>
+                ${c.shortcut ? `<span class="cmd-shortcut">${c.shortcut}</span>` : ''}
+              </div>
+            `).join('');
+            
+            list.querySelectorAll('.command-item').forEach((item, i) => {
+              item.addEventListener('click', () => executeCommand(filtered[i]));
+              item.addEventListener('mouseenter', () => {
+                selectedIndex = i;
+                renderCommands(filter);
+              });
+            });
+          };
+
+          const executeCommand = (cmd) => {
+            overlay.classList.remove('is-open');
+            input.value = '';
+            cmd.action();
+          };
+
+          const openPalette = () => {
+            overlay.classList.add('is-open');
+            input.focus();
+            selectedIndex = 0;
+            renderCommands();
+          };
+
+          const closePalette = () => {
+            overlay.classList.remove('is-open');
+            input.value = '';
+          };
+
+          if (input) {
+            input.addEventListener('input', (e) => {
+              selectedIndex = 0;
+              renderCommands(e.target.value);
+            });
+            
+            input.addEventListener('keydown', (e) => {
+              const items = list.querySelectorAll('.command-item');
+              if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                selectedIndex = (selectedIndex + 1) % items.length;
+                renderCommands(input.value);
+              } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                selectedIndex = (selectedIndex - 1 + items.length) % items.length;
+                renderCommands(input.value);
+              } else if (e.key === 'Enter') {
+                e.preventDefault();
+                const filtered = commands.filter(c => c.label.toLowerCase().includes(input.value.toLowerCase()));
+                if (filtered[selectedIndex]) executeCommand(filtered[selectedIndex]);
+              }
+            });
+          }
+
+          if (overlay) {
+            overlay.addEventListener('click', (e) => {
+              if (e.target === overlay) closePalette();
+            });
+          }
+
+          // Global shortcut
+          window.cmdPaletteOpen = openPalette;
+          window.cmdPaletteClose = closePalette;
+        };
+
+        // Keyboard Shortcuts
+        const setupKeyboardShortcuts = () => {
+          const hint = document.getElementById('keyboard-hint');
+          let hintTimeout;
+
+          const showHint = () => {
+            if (hint) {
+              hint.classList.add('is-visible');
+              clearTimeout(hintTimeout);
+              hintTimeout = setTimeout(() => hint.classList.remove('is-visible'), 3000);
+            }
+          };
+
+          // Show hint on first visit
+          if (!localStorage.getItem('planet-sandbox-hint-seen')) {
+            setTimeout(showHint, 2000);
+            localStorage.setItem('planet-sandbox-hint-seen', 'true');
+          }
+
+          document.addEventListener('keydown', (e) => {
+            // Skip if typing in input
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
+            
+            // Command palette
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+              e.preventDefault();
+              window.cmdPaletteOpen?.();
+              return;
+            }
+            
+            // ESC closes modals
+            if (e.key === 'Escape') {
+              document.querySelectorAll('.is-open').forEach(el => el.classList.remove('is-open'));
+              document.querySelectorAll('.is-active').forEach(el => el.classList.remove('is-active'));
+              window.cmdPaletteClose?.();
+              return;
+            }
+            
+            // Single key shortcuts
+            const keyMap = {
+              't': () => document.getElementById('theme-toggle')?.click(),
+              'g': () => document.getElementById('glossary-modal')?.classList.add('is-open'),
+              'h': () => document.getElementById('tutorial-overlay')?.classList.add('is-open'),
+              ' ': () => document.getElementById('sim-pause')?.click(),
+              '1': () => document.getElementById('sim-1x')?.click(),
+              '2': () => document.getElementById('sim-4x')?.click(),
+              '3': () => document.getElementById('sim-10x')?.click(),
+              'n': () => document.getElementById('random-seed-btn')?.click(),
+              '?': showHint
+            };
+
+            if (keyMap[e.key.toLowerCase()]) {
+              e.preventDefault();
+              keyMap[e.key.toLowerCase()]();
+            }
+          });
+        };
+
+        // Overlay System
+        const setupOverlays = () => {
+          const controls = document.querySelectorAll('.overlay-controls');
+          controls.forEach(control => {
+            const buttons = control.querySelectorAll('.overlay-btn');
+            const map = control.nextElementSibling;
+            const layers = map?.querySelectorAll('.overlay-layer');
+            
+            buttons.forEach(btn => {
+              btn.addEventListener('click', () => {
+                buttons.forEach(b => b.setAttribute('aria-pressed', 'false'));
+                btn.setAttribute('aria-pressed', 'true');
+                
+                const overlay = btn.dataset.overlay;
+                layers?.forEach(layer => {
+                  layer.classList.toggle('is-active', layer.classList.contains(overlay));
+                });
+              });
+            });
+          });
+        };
+
+        // Flow Diagram Interactivity
+        const setupFlowInteractivity = () => {
+          const nodes = document.querySelectorAll('.flow-node');
+          nodes.forEach(node => {
+            node.addEventListener('mouseenter', () => {
+              node.classList.add('is-highlighted');
+              // Highlight connected paths (simplified demo)
+              document.querySelectorAll('.flow-arrow').forEach(arrow => {
+                arrow.style.opacity = '1';
+              });
+            });
+            node.addEventListener('mouseleave', () => {
+              node.classList.remove('is-highlighted');
+              document.querySelectorAll('.flow-arrow').forEach(arrow => {
+                arrow.style.opacity = '';
+              });
+            });
+          });
+        };
+
+        // Diplomacy Interactions
+        const setupDiplomacy = () => {
+          const factions = document.querySelectorAll('.faction-card');
+          factions.forEach(card => {
+            const btns = card.querySelectorAll('.faction-btn');
+            const relationValue = card.querySelector('.relation-value');
+            const relationFill = card.querySelector('.relation-fill');
+            const relationStatus = card.querySelector('.relation-status');
+            
+            btns.forEach(btn => {
+              btn.addEventListener('click', () => {
+                const action = btn.dataset.action;
+                let delta = 0;
+                let msg = '';
+                
+                switch (action) {
+                  case 'gift':
+                    delta = 5;
+                    msg = 'Geschenk gesendet! +5 Beziehung';
+                    break;
+                  case 'trade':
+                    delta = 2;
+                    msg = 'Handel eröffnet! +2 Beziehung';
+                    break;
+                  case 'treaty':
+                    const current = parseInt(relationValue?.textContent || 0);
+                    if (current >= 60) {
+                      delta = 10;
+                      msg = 'Vertrag unterzeichnet! +10 Beziehung';
+                    } else {
+                      toast({ type: 'warning', title: 'Vertrag abgelehnt', message: 'Mindestens 60% Beziehung erforderlich.' });
+                      return;
+                    }
+                    break;
+                }
+                
+                if (relationValue && relationFill && delta) {
+                  const newVal = Math.min(100, parseInt(relationValue.textContent) + delta);
+                  relationValue.textContent = newVal;
+                  relationFill.style.width = newVal + '%';
+                  
+                  // Update status and class
+                  relationFill.className = 'relation-fill';
+                  if (newVal >= 80) { relationFill.classList.add('allied'); relationStatus.textContent = 'Verbündet'; }
+                  else if (newVal >= 60) { relationFill.classList.add('friendly'); relationStatus.textContent = 'Freundlich'; }
+                  else if (newVal >= 30) { relationFill.classList.add('neutral'); relationStatus.textContent = 'Neutral'; }
+                  else { relationFill.classList.add('hostile'); relationStatus.textContent = 'Feindlich'; }
+                  
+                  toast({ type: 'success', title: 'Diplomatie', message: msg });
+                }
+              });
+            });
+          });
+        };
+
+        // Route Editor (CRUD)
+        let routeIdCounter = 4;
+        const setupRouteEditor = () => {
+          const list = document.getElementById('route-list');
+          const fromSelect = document.getElementById('route-from');
+          const toSelect = document.getElementById('route-to');
+          const addBtn = document.getElementById('route-add');
+          
+          const calcTravelTime = () => Math.floor(Math.random() * 8) + 3;
+          const calcCost = () => Math.floor(Math.random() * 100) + 50;
+          
+          const createRouteEl = (id, from, to, days, cost) => {
+            const div = document.createElement('div');
+            div.className = 'route editable';
+            div.dataset.routeId = id;
+            div.innerHTML = `
+              <span>${from} → ${to}</span>
+              <span>${days}d / ${cost}t</span>
+              <div class="route-actions">
+                <button class="route-action" data-action="edit">✏️</button>
+                <button class="route-action delete" data-action="delete">🗑️</button>
+              </div>
+            `;
+            setupRouteActions(div);
+            return div;
+          };
+          
+          // Setup existing routes (setupRouteActions is defined globally above)
+          list?.querySelectorAll('.route.editable').forEach(setupRouteActions);
+          
+          // Add new route
+          if (addBtn && fromSelect && toSelect && list) {
+            addBtn.addEventListener('click', () => {
+              const from = fromSelect.value;
+              const to = toSelect.value;
+              if (from === to) {
+                toast({ type: 'warning', title: 'Ungültige Route', message: 'Start und Ziel müssen verschieden sein.' });
+                return;
+              }
+              const days = calcTravelTime();
+              const cost = calcCost();
+              const route = createRouteEl(routeIdCounter++, from, to, days, cost);
+              list.appendChild(route);
+              toast({ type: 'success', title: 'Route erstellt', message: `${from} → ${to}` });
+            });
+          }
+        };
+
+
+        // Multi-Planet System
+        const multiPlanetState = {
+          planets: [],
+          activePlanetId: null,
+          nextId: 1
+        };
+
+        const loadPlanetsFromStorage = () => {
+          try {
+            const saved = localStorage.getItem('planet-sandbox-multiplanets');
+            if (saved) {
+              const data = JSON.parse(saved);
+              multiPlanetState.planets = data.planets || [];
+              multiPlanetState.activePlanetId = data.activePlanetId || null;
+              multiPlanetState.nextId = data.nextId || 1;
+            }
+          } catch (e) {
+            console.warn('Failed to load planets:', e);
+          }
+          
+          // Ensure at least one planet exists
+          if (multiPlanetState.planets.length === 0) {
+            const seedInput = document.getElementById('seed-input');
+            const initialSeed = seedInput?.value || 'DEFAULT';
+            const newPlanet = {
+              id: `planet-${multiPlanetState.nextId++}`,
+              name: `Planet ${multiPlanetState.nextId - 1}`,
+              seed: initialSeed,
+              simulation: { day: 1, year: 1, speed: 1, paused: false },
+              buildings: [],
+              research: [],
+              routes: [],
+              createdAt: new Date().toISOString()
+            };
+            multiPlanetState.planets.push(newPlanet);
+            multiPlanetState.activePlanetId = newPlanet.id;
+          }
+          
+          if (!multiPlanetState.activePlanetId && multiPlanetState.planets.length > 0) {
+            multiPlanetState.activePlanetId = multiPlanetState.planets[0].id;
+          }
+        };
+
+        const savePlanetsToStorage = () => {
+          try {
+            localStorage.setItem('planet-sandbox-multiplanets', JSON.stringify({
+              planets: multiPlanetState.planets,
+              activePlanetId: multiPlanetState.activePlanetId,
+              nextId: multiPlanetState.nextId
+            }));
+          } catch (e) {
+            console.warn('Failed to save planets:', e);
+          }
+        };
+
+        const getActivePlanet = () => {
+          return multiPlanetState.planets.find(p => p.id === multiPlanetState.activePlanetId);
+        };
+
+        const switchToPlanet = (planetId) => {
+          const planet = multiPlanetState.planets.find(p => p.id === planetId);
+          if (!planet) return;
+          
+          // Save current planet state
+          const current = getActivePlanet();
+          if (current) {
+            const state = getGameState();
+            Object.assign(current, {
+              seed: state.seed,
+              simulation: state.simulation,
+              buildings: state.buildings,
+              research: state.research,
+              routes: state.routes
+            });
+          }
+          
+          // Switch to new planet
+          multiPlanetState.activePlanetId = planetId;
+          savePlanetsToStorage();
+          
+          // Load planet state
+          const seedInput = document.getElementById('seed-input');
+          if (seedInput) seedInput.value = planet.seed;
+          
+          simState.day = planet.simulation.day || 1;
+          simState.year = planet.simulation.year || 1;
+          simState.speed = planet.simulation.speed || 1;
+          simState.paused = planet.simulation.paused || false;
+          updateTimeDisplay();
+          
+          // Apply seed
+          if (typeof applySeed === 'function') {
+            applySeed(planet.seed, { save: false });
+          } else {
+            // Fallback: render planet directly
+            renderPixelPlanet(planet.seed);
+          }
+          
+          // Restore buildings, research, routes
+          loadGameState({
+            seed: planet.seed,
+            simulation: planet.simulation,
+            buildings: planet.buildings,
+            research: planet.research,
+            routes: planet.routes
+          });
+          
+          updatePlanetUI();
+        };
+
+        const addNewPlanet = () => {
+          const seedInput = document.getElementById('seed-input');
+          const newSeed = seedInput?.value || randomSeed();
+          const newPlanet = {
+            id: `planet-${multiPlanetState.nextId++}`,
+            name: `Planet ${multiPlanetState.planets.length + 1}`,
+            seed: newSeed,
+            simulation: { day: 1, year: 1, speed: 1, paused: false },
+            buildings: [],
+            research: [],
+            routes: [],
+            createdAt: new Date().toISOString()
+          };
+          multiPlanetState.planets.push(newPlanet);
+          savePlanetsToStorage();
+          switchToPlanet(newPlanet.id);
+          renderPlanetList();
+        };
+
+        const updatePlanetUI = () => {
+          const active = getActivePlanet();
+          const nameEl = document.getElementById('current-planet-name');
+          if (nameEl && active) {
+            nameEl.textContent = active.name;
+          }
+        };
+
+        const renderPlanetList = () => {
+          const body = document.getElementById('planet-list-body');
+          if (!body) return;
+          
+          body.innerHTML = multiPlanetState.planets.map(planet => {
+            const isActive = planet.id === multiPlanetState.activePlanetId;
+            return `
+              <div class="planet-item ${isActive ? 'is-active' : ''}" data-planet-id="${planet.id}">
+                <div style="font-size: 1.5rem;">🌍</div>
+                <div>
+                  <strong>${planet.name}</strong>
+                  <div style="font-size: 0.8rem; color: var(--muted); margin-top: 4px;">
+                    Seed: ${planet.seed} | Jahr ${planet.simulation.year}, Tag ${planet.simulation.day}
+                  </div>
+                </div>
+                <div class="planet-item-actions">
+                  <button class="planet-item-btn" data-action="switch">Wechseln</button>
+                  <button class="planet-item-btn" data-action="duplicate">Duplizieren</button>
+                  ${multiPlanetState.planets.length > 1 ? '<button class="planet-item-btn" data-action="delete">Löschen</button>' : ''}
+                </div>
+              </div>
+            `;
+          }).join('');
+          
+          // Attach event listeners
+          body.querySelectorAll('.planet-item').forEach(item => {
+            const planetId = item.dataset.planetId;
+            item.addEventListener('click', (e) => {
+              if (!e.target.closest('.planet-item-actions')) {
+                switchToPlanet(planetId);
+                document.getElementById('planet-list-overlay')?.classList.remove('is-open');
+              }
+            });
+            
+            item.querySelectorAll('[data-action]').forEach(btn => {
+              btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const action = btn.dataset.action;
+                if (action === 'switch') {
+                  switchToPlanet(planetId);
+                  document.getElementById('planet-list-overlay')?.classList.remove('is-open');
+                } else if (action === 'duplicate') {
+                  const planet = multiPlanetState.planets.find(p => p.id === planetId);
+                  if (planet) {
+                    const dup = {
+                      ...planet,
+                      id: `planet-${multiPlanetState.nextId++}`,
+                      name: `${planet.name} (Kopie)`,
+                      createdAt: new Date().toISOString()
+                    };
+                    multiPlanetState.planets.push(dup);
+                    savePlanetsToStorage();
+                    renderPlanetList();
+                  }
+                } else if (action === 'delete' && multiPlanetState.planets.length > 1) {
+                  multiPlanetState.planets = multiPlanetState.planets.filter(p => p.id !== planetId);
+                  if (multiPlanetState.activePlanetId === planetId) {
+                    multiPlanetState.activePlanetId = multiPlanetState.planets[0].id;
+                    switchToPlanet(multiPlanetState.activePlanetId);
+                  }
+                  savePlanetsToStorage();
+                  renderPlanetList();
+                }
+              });
+            });
+          });
+        };
+
+        const setupMultiPlanet = () => {
+          loadPlanetsFromStorage();
+          updatePlanetUI();
+          
+          const switcher = document.getElementById('planet-switcher');
+          const addBtn = document.getElementById('planet-add');
+          const overlay = document.getElementById('planet-list-overlay');
+          const closeBtn = document.getElementById('planet-list-close');
+          
+          if (switcher && overlay) {
+            switcher.addEventListener('click', () => {
+              renderPlanetList();
+              overlay.classList.add('is-open');
+            });
+          }
+          
+          if (addBtn) {
+            addBtn.addEventListener('click', () => {
+              addNewPlanet();
+            });
+          }
+          
+          if (closeBtn && overlay) {
+            closeBtn.addEventListener('click', () => {
+              overlay.classList.remove('is-open');
+            });
+          }
+          
+          overlay?.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+              overlay.classList.remove('is-open');
+            }
+          });
+          
+          // Auto-save planet state periodically
+          setInterval(() => {
+            const active = getActivePlanet();
+            if (active) {
+              const state = getGameState();
+              Object.assign(active, {
+                seed: state.seed,
+                simulation: state.simulation,
+                buildings: state.buildings,
+                research: state.research,
+                routes: state.routes
+              });
+              savePlanetsToStorage();
+            }
+          }, 5000);
+        };
+
+        // Pixel Art Planet Rendering
+        const renderPixelPlanet = (seed) => {
+          const canvas = document.getElementById('main-planet-canvas');
+          if (!canvas) return;
+          
+          const ctx = canvas.getContext('2d');
+          const size = 200;
+          const center = size / 2;
+          const radius = 90;
+          
+          // Clear
+          ctx.fillStyle = '#0d1117';
+          ctx.fillRect(0, 0, size, size);
+          
+          // Generate deterministic noise from seed
+          const hash = hashSeed(seed);
+          const rng = mulberry32(hash);
+          
+          // Planet base color (seed-dependent)
+          const hue = (hash % 360);
+          const planetColor = `hsl(${hue}, 60%, 45%)`;
+          const oceanColor = `hsl(${hue + 30}, 70%, 35%)`;
+          const landColor = `hsl(${hue - 20}, 50%, 55%)`;
+          
+          // Draw planet circle
+          ctx.beginPath();
+          ctx.arc(center, center, radius, 0, Math.PI * 2);
+          ctx.fillStyle = planetColor;
+          ctx.fill();
+          
+          // Generate continents (simplified pixel art)
+          const numContinents = Math.floor(rng() * 4) + 3;
+          for (let i = 0; i < numContinents; i++) {
+            const angle = rng() * Math.PI * 2;
+            const dist = (rng() * 0.4 + 0.1) * radius;
+            const contX = center + Math.cos(angle) * dist;
+            const contY = center + Math.sin(angle) * dist;
+            const contSize = rng() * 25 + 15;
+            
+            // Draw continent blob (pixelated)
+            ctx.fillStyle = landColor;
+            for (let x = -contSize; x < contSize; x += 2) {
+              for (let y = -contSize; y < contSize; y += 2) {
+                const distFromCenter = Math.sqrt(x * x + y * y);
+                if (distFromCenter < contSize && distFromCenter > contSize * 0.3) {
+                  const px = Math.floor(contX + x);
+                  const py = Math.floor(contY + y);
+                  const distFromPlanet = Math.sqrt((px - center) ** 2 + (py - center) ** 2);
+                  if (distFromPlanet < radius) {
+                    ctx.fillRect(px, py, 2, 2);
+                  }
+                }
+              }
+            }
+          }
+          
+          // Draw terminator (day/night line)
+          ctx.save();
+          const terminatorX = center + Math.cos(Date.now() / 10000) * radius * 0.3;
+          ctx.beginPath();
+          ctx.arc(center, center, radius, Math.PI / 2, Math.PI * 1.5);
+          ctx.clip();
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+          ctx.fillRect(0, 0, terminatorX, size);
+          ctx.restore();
+          
+          // Draw clouds (pixelated)
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+          for (let i = 0; i < 5; i++) {
+            const cloudX = center + (rng() - 0.5) * radius * 1.2;
+            const cloudY = center + (rng() - 0.5) * radius * 1.2;
+            const distFromCenter = Math.sqrt((cloudX - center) ** 2 + (cloudY - center) ** 2);
+            if (distFromCenter < radius) {
+              for (let x = -8; x < 8; x += 2) {
+                for (let y = -4; y < 4; y += 2) {
+                  if (rng() > 0.3) {
+                    ctx.fillRect(Math.floor(cloudX + x), Math.floor(cloudY + y), 2, 2);
+                  }
+                }
+              }
+            }
+          }
+        };
+
+        // Initialize all features
         setupTheme();
         setupNotifications();
         setupFloatingNav();
@@ -5593,6 +8052,41 @@
         setupSoundtrack();
         setupExport();
         setupResearch();
+        setupSimulationControls();
+        setupSettings();
+        setupCommandPalette();
+        setupKeyboardShortcuts();
+        setupOverlays();
+        setupFlowInteractivity();
+        setupDiplomacy();
+        setupRouteEditor();
+        setupMultiPlanet();
+        
+        // Initial planet render
+        const seedInput = document.getElementById('seed-input');
+        if (seedInput) {
+          renderPixelPlanet(seedInput.value || 'DEFAULT');
+        }
+        
+        // Animate planet rotation
+        let planetAnimationFrame = null;
+        const animatePlanet = () => {
+          const seedInput = document.getElementById('seed-input');
+          if (seedInput) {
+            renderPixelPlanet(seedInput.value || 'DEFAULT');
+          }
+          planetAnimationFrame = requestAnimationFrame(() => {
+            setTimeout(animatePlanet, 100); // Update every 100ms for smooth rotation
+          });
+        };
+        animatePlanet();
+
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('./sw.js')
+            .then(() => console.log('PWA: Service Worker registriert'))
+            .catch(err => console.warn('PWA: Registrierung fehlgeschlagen', err));
+        }
       })();
     </script>
   </body>
