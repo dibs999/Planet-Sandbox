@@ -3225,6 +3225,63 @@
         .route-form {
           grid-template-columns: 1fr;
         }
+
+        .research-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .route-editor-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .page {
+          padding: 28px 16px 64px;
+        }
+
+        .hero {
+          grid-template-columns: 1fr;
+          text-align: center;
+          gap: 16px;
+        }
+
+        .hero-visual {
+          order: -1;
+        }
+
+        .kpi-grid,
+        .grid-2,
+        .grid-3,
+        .grid-4 {
+          grid-template-columns: 1fr;
+        }
+
+        .resource-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .build-editor {
+          grid-template-columns: 1fr;
+        }
+
+        .build-palette {
+          flex-direction: row;
+          overflow-x: auto;
+          white-space: nowrap;
+          gap: 10px;
+        }
+
+        .build-palette .build-item {
+          min-width: 150px;
+        }
+
+        .route {
+          padding: 12px;
+        }
+
+        .route-meta {
+          flex-direction: column;
+          align-items: flex-start;
+        }
       }
 
       /* Toasts (statt alert) */
@@ -4391,6 +4448,13 @@
         </div>
       </div>
     </div>
+
+      <section class="card" style="margin: 20px auto; max-width: 960px;">
+        <h3>Sicherung &amp; Login (lokal)</h3>
+        <p class="lead">
+          Saves und Login laufen nur lokal im Browser. Kein echter Account, keine Cloud-Sync. Für schnelle Tests kannst du als Gast spielen.
+        </p>
+      </section>
 
     <!-- Planet Compare Overlay -->
     <div class="planet-compare-overlay" id="planet-compare-overlay" role="dialog" aria-modal="true" aria-label="Planetenvergleich">
@@ -6777,6 +6841,8 @@
           }
         };
 
+        const isCryptoAvailable = () => typeof crypto !== "undefined" && !!crypto.subtle?.digest;
+
         const hashSeed = (seed) => {
           let hash = 2166136261;
           for (let i = 0; i < seed.length; i += 1) {
@@ -6891,6 +6957,39 @@
         };
 
         const saveKeyForUser = (user, suffix) => `ps-${suffix}:${user || 'guest'}`;
+
+        const clearUserData = (username) => {
+          const keys = [];
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && key.includes(`:${username || 'guest'}`)) {
+              keys.push(key);
+            }
+          }
+          keys.forEach((k) => localStorage.removeItem(k));
+        };
+
+        const updateAuthUI = () => {
+          const label = document.getElementById('auth-user-label');
+          const loginBtn = document.getElementById('auth-login');
+          const logoutBtn = document.getElementById('auth-logout');
+          const isGuest = authState.user === 'gast';
+          if (label) label.textContent = authState.user ? `Angemeldet: ${authState.user}${isGuest ? ' (Gast)' : ''}` : 'Nicht angemeldet';
+          if (loginBtn) loginBtn.style.display = authState.user ? 'none' : 'inline-flex';
+          if (logoutBtn) logoutBtn.style.display = authState.user ? 'inline-flex' : 'none';
+          const needsAuth = !authState.user;
+          setButtonDisabled('save-game', needsAuth);
+          setButtonDisabled('load-game', needsAuth);
+        };
+
+        const setButtonDisabled = (id, disabled) => {
+          const el = document.getElementById(id);
+          if (el) {
+            el.disabled = !!disabled;
+            el.style.opacity = disabled ? "0.6" : "1";
+            el.style.pointerEvents = disabled ? "none" : "auto";
+          }
+        };
 
         // --- Seed -> UI (KPIs / Charts / Flows / Routes / Biome highlight) ---
         const deriveColonyFromPlanet = (planet) => {
@@ -7945,6 +8044,70 @@
             const idx = parseInt(btn.dataset.choiceIndex || '0', 10);
             const choice = pendingEvent.choices?.[idx];
             handleEventChoice(choice, pendingEvent);
+          });
+        };
+
+        const initAuth = () => {
+          const overlay = document.getElementById('auth-overlay');
+          const loginBtn = document.getElementById('auth-login');
+          const logoutBtn = document.getElementById('auth-logout');
+          const submitBtn = document.getElementById('auth-submit');
+          const cancelBtn = document.getElementById('auth-cancel');
+          const errorEl = document.getElementById('auth-error');
+          const userInput = document.getElementById('auth-username');
+          const passInput = document.getElementById('auth-pass');
+
+          const setError = (msg) => { if (errorEl) errorEl.textContent = msg || ''; };
+          const showOverlay = () => overlay?.classList.add('is-open');
+          const hideOverlay = () => { overlay?.classList.remove('is-open'); setError(''); if (passInput) passInput.value=''; };
+
+          if (!isCryptoAvailable()) {
+            authState.user = 'gast';
+            updateAuthUI();
+            setError('Web Crypto nicht verfügbar – Login nur als Gast.');
+            setButtonDisabled('auth-login', true);
+            return;
+          }
+
+          const session = userStore.getSession();
+          authState.user = session?.username || 'gast';
+          updateAuthUI();
+
+          loginBtn?.addEventListener('click', showOverlay);
+          cancelBtn?.addEventListener('click', hideOverlay);
+
+          logoutBtn?.addEventListener('click', () => {
+            userStore.clearSession();
+            authState.user = 'gast';
+            updateAuthUI();
+            location.reload();
+          });
+
+          submitBtn?.addEventListener('click', async () => {
+            const username = (userInput?.value || '').trim().toLowerCase();
+            const pass = passInput?.value || '';
+            if (!username || pass.length < 6) {
+              setError('Nutzername und Passcode (min. 6) erforderlich.');
+              return;
+            }
+            const users = userStore.getUsers();
+            const existing = users.find((u) => u.username === username);
+            const passHash = await hashPasscode(pass);
+            if (existing && existing.passHash !== passHash) {
+              authState.failedAttempts += 1;
+              setError('Falscher Passcode.');
+              if (authState.failedAttempts >= 3) setError('Zu viele Versuche. Bitte kurz warten oder Gast nutzen.');
+              return;
+            }
+            if (!existing) {
+              users.push({ username, passHash });
+              userStore.saveUsers(users);
+            }
+            authState.user = username;
+            userStore.saveSession({ username, lastActive: Date.now() });
+            updateAuthUI();
+            hideOverlay();
+            location.reload();
           });
         };
 
@@ -10242,7 +10405,7 @@
 
         const saveSettings = () => {
           try {
-            localStorage.setItem('planet-sandbox-settings', JSON.stringify(getSettings()));
+            localStorage.setItem(saveKeyForUser(authState.user, 'settings'), JSON.stringify(getSettings()));
           } catch (e) {
             console.warn('Failed to save settings:', e);
           }
@@ -10341,15 +10504,15 @@
           
           if (clearData) {
             clearData.addEventListener('click', () => {
-              if (confirm('Alle Daten löschen? (Spielstände, Einstellungen)')) {
-                localStorage.clear();
-                toast({ type: 'warning', title: 'Daten gelöscht', message: 'Alle Spielstände wurden entfernt.' });
+              if (confirm('Alle Daten für diesen Nutzer löschen? (Spielstände, Einstellungen)')) {
+                clearUserData(authState.user);
+                toast({ type: 'warning', title: 'Daten gelöscht', message: 'Alle Spielstände für diesen Nutzer wurden entfernt.' });
               }
             });
           }
 
           try {
-            const saved = localStorage.getItem('planet-sandbox-settings');
+            const saved = localStorage.getItem(saveKeyForUser(authState.user, 'settings'));
             if (saved) {
               applySettings(JSON.parse(saved));
             }
@@ -10632,8 +10795,11 @@
         };
 
         const loadPlanetsFromStorage = () => {
+          multiPlanetState.planets = [];
+          multiPlanetState.activePlanetId = null;
+          multiPlanetState.nextId = 1;
           try {
-            const saved = localStorage.getItem('planet-sandbox-multiplanets');
+            const saved = localStorage.getItem(saveKeyForUser(authState.user, 'planets'));
             if (saved) {
               const data = JSON.parse(saved);
               multiPlanetState.planets = (data.planets || []).map((planet) => ({
@@ -10679,7 +10845,7 @@
 
         const savePlanetsToStorage = () => {
           try {
-            localStorage.setItem('planet-sandbox-multiplanets', JSON.stringify({
+            localStorage.setItem(saveKeyForUser(authState.user, 'planets'), JSON.stringify({
               planets: multiPlanetState.planets,
               activePlanetId: multiPlanetState.activePlanetId,
               nextId: multiPlanetState.nextId
@@ -11236,7 +11402,7 @@
 
         const loadAchievements = () => {
           try {
-            const saved = localStorage.getItem('planet-sandbox-achievements');
+            const saved = localStorage.getItem(saveKeyForUser(authState.user, 'achievements'));
             if (saved) {
               achievementState = JSON.parse(saved);
             }
@@ -11247,7 +11413,7 @@
 
         const saveAchievements = () => {
           try {
-            localStorage.setItem('planet-sandbox-achievements', JSON.stringify(achievementState));
+            localStorage.setItem(saveKeyForUser(authState.user, 'achievements'), JSON.stringify(achievementState));
           } catch (e) {
             console.warn('Failed to save achievements:', e);
           }
@@ -11328,6 +11494,7 @@
         };
 
         // Initialize all features
+        initAuth();
         setupTheme();
         setupNotifications();
         setupFloatingNav();
@@ -11356,7 +11523,7 @@
 
         const loadStatsHistory = () => {
           try {
-            const saved = localStorage.getItem('planet-sandbox-stats-history');
+            const saved = localStorage.getItem(saveKeyForUser(authState.user, 'stats-history'));
             if (saved) {
               const parsed = JSON.parse(saved);
               if (parsed.byPlanet) {
@@ -11373,7 +11540,7 @@
 
         const saveStatsHistory = () => {
           try {
-            localStorage.setItem('planet-sandbox-stats-history', JSON.stringify(statsHistory));
+            localStorage.setItem(saveKeyForUser(authState.user, 'stats-history'), JSON.stringify(statsHistory));
           } catch (e) {
             console.warn('Failed to save stats history:', e);
           }
