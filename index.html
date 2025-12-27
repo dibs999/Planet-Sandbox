@@ -93,14 +93,15 @@
         flex-direction: column;
         align-items: center;
         text-align: center;
-        gap: 24px;
-        padding: 40px 32px;
+        gap: 16px;
+        padding: 24px 24px;
         background: var(--panel);
         border: 1px solid var(--stroke);
-        border-radius: 28px;
+        border-radius: 20px;
         box-shadow: var(--shadow);
         position: relative;
         overflow: hidden;
+        margin-top: 16px;
       }
 
       .hero::after {
@@ -204,7 +205,7 @@
       }
 
       section {
-        margin-top: 32px;
+        margin-top: 24px;
         animation: fadeUp 0.7s ease both;
       }
 
@@ -245,8 +246,8 @@
       .card {
         background: var(--panel);
         border: 1px solid var(--stroke);
-        border-radius: 18px;
-        padding: 16px;
+        border-radius: 12px;
+        padding: 14px;
         box-shadow: var(--shadow-soft);
       }
 
@@ -348,16 +349,43 @@
 
       .kpi-grid {
         display: grid;
-        gap: 16px;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 12px;
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      @media (max-width: 768px) {
+        .kpi-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 480px) {
+        .kpi-grid {
+          grid-template-columns: 1fr;
+        }
       }
 
       .kpi-card {
         background: var(--panel-strong);
         border: 1px solid var(--stroke);
-        border-radius: 16px;
-        padding: 14px;
+        border-radius: 12px;
+        padding: 12px;
         box-shadow: var(--shadow-soft);
+        transition: all 0.2s ease;
+      }
+
+      .kpi-card[data-kpi="supply"][style*="--value:"] {
+        --value-num: attr(data-value);
+      }
+
+      .kpi-card.warning {
+        border-color: var(--warning);
+        background: rgba(197, 143, 42, 0.1);
+      }
+
+      .kpi-card.danger {
+        border-color: var(--danger);
+        background: rgba(220, 38, 38, 0.1);
       }
 
       .kpi-title {
@@ -1471,39 +1499,108 @@
         fill: currentColor;
       }
 
-      /* Floating Navigation */
-      .floating-nav {
-        position: fixed;
-        bottom: 24px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 1000;
-        display: flex;
-        gap: 6px;
-        padding: 8px;
-        border-radius: 999px;
-        background: var(--panel-strong);
-        border: 1px solid var(--stroke);
-        box-shadow: var(--shadow);
-        backdrop-filter: blur(10px);
+      /* View System */
+      .view-container {
+        display: none;
       }
 
-      .floating-nav button {
-        padding: 8px 14px;
-        border-radius: 999px;
-        border: 1px solid transparent;
-        background: transparent;
-        color: var(--muted);
-        font-size: 0.8rem;
-        cursor: pointer;
-        transition: all 0.2s ease;
+      .view-container.active {
+        display: block;
       }
 
-      .floating-nav button:hover,
-      .floating-nav button.active {
-        background: var(--navy);
-        color: #fff;
-        border-color: var(--navy);
+      .view-container.active section {
+        display: block;
+      }
+
+      /* Body padding für Topbar */
+      body {
+        padding-top: 56px;
+      }
+
+      /* Responsive Topbar */
+      @media (max-width: 1024px) {
+        .topbar-nav button {
+          padding: 6px 8px;
+          font-size: 0.8rem;
+        }
+        
+        .topbar-logo {
+          font-size: 1rem;
+        }
+        
+        .sim-time-compact {
+          display: none;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .topbar {
+          flex-wrap: wrap;
+          height: auto;
+          min-height: 56px;
+          padding: 8px 12px;
+        }
+        
+        .topbar-left {
+          flex: 1 1 100%;
+          order: 1;
+          margin-bottom: 8px;
+        }
+        
+        .topbar-center {
+          flex: 1 1 auto;
+          order: 2;
+        }
+        
+        .topbar-right {
+          flex: 1 1 auto;
+          order: 3;
+          justify-content: flex-end;
+        }
+        
+        .topbar-nav {
+          flex-wrap: wrap;
+          gap: 4px;
+        }
+        
+        .topbar-nav button {
+          padding: 4px 8px;
+          font-size: 0.75rem;
+        }
+        
+        .topbar-logo {
+          font-size: 0.9rem;
+        }
+        
+        .sim-controls-compact {
+          padding: 2px 4px;
+        }
+        
+        .sim-btn-compact {
+          padding: 4px 6px;
+          font-size: 0.75rem;
+          min-width: 28px;
+        }
+        
+        .planet-switcher-compact {
+          padding: 4px 8px;
+          font-size: 0.75rem;
+        }
+        
+        .topbar-btn {
+          padding: 4px 8px;
+          font-size: 0.75rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .topbar-nav-more {
+          display: none;
+        }
+        
+        .topbar-nav button:nth-child(n+6) {
+          display: none;
+        }
       }
 
       /* 3D Planet */
@@ -3404,48 +3501,7 @@
       }
 
       /* Sim Controls */
-      .sim-controls {
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        z-index: 1000;
-        display: flex;
-        gap: 8px;
-        align-items: center;
-        padding: 8px 10px;
-        border-radius: 999px;
-        background: var(--panel-strong);
-        border: 1px solid var(--stroke);
-        box-shadow: var(--shadow-soft);
-      }
-
-      .sim-controls .sim-label {
-        font-size: 0.78rem;
-        color: var(--muted);
-        margin-right: 6px;
-        white-space: nowrap;
-      }
-
-      .sim-controls .sim-btn {
-        border: 1px solid var(--stroke);
-        background: rgba(255, 255, 255, 0.8);
-        color: var(--navy);
-        padding: 7px 10px;
-        border-radius: 999px;
-        font-size: 0.82rem;
-        cursor: pointer;
-      }
-
-      .sim-controls .sim-btn[aria-pressed="true"] {
-        background: var(--navy);
-        color: #fff;
-        border-color: var(--navy);
-      }
-
-      .sim-controls .sim-btn:focus-visible {
-        outline: 2px solid var(--brass);
-        outline-offset: 2px;
-      }
+      /* Alte sim-controls entfernt - jetzt in Topbar integriert */
 
       /* Seed-getriebene Highlights */
       .biome-card.is-dominant {
@@ -4351,8 +4407,8 @@
       /* Pixel Art Planet Canvas */
       .planet-canvas-container {
         position: relative;
-        width: 300px;
-        height: 300px;
+        width: 250px;
+        height: 250px;
         margin: 0 auto;
         display: flex;
         align-items: center;
@@ -4432,31 +4488,137 @@
       [data-kpi] {
         border: 2px solid var(--stroke);
         box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.05);
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      [data-kpi]:hover {
+        transform: translateY(-2px);
+        box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.1);
+      }
+
+      /* KPI Detail Modal */
+      .kpi-detail-modal {
+        max-width: 600px;
+      }
+
+      .kpi-detail-content {
+        display: grid;
+        gap: 16px;
+      }
+
+      .kpi-detail-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid var(--stroke);
+      }
+
+      .kpi-detail-row:last-child {
+        border-bottom: none;
+      }
+
+      .kpi-detail-label {
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .kpi-detail-value {
+        font-weight: 600;
+        color: var(--ink);
+      }
+
+      .kpi-trend {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .kpi-trend.up {
+        color: var(--success);
+      }
+
+      .kpi-trend.down {
+        color: var(--danger);
+      }
+
+      /* Quick Actions Bar */
+      .quick-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 16px;
+        padding: 12px;
+        background: var(--panel);
+        border: 1px solid var(--stroke);
+        border-radius: 12px;
+      }
+
+      .quick-action-btn {
+        padding: 10px 16px;
+        border-radius: 12px;
+        border: 1px solid var(--stroke);
+        background: rgba(255, 255, 255, 0.8);
+        color: var(--navy);
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .quick-action-btn:hover {
+        background: var(--navy);
+        color: #fff;
+        border-color: var(--navy);
+        transform: translateY(-1px);
       }
     </style>
   </head>
   <body>
-    <!-- Simulation Controls -->
-    <div class="sim-controls" id="sim-controls" aria-label="Simulation">
-      <span class="sim-label">Simulation</span>
-      <button class="sim-btn" id="sim-pause" type="button" aria-pressed="false">Pause</button>
-      <button class="sim-btn" id="sim-1x" type="button" aria-pressed="true">1×</button>
-      <button class="sim-btn" id="sim-4x" type="button" aria-pressed="false">4×</button>
-      <button class="sim-btn" id="sim-10x" type="button" aria-pressed="false">10×</button>
-      <span class="sim-time" id="sim-time">Tag 1, Jahr 1</span>
-    </div>
-
-    <!-- Planet Manager -->
-    <div class="planet-manager">
-      <button class="planet-switcher" id="planet-switcher" aria-label="Planeten wechseln">
-        <span>🌍</span>
-        <span id="current-planet-name">Planet 1</span>
-        <span>▼</span>
-      </button>
-      <button class="planet-switcher" id="planet-add" aria-label="Neuen Planet hinzufügen" title="Neuer Planet">
-        ➕
-      </button>
-    </div>
+    <!-- Topbar Navigation -->
+    <header class="topbar" id="topbar">
+      <div class="topbar-left">
+        <div class="topbar-logo">🌍 Planet Sandbox</div>
+        <nav class="topbar-nav" id="topbar-nav">
+          <button class="active" data-section="hero">🏠 Start</button>
+          <button data-section="research">🔬 Forschung</button>
+          <button data-section="chains">⚙️ Ketten</button>
+          <button data-section="military">⚔️ Militär</button>
+          <button data-section="diplomacy">🤝 Diplomatie</button>
+          <div class="topbar-nav-more">
+            <button class="topbar-nav-more-btn">Mehr ▼</button>
+            <div class="topbar-nav-dropdown">
+              <button data-section="biomes">🌍 Biome</button>
+              <button data-section="achievements">🏆 Erfolge</button>
+              <button data-section="seeds">🌱 Seeds</button>
+            </div>
+          </div>
+        </nav>
+      </div>
+      <div class="topbar-center">
+        <div class="sim-controls-compact" id="sim-controls" aria-label="Simulation">
+          <button class="sim-btn-compact" id="sim-pause" type="button" aria-pressed="false" title="Pause">⏸</button>
+          <button class="sim-btn-compact" id="sim-1x" type="button" aria-pressed="true" title="1× Geschwindigkeit">1×</button>
+          <button class="sim-btn-compact" id="sim-4x" type="button" aria-pressed="false" title="4× Geschwindigkeit">4×</button>
+          <button class="sim-btn-compact" id="sim-10x" type="button" aria-pressed="false" title="10× Geschwindigkeit">10×</button>
+          <span class="sim-time-compact" id="sim-time">Tag 1, Jahr 1</span>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="planet-switcher-compact" id="planet-switcher" aria-label="Planeten wechseln">
+          <span>🌍</span>
+          <span id="current-planet-name">Planet 1</span>
+          <span>▼</span>
+        </button>
+        <button class="planet-switcher-compact" id="planet-add" aria-label="Neuen Planet hinzufügen" title="Neuer Planet">➕</button>
+        <button class="topbar-btn" id="settings-toggle" aria-label="Einstellungen">⚙️</button>
+        <button class="topbar-btn" id="auth-login">Anmelden</button>
+        <button class="topbar-btn" id="auth-logout" style="display: none;">Abmelden</button>
+      </div>
+    </header>
 
     <!-- Planet List Overlay -->
     <div class="planet-list-overlay" id="planet-list-overlay" role="dialog" aria-modal="true" aria-label="Planetenliste">
@@ -4646,18 +4808,6 @@
       </div>
     </aside>
 
-    <!-- Floating Navigation -->
-    <nav class="floating-nav" id="floating-nav">
-      <button class="active" data-section="hero">Start</button>
-      <button data-section="status">Status</button>
-      <button data-section="research">Forschung</button>
-      <button data-section="chains">Ketten</button>
-      <button data-section="diplomacy">Diplomatie</button>
-      <button data-section="biomes">Biome</button>
-      <button data-section="achievements">Erfolge</button>
-      <button data-section="seeds">Seeds</button>
-      <button id="settings-toggle" aria-label="Einstellungen">⚙️</button>
-    </nav>
 
     <!-- Soundtrack Player -->
     <div class="soundtrack-player" id="soundtrack-player">
@@ -4670,6 +4820,21 @@
     </div>
 
     <!-- Glossary Modal -->
+    <!-- KPI Detail Modal -->
+    <div class="modal-overlay" id="kpi-detail-modal">
+      <div class="modal kpi-detail-modal">
+        <div class="modal-header">
+          <h3 id="kpi-detail-title">KPI Details</h3>
+          <button class="modal-close" id="kpi-detail-close" aria-label="Schließen">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="kpi-detail-content" id="kpi-detail-content">
+            <!-- Wird dynamisch generiert -->
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="modal-overlay" id="glossary-modal">
       <div class="modal">
         <div class="modal-header">
@@ -4732,6 +4897,7 @@
           <span></span>
           <span></span>
           <span></span>
+          <span></span>
         </div>
       </div>
     </div>
@@ -4763,6 +4929,8 @@
     </div>
 
     <main class="page">
+      <!-- Start View: Hero + Status -->
+      <div class="view-container active" id="view-start">
       <header class="hero" id="hero">
         <div class="auth-bar">
           <span class="auth-user" id="auth-user-label">Nicht angemeldet</span>
@@ -4780,7 +4948,7 @@
         </div>
         <div class="hero-visual">
           <div class="planet-canvas-container">
-            <canvas class="planet-canvas pixel-art" id="main-planet-canvas" width="300" height="300"></canvas>
+            <canvas class="planet-canvas pixel-art" id="main-planet-canvas" width="250" height="250"></canvas>
           </div>
           <div class="legend">Pixel Art Planet mit Seed-generierten Kontinenten</div>
         </div>
@@ -4850,8 +5018,27 @@
             <div class="effects-list" id="effects-list"></div>
           </div>
         </div>
+        <!-- Quick Actions Bar - kompakter -->
+        <div class="quick-actions">
+          <button class="quick-action-btn" id="quick-build">
+            🏗️ Gebäude
+          </button>
+          <button class="quick-action-btn" id="quick-research">
+            🔬 Forschung
+          </button>
+          <button class="quick-action-btn" id="quick-routes">
+            🚀 Routen
+          </button>
+          <button class="quick-action-btn" id="quick-events">
+            📰 Events
+          </button>
+        </div>
       </section>
+      </div>
+      <!-- End Start View -->
 
+      <!-- Research View -->
+      <div class="view-container" id="view-research">
       <section id="research">
         <h2>🔬 Forschungsbaum</h2>
         <p class="lead">Schalte neue Technologien frei und forme die Zukunft deines Planeten.</p>
@@ -4924,6 +5111,101 @@
                 </div>
               </div>
               <div class="research-tier">
+                <span class="research-tier-label">Energie</span>
+                <div class="research-node available">
+                  <div class="node-icon">🔋</div>
+                  <div class="node-title">Energiespeicher I</div>
+                  <div class="node-cost">800 Forschung</div>
+                </div>
+                <div class="research-node locked">
+                  <div class="node-icon">⚡</div>
+                  <div class="node-title">Energiespeicher II</div>
+                  <div class="node-cost">2200 Forschung</div>
+                </div>
+                <div class="research-node available">
+                  <div class="node-icon">🌋</div>
+                  <div class="node-title">Geothermie</div>
+                  <div class="node-cost">2800 Forschung</div>
+                </div>
+                <div class="research-node locked">
+                  <div class="node-icon">⚛️</div>
+                  <div class="node-title">Kernfusion II</div>
+                  <div class="node-cost">6000 Forschung</div>
+                </div>
+              </div>
+              <div class="research-tier">
+                <span class="research-tier-label">Ressourcen</span>
+                <div class="research-node available">
+                  <div class="node-icon">⛏️</div>
+                  <div class="node-title">Tiefbohrung</div>
+                  <div class="node-cost">2400 Forschung</div>
+                </div>
+                <div class="research-node available">
+                  <div class="node-icon">♻️</div>
+                  <div class="node-title">Ressourcen-Recycling</div>
+                  <div class="node-cost">2000 Forschung</div>
+                </div>
+                <div class="research-node locked">
+                  <div class="node-icon">☄️</div>
+                  <div class="node-title">Asteroiden-Abbau</div>
+                  <div class="node-cost">7000 Forschung</div>
+                </div>
+              </div>
+              <div class="research-tier">
+                <span class="research-tier-label">Bevölkerung</span>
+                <div class="research-node available">
+                  <div class="node-icon">🌱</div>
+                  <div class="node-title">Hydroponik II</div>
+                  <div class="node-cost">2600 Forschung</div>
+                </div>
+                <div class="research-node locked">
+                  <div class="node-icon">🌿</div>
+                  <div class="node-title">Hydroponik III</div>
+                  <div class="node-cost">5500 Forschung</div>
+                </div>
+                <div class="research-node available">
+                  <div class="node-icon">🏛️</div>
+                  <div class="node-title">Lebensraum-Expansion</div>
+                  <div class="node-cost">3000 Forschung</div>
+                </div>
+              </div>
+              <div class="research-tier">
+                <span class="research-tier-label">Terraforming</span>
+                <div class="research-node available">
+                  <div class="node-icon">🌍</div>
+                  <div class="node-title">Terraforming I</div>
+                  <div class="node-cost">3200 Forschung</div>
+                </div>
+                <div class="research-node locked">
+                  <div class="node-icon">🌎</div>
+                  <div class="node-title">Terraforming II</div>
+                  <div class="node-cost">7500 Forschung</div>
+                </div>
+                <div class="research-node locked">
+                  <div class="node-icon">🌏</div>
+                  <div class="node-title">Biosphären-Engineering</div>
+                  <div class="node-cost">6500 Forschung</div>
+                </div>
+              </div>
+              <div class="research-tier">
+                <span class="research-tier-label">Handel</span>
+                <div class="research-node available">
+                  <div class="node-icon">📊</div>
+                  <div class="node-title">Handelsoptimierung</div>
+                  <div class="node-cost">1800 Forschung</div>
+                </div>
+                <div class="research-node locked">
+                  <div class="node-icon">🌐</div>
+                  <div class="node-title">Handelsnetzwerk</div>
+                  <div class="node-cost">5000 Forschung</div>
+                </div>
+                <div class="research-node locked">
+                  <div class="node-icon">🚀</div>
+                  <div class="node-title">Interplanetarer Handel</div>
+                  <div class="node-cost">14000 Forschung</div>
+                </div>
+              </div>
+              <div class="research-tier">
                 <span class="research-tier-label">Endgame</span>
                 <div class="research-node locked">
                   <div class="node-icon">☀️</div>
@@ -4935,6 +5217,21 @@
                   <div class="node-title">Planetares Netzwerk</div>
                   <div class="node-cost">12000 Forschung</div>
                 </div>
+                <div class="research-node locked">
+                  <div class="node-icon">💻</div>
+                  <div class="node-title">Quantencomputer</div>
+                  <div class="node-cost">8000 Forschung</div>
+                </div>
+                <div class="research-node locked">
+                  <div class="node-icon">🔬</div>
+                  <div class="node-title">Nanotechnologie</div>
+                  <div class="node-cost">6000 Forschung</div>
+                </div>
+                <div class="research-node locked">
+                  <div class="node-icon">🤖</div>
+                  <div class="node-title">Künstliche Intelligenz</div>
+                  <div class="node-cost">16000 Forschung</div>
+                </div>
               </div>
             </div>
             <div class="research-deps" id="research-deps">
@@ -4944,7 +5241,11 @@
           </div>
         </div>
       </section>
+      </div>
+      <!-- End Research View -->
 
+      <!-- Diplomacy View -->
+      <div class="view-container" id="view-diplomacy">
       <section id="diplomacy">
         <h2>🤝 Diplomatie &amp; Fraktionen</h2>
         <p class="lead">Baue Beziehungen zu anderen Kolonien auf oder konkurriere um Ressourcen.</p>
@@ -5036,7 +5337,11 @@
           </div>
         </div>
       </section>
+      </div>
+      <!-- End Diplomacy View -->
 
+      <!-- Chains/Flow View -->
+      <div class="view-container" id="view-chains">
       <section id="flow">
         <h2>📊 Ressourcen-Fluss</h2>
         <p class="lead">Visualisierung aller Warenströme – von der Quelle bis zum Verbraucher.</p>
@@ -5066,7 +5371,6 @@
           <svg class="flow-svg" id="flow-svg" aria-hidden="true"></svg>
         </div>
       </section>
-
       <section id="stats">
         <h2>📈 Statistik-Dashboard</h2>
         <p class="lead">Entwicklung über Zeit – erkenne Trends und optimiere frühzeitig.</p>
@@ -5079,8 +5383,7 @@
           <!-- Wird dynamisch generiert -->
         </div>
       </section>
-
-      <section id="biomes">
+      <section id="chains">
         <h2>🌍 Biom-Galerie</h2>
         <p class="lead">Jedes Biom hat einzigartige Eigenschaften, Boni und Herausforderungen.</p>
         <div class="biome-gallery">
@@ -5439,7 +5742,6 @@
           </div>
         </div>
       </section>
-
       <section id="chains">
         <h2>Warenketten &amp; Gesellschaft</h2>
         <p class="lead">
@@ -6232,6 +6534,13 @@
                 <span class="item-meta">80 Metall</span>
               </div>
             </div>
+            <div class="build-item" data-building="barracks">
+              <span class="item-icon">⚔️</span>
+              <div class="item-text">
+                <span>Kaserne</span>
+                <span class="item-meta">400 Metall</span>
+              </div>
+            </div>
             <div class="build-item is-locked" data-building="fusion-reactor" data-requires="fusion">
               <span class="item-icon">⚛️</span>
               <div class="item-text">
@@ -6710,6 +7019,7 @@
         const getActivePlanetId = () => multiPlanetState?.activePlanetId || 'default';
 
         const resourceDefinitions = {
+          military: { label: "Militär", unit: "Einheiten", icon: "⚔️" },
           ice: { label: "Eis", unit: "t", icon: "🧊" },
           regolith: { label: "Regolith", unit: "t", icon: "🪨" },
           water: { label: "Wasser", unit: "t", icon: "💧" },
@@ -7233,7 +7543,10 @@
 
         const renderRoutes = (planet, colony) => {
           initRouteStateFromDOM();
-          ensureSeedRoutes(planet, colony);
+          // Nur automatische Routen erstellen wenn Tutorial abgeschlossen
+          if (tutorialCompleted) {
+            // ensureSeedRoutes(planet, colony); // Entfernt - Routen müssen manuell erstellt werden
+          }
           updateRouteUI();
         };
 
@@ -7720,23 +8033,65 @@
         };
 
         // Floating Navigation
-        const setupFloatingNav = () => {
-          const nav = document.getElementById('floating-nav');
+        const setupTopbarNav = () => {
+          const nav = document.getElementById('topbar-nav');
           if (!nav) return;
+          
+          const viewMap = {
+            'hero': 'view-start',
+            'status': 'view-start',
+            'research': 'view-research',
+            'chains': 'view-chains',
+            'military': 'view-military',
+            'diplomacy': 'view-diplomacy',
+            'biomes': 'view-biomes',
+            'achievements': 'view-achievements',
+            'seeds': 'view-seeds'
+          };
+          
+          const switchView = (viewId) => {
+            // Verstecke alle Views
+            document.querySelectorAll('.view-container').forEach(view => {
+              view.classList.remove('active');
+            });
+            
+            // Zeige gewählte View
+            const targetView = document.getElementById(viewId);
+            if (targetView) {
+              targetView.classList.add('active');
+              // Scroll zum Anfang der View
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+          };
           
           const buttons = nav.querySelectorAll('button');
           buttons.forEach(btn => {
             btn.addEventListener('click', () => {
               const sectionId = btn.dataset.section;
-              const section = document.getElementById(sectionId) || 
-                             document.querySelector(`.hero`);
-              if (section) {
-                section.scrollIntoView({ behavior: 'smooth' });
+              
+              // View-Switching
+              if (sectionId && viewMap[sectionId]) {
+                switchView(viewMap[sectionId]);
+                buttons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+              } else if (btn.id === 'settings-toggle') {
+                // Settings bleibt wie es war
+                return;
+              } else {
+                // Fallback: Scroll zu Sektion
+                const section = document.getElementById(sectionId) || 
+                               document.querySelector(`.hero`);
+                if (section) {
+                  section.scrollIntoView({ behavior: 'smooth' });
+                }
+                buttons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
               }
-              buttons.forEach(b => b.classList.remove('active'));
-              btn.classList.add('active');
             });
           });
+          
+          // Standard: Start-View anzeigen
+          switchView('view-start');
         };
 
         // Glossary Modal
@@ -7788,11 +8143,60 @@
           if (!startBtn || !overlay) return;
           
           const steps = [
-            { selector: '.hero', title: 'Willkommen!', text: 'Dies ist dein Planeten-Übersichtspanel. Hier siehst du den aktuellen Status deiner Kolonie.' },
-            { selector: '#status', title: 'Kolonie-Status', text: 'Behalte Bevölkerung, Versorgung und Emissionen im Blick.' },
-            { selector: '#research', title: 'Forschung', text: 'Schalte neue Technologien frei, um deine Kolonie zu verbessern.' },
-            { selector: '#diplomacy', title: 'Diplomatie', text: 'Baue Beziehungen zu anderen Fraktionen auf oder führe Handelskriege.' },
-            { selector: '#seeds', title: 'Seeds & Welten', text: 'Generiere einzigartige Planeten mit Seeds oder lade Community-Welten.' }
+            { 
+              selector: '.hero', 
+              title: 'Willkommen zu Planet Sandbox!', 
+              text: 'Du beginnst mit einer neuen Kolonie. Die Simulation ist pausiert - du hast Zeit, alles zu lernen. Klicke auf "Weiter" um zu beginnen.',
+              action: null
+            },
+            { 
+              selector: '#status', 
+              title: 'Kolonie-Status überwachen', 
+              text: 'Hier siehst du Bevölkerung, Versorgung, Zufriedenheit und Emissionen. Diese Werte ändern sich langsam - du musst aktiv handeln!',
+              action: null
+            },
+            { 
+              selector: '#research', 
+              title: 'Forschung - Der Schlüssel zum Erfolg', 
+              text: 'Forschung passiert NICHT automatisch! Du musst Technologien manuell auswählen und Forschungspunkte sammeln. Klicke auf eine verfügbare Technologie, um sie zu erforschen.',
+              action: () => {
+                const researchSection = document.querySelector('#research');
+                if (researchSection) {
+                  researchSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+              }
+            },
+            { 
+              selector: '#flow', 
+              title: 'Handelsrouten erstellen', 
+              text: 'Handelsrouten werden NICHT automatisch erstellt! Du musst sie manuell im Handelsrouten-Panel erstellen. Ohne Routen gibt es keinen Handel.',
+              action: null
+            },
+            { 
+              selector: '.sim-controls', 
+              title: 'Simulation steuern', 
+              text: 'Die Simulation startet pausiert. Klicke auf "Weiter" um sie zu starten. Du kannst die Geschwindigkeit anpassen (1×, 4×, 10×) oder pausieren.',
+              action: null
+            },
+            { 
+              selector: null, 
+              title: 'Tutorial abgeschlossen!', 
+              text: 'Du bist bereit! Die Simulation startet jetzt. Denke daran: Forschung und Handelsrouten müssen manuell erstellt werden. Viel Erfolg!',
+              action: () => {
+                tutorialCompleted = true;
+                localStorage.setItem('tutorialCompleted', 'true');
+                simState.paused = false;
+                const pauseBtn = document.getElementById('sim-pause');
+                if (pauseBtn) {
+                  pauseBtn.setAttribute("aria-pressed", "false");
+                  pauseBtn.textContent = "Pause";
+                }
+                if (!simState.tickInterval) {
+                  startSimulation();
+                }
+                toast({ type: 'success', title: 'Tutorial abgeschlossen!', message: 'Die Simulation startet jetzt. Viel Erfolg!' });
+              }
+            }
           ];
           
           let currentStep = 0;
@@ -7800,14 +8204,28 @@
           const showStep = (index) => {
             if (index >= steps.length) {
               overlay.classList.remove('is-active');
+              if (!tutorialCompleted) {
+                tutorialCompleted = true;
+                localStorage.setItem('tutorialCompleted', 'true');
+                simState.paused = false;
+                const pauseBtn = document.getElementById('sim-pause');
+                if (pauseBtn) {
+                  pauseBtn.setAttribute("aria-pressed", "false");
+                  pauseBtn.textContent = "Pause";
+                }
+                if (!simState.tickInterval) {
+                  startSimulation();
+                }
+              }
               return;
             }
             
             const step = steps[index];
-            const el = document.querySelector(step.selector);
             
             document.getElementById('tutorial-title').textContent = step.title;
             document.getElementById('tutorial-text').textContent = step.text;
+            
+            const el = step.selector ? document.querySelector(step.selector) : null;
             
             if (el) {
               el.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -7827,6 +8245,8 @@
               const left = Math.min(window.innerWidth - tooltipWidth - padding, rect.left);
               tooltip.style.top = `${Math.max(padding, top)}px`;
               tooltip.style.left = `${Math.max(padding, left)}px`;
+            } else if (highlight) {
+              highlight.style.display = 'none';
             }
             
             // Update progress
@@ -7836,7 +8256,21 @@
             });
             
             nextBtn.textContent = index === steps.length - 1 ? 'Fertig ✓' : 'Weiter →';
+            
+            // Führe Action aus wenn vorhanden
+            if (step.action) {
+              setTimeout(() => step.action(), 300);
+            }
           };
+          
+          // Auto-start Tutorial wenn nicht abgeschlossen
+          if (!tutorialCompleted) {
+            setTimeout(() => {
+              currentStep = 0;
+              overlay.classList.add('is-active');
+              showStep(0);
+            }, 1000);
+          }
           
           startBtn.addEventListener('click', () => {
             currentStep = 0;
@@ -7846,6 +8280,10 @@
           
           skipBtn?.addEventListener('click', () => {
             overlay.classList.remove('is-active');
+            if (!tutorialCompleted) {
+              tutorialCompleted = true;
+              localStorage.setItem('tutorialCompleted', 'true');
+            }
           });
           
           nextBtn?.addEventListener('click', () => {
@@ -7866,7 +8304,14 @@
           warehouse: '📦',
           'fusion-reactor': '⚛️',
           'orbital-shipyard': '🛰️',
-          'dyson-mirror': '☀️'
+          'dyson-mirror': '☀️',
+          'geothermal-plant': '🌋',
+          'deep-mine': '⛏️',
+          'asteroid-miner': '☄️',
+          'habitat-dome': '🏛️',
+          'terraform-station': '🌍',
+          'biosphere-lab': '🌏',
+          'interplanetary-port': '🚀'
         };
         const buildingRadius = {
           home: 1,
@@ -7877,9 +8322,17 @@
           lab: 2,
           spaceport: 4,
           warehouse: 1,
+          barracks: 2,
           'fusion-reactor': 3,
           'orbital-shipyard': 3,
-          'dyson-mirror': 4
+          'dyson-mirror': 4,
+          'geothermal-plant': 3,
+          'deep-mine': 2,
+          'asteroid-miner': 4,
+          'habitat-dome': 3,
+          'terraform-station': 3,
+          'biosphere-lab': 2,
+          'interplanetary-port': 4
         };
         
         const renderBuildingIcon = (building) => {
@@ -8039,6 +8492,695 @@
               if (catType) {
                 triggerCatastrophe(catType);
               }
+            });
+          }
+        };
+
+        // ===== PHASE 1: INTERAKTIVE AKTIONEN =====
+        
+        // 1. KPI-Karten interaktiv machen
+        const setupKPIActions = () => {
+          const kpiCards = document.querySelectorAll('[data-kpi]');
+          const modal = document.getElementById('kpi-detail-modal');
+          const closeBtn = document.getElementById('kpi-detail-close');
+          const titleEl = document.getElementById('kpi-detail-title');
+          const contentEl = document.getElementById('kpi-detail-content');
+          
+          if (!modal || !titleEl || !contentEl) return;
+          
+          const kpiDetails = {
+            population: {
+              title: '👥 Bevölkerung',
+              getData: () => {
+                const planet = generatePlanet(document.getElementById('seed-input')?.value || 'DEFAULT');
+                const colony = calculateColonyKPIs(planet, collectBuildings());
+                const buildings = collectBuildings();
+                const homes = buildings.filter(b => b.building === 'home').length;
+                return {
+                  aktuell: `${(colony.population / 1000).toFixed(0)}k`,
+                  stufe: colony.stage,
+                  wachstum: `${((colony.population / 100000) * 0.1).toFixed(1)}% pro Tag`,
+                  wohnungen: homes,
+                  kapazität: `${(homes * 500).toFixed(0)}`,
+                  sektoren: colony.sectors,
+                  optimierung: colony.bottleneck === 'Nahrung' ? 'Mehr Hydroponik bauen' : 
+                              colony.bottleneck === 'Wasser' ? 'Wasserwerke erweitern' : 
+                              'Stabil'
+                };
+              }
+            },
+            supply: {
+              title: '📦 Versorgung',
+              getData: () => {
+                const planet = generatePlanet(document.getElementById('seed-input')?.value || 'DEFAULT');
+                const colony = calculateColonyKPIs(planet, collectBuildings());
+                return {
+                  aktuell: `${colony.supply}%`,
+                  engpass: colony.bottleneck,
+                  produktion: 'Berechnet aus Gebäuden',
+                  verbrauch: 'Berechnet aus Bevölkerung',
+                  optimierung: colony.bottleneck !== 'Keiner' ? `Mehr ${colony.bottleneck} produzieren` : 'Optimal'
+                };
+              }
+            },
+            satisfaction: {
+              title: '😊 Zufriedenheit',
+              getData: () => {
+                const planet = generatePlanet(document.getElementById('seed-input')?.value || 'DEFAULT');
+                const colony = calculateColonyKPIs(planet, collectBuildings());
+                return {
+                  aktuell: `${colony.satisfaction}%`,
+                  faktoren: `Versorgung: ${colony.supply}%, Emissionen: ${colony.emissions}%`,
+                  steuern: 'Stabil',
+                  optimierung: colony.satisfaction < 60 ? 'Versorgung erhöhen, Emissionen senken' : 'Gut'
+                };
+              }
+            },
+            emissions: {
+              title: '💨 Emissionen',
+              getData: () => {
+                const planet = generatePlanet(document.getElementById('seed-input')?.value || 'DEFAULT');
+                const colony = calculateColonyKPIs(planet, collectBuildings());
+                return {
+                  aktuell: `${colony.emissions}%`,
+                  limit: `${colony.emissionsLimit}%`,
+                  status: colony.emissions > colony.emissionsLimit * 0.8 ? 'Kritisch' : 'OK',
+                  optimierung: colony.emissions > 50 ? 'Mehr erneuerbare Energie, Recycling' : 'Gut'
+                };
+              }
+            },
+            energy: {
+              title: '⚡ Energie',
+              getData: () => {
+                const planet = generatePlanet(document.getElementById('seed-input')?.value || 'DEFAULT');
+                const colony = calculateColonyKPIs(planet, collectBuildings());
+                return {
+                  aktuell: `${colony.energy}%`,
+                  puffer: '2 Tage',
+                  produktion: 'Solar + Fusion',
+                  optimierung: colony.energy < 50 ? 'Mehr Solarkraftwerke bauen' : 'Ausreichend'
+                };
+              }
+            },
+            water: {
+              title: '💧 Wasser',
+              getData: () => {
+                const planet = generatePlanet(document.getElementById('seed-input')?.value || 'DEFAULT');
+                const colony = calculateColonyKPIs(planet, collectBuildings());
+                return {
+                  aktuell: `${colony.water}%`,
+                  status: colony.water > 70 ? 'Stabil' : 'Knapp',
+                  produktion: 'Wasserwerke',
+                  optimierung: colony.water < 50 ? 'Mehr Wasserwerke bauen' : 'Gut'
+                };
+              }
+            }
+          };
+          
+          const showKPIDetails = (kpiType) => {
+            const detail = kpiDetails[kpiType];
+            if (!detail) return;
+            
+            const data = detail.getData();
+            titleEl.textContent = detail.title;
+            
+            contentEl.innerHTML = Object.entries(data).map(([key, value]) => {
+              const label = key === 'aktuell' ? 'Aktueller Wert' :
+                           key === 'stufe' ? 'Bevölkerungsstufe' :
+                           key === 'wachstum' ? 'Wachstumsrate' :
+                           key === 'wohnungen' ? 'Wohnungen' :
+                           key === 'kapazität' ? 'Kapazität' :
+                           key === 'sektoren' ? 'Sektoren' :
+                           key === 'engpass' ? 'Engpass' :
+                           key === 'produktion' ? 'Produktion' :
+                           key === 'verbrauch' ? 'Verbrauch' :
+                           key === 'faktoren' ? 'Einflussfaktoren' :
+                           key === 'steuern' ? 'Steuern' :
+                           key === 'limit' ? 'Limit' :
+                           key === 'status' ? 'Status' :
+                           key === 'puffer' ? 'Puffer' :
+                           key === 'optimierung' ? 'Optimierung' : key;
+              
+              return `
+                <div class="kpi-detail-row">
+                  <span class="kpi-detail-label">${label}</span>
+                  <span class="kpi-detail-value">${value}</span>
+                </div>
+              `;
+            }).join('');
+            
+            modal.classList.add('is-open');
+          };
+          
+          kpiCards.forEach(card => {
+            card.addEventListener('click', () => {
+              const kpiType = card.dataset.kpi;
+              if (kpiType) {
+                showKPIDetails(kpiType);
+              }
+            });
+          });
+          
+          closeBtn?.addEventListener('click', () => {
+            modal.classList.remove('is-open');
+          });
+          
+          modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+              modal.classList.remove('is-open');
+            }
+          });
+        };
+        
+        // 2. Schnellaktionen
+        const setupQuickActions = () => {
+          const buildBtn = document.getElementById('quick-build');
+          const researchBtn = document.getElementById('quick-research');
+          const routesBtn = document.getElementById('quick-routes');
+          const eventsBtn = document.getElementById('quick-events');
+          
+          buildBtn?.addEventListener('click', () => {
+            const buildSection = document.getElementById('build-editor');
+            if (buildSection) {
+              // Wechsle zu Chains-View und scroll zu Build-Editor
+              const nav = document.getElementById('floating-nav');
+              const chainsBtn = nav?.querySelector('[data-section="chains"]');
+              if (chainsBtn) chainsBtn.click();
+              setTimeout(() => {
+                buildSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }, 300);
+            }
+          });
+          
+          researchBtn?.addEventListener('click', () => {
+            const nav = document.getElementById('floating-nav');
+            const researchBtn = nav?.querySelector('[data-section="research"]');
+            if (researchBtn) researchBtn.click();
+          });
+          
+          routesBtn?.addEventListener('click', () => {
+            const nav = document.getElementById('floating-nav');
+            const chainsBtn = nav?.querySelector('[data-section="chains"]');
+            if (chainsBtn) chainsBtn.click();
+            setTimeout(() => {
+              const routeSection = document.querySelector('#panel-handel');
+              if (routeSection) {
+                routeSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }
+            }, 300);
+          });
+          
+          eventsBtn?.addEventListener('click', () => {
+            if (pendingEvent) {
+              showEventOverlay(pendingEvent);
+            } else {
+              toast({ type: 'info', title: 'Keine Events', message: 'Aktuell gibt es keine aktiven Events.' });
+            }
+          });
+        };
+        
+        // 3. Diplomatie-Buttons
+        const setupDiplomacyActions = () => {
+          const factionCards = document.querySelectorAll('.faction-card');
+          
+          factionCards.forEach(card => {
+            const giftBtn = card.querySelector('[data-action="gift"]');
+            const tradeBtn = card.querySelector('[data-action="trade"]');
+            const treatyBtn = card.querySelector('[data-action="treaty"]');
+            const faction = card.dataset.faction;
+            
+            giftBtn?.addEventListener('click', () => {
+              showDiplomacyDialog('gift', faction);
+            });
+            
+            tradeBtn?.addEventListener('click', () => {
+              showDiplomacyDialog('trade', faction);
+            });
+            
+            treatyBtn?.addEventListener('click', () => {
+              showDiplomacyDialog('treaty', faction);
+            });
+          });
+        };
+        
+        const showDiplomacyDialog = (action, faction) => {
+          const factionNames = {
+            tech: 'Technokraten-Union',
+            eco: 'Öko-Allianz',
+            militant: 'Frontier-Miliz'
+          };
+          
+          const factionName = factionNames[faction] || faction;
+          
+          if (action === 'gift') {
+            const resources = ['metal', 'water', 'food', 'energy'];
+            const resourceNames = {
+              metal: 'Metall',
+              water: 'Wasser',
+              food: 'Nahrung',
+              energy: 'Energie'
+            };
+            
+            const resource = resources[Math.floor(Math.random() * resources.length)];
+            const amount = Math.floor(Math.random() * 100 + 50);
+            const cost = amount * 2;
+            
+            if (confirm(`Geschenk an ${factionName} senden?\n\n${amount} ${resourceNames[resource]}\nKosten: ${cost} Einfluss\n\nBeziehung: +10`)) {
+              if (getResource(resource) >= amount) {
+                consumeResource(resource, amount);
+                if (factionState[faction]) {
+                  factionState[faction].relation = Math.min(100, (factionState[faction].relation || 0) + 10);
+                }
+                toast({ type: 'success', title: 'Geschenk gesendet', message: `${factionName} freut sich über das Geschenk!` });
+                updateResourcePanel();
+                refreshColonyUI();
+              } else {
+                toast({ type: 'warning', title: 'Nicht genug Ressourcen', message: `Du hast nicht genug ${resourceNames[resource]}.` });
+              }
+            }
+          } else if (action === 'trade') {
+            toast({ type: 'info', title: 'Handel', message: `Handelsdialog mit ${factionName} öffnen (wird erweitert)` });
+          } else if (action === 'treaty') {
+            toast({ type: 'info', title: 'Vertrag', message: `Vertragsverhandlung mit ${factionName} (wird erweitert)` });
+          }
+        };
+        
+        // 4. Ressourcen-Karten interaktiv
+        const setupResourceActions = () => {
+          // Wird beim Rendern der Ressourcen-Karten aufgerufen
+          // Siehe updateResourcePanel()
+        };
+
+        // ===== PHASE 2: KI-GEGNER & TERRITORIUM-SYSTEM =====
+        
+        // Territorium State
+        const sectorOwnership = {}; // sectorId -> { owner: 'player'|'ai1'|'ai2'|'ai3'|'neutral', strength: number, buildings: [] }
+        
+        // KI-Gegner State
+        const aiOpponents = [
+          { 
+            id: 'ai1', 
+            name: 'Imperium Alpha', 
+            color: '#ff4444', 
+            sectors: [], 
+            resources: { metal: 500, water: 300, food: 200, energy: 4000 },
+            military: 100,
+            relationship: 0,
+            expansionRate: 0.1
+          },
+          { 
+            id: 'ai2', 
+            name: 'Kolonie Beta', 
+            color: '#ff8844', 
+            sectors: [], 
+            resources: { metal: 400, water: 350, food: 250, energy: 3500 },
+            military: 80,
+            relationship: 0,
+            expansionRate: 0.08
+          },
+          { 
+            id: 'ai3', 
+            name: 'Siedlung Gamma', 
+            color: '#8844ff', 
+            sectors: [], 
+            resources: { metal: 450, water: 320, food: 220, energy: 3800 },
+            military: 90,
+            relationship: 0,
+            expansionRate: 0.09
+          }
+        ];
+        
+        // Militär State
+        const militaryState = {
+          player: { strength: 0, units: [] },
+          ai1: { strength: 100 },
+          ai2: { strength: 80 },
+          ai3: { strength: 90 }
+        };
+        
+        // Territorium initialisieren
+        const setupTerritorySystem = () => {
+          const buildGrid = document.getElementById('build-grid');
+          if (!buildGrid) return;
+          
+          const totalCells = 8 * 12; // 8 rows, 12 cols
+          const totalSectors = 12; // Beispiel: 12 Sektoren
+          
+          // Initialisiere Sektoren: Spieler bekommt 2-3, KI bekommt je 1-2, Rest neutral
+          const playerSectors = 3;
+          const aiSectorsPerOpponent = 2;
+          
+          // Spieler-Sektoren
+          for (let i = 0; i < playerSectors; i++) {
+            const sectorId = `sector-${i}`;
+            sectorOwnership[sectorId] = {
+              owner: 'player',
+              strength: 50,
+              buildings: []
+            };
+          }
+          
+          // KI-Sektoren
+          let sectorIndex = playerSectors;
+          aiOpponents.forEach(ai => {
+            for (let j = 0; j < aiSectorsPerOpponent; j++) {
+              const sectorId = `sector-${sectorIndex}`;
+              sectorOwnership[sectorId] = {
+                owner: ai.id,
+                strength: ai.military,
+                buildings: []
+              };
+              ai.sectors.push(sectorId);
+              sectorIndex++;
+            }
+          });
+          
+          // Rest ist neutral
+          for (let i = sectorIndex; i < totalSectors; i++) {
+            const sectorId = `sector-${i}`;
+            sectorOwnership[sectorId] = {
+              owner: 'neutral',
+              strength: 0,
+              buildings: []
+            };
+          }
+          
+          renderSectorOwnership();
+        };
+        
+        // Sektoren auf Karte rendern
+        const renderSectorOwnership = () => {
+          // Planet-Canvas neu rendern mit Sektoren-Farben
+          const seedInput = document.getElementById('seed-input');
+          const seed = seedInput?.value || 'DEFAULT';
+          renderPixelPlanet(seed);
+          
+          // Markiere Sektoren im Build-Grid
+          const buildGrid = document.getElementById('build-grid');
+          if (!buildGrid) return;
+          
+          const cells = buildGrid.querySelectorAll('.build-cell');
+          cells.forEach((cell, index) => {
+            const sectorId = `sector-${Math.floor(index / 10)}`; // Vereinfacht: 10 Zellen pro Sektor
+            const ownership = sectorOwnership[sectorId];
+            
+            if (ownership) {
+              cell.dataset.owner = ownership.owner;
+              
+              // Farbe basierend auf Besitzer
+              if (ownership.owner === 'player') {
+                cell.style.borderColor = '#4ade80';
+                cell.style.borderWidth = '2px';
+              } else if (ownership.owner === 'ai1') {
+                cell.style.borderColor = '#ff4444';
+                cell.style.borderWidth = '2px';
+              } else if (ownership.owner === 'ai2') {
+                cell.style.borderColor = '#ff8844';
+                cell.style.borderWidth = '2px';
+              } else if (ownership.owner === 'ai3') {
+                cell.style.borderColor = '#8844ff';
+                cell.style.borderWidth = '2px';
+              } else {
+                cell.style.borderColor = '#888';
+                cell.style.borderWidth = '1px';
+              }
+              
+              // Klick-Handler für fremde Sektoren
+              if (ownership.owner !== 'player' && ownership.owner !== 'neutral') {
+                cell.style.cursor = 'pointer';
+                cell.title = `Sektor ${sectorId} - Besitzer: ${ownership.owner === 'ai1' ? 'Imperium Alpha' : ownership.owner === 'ai2' ? 'Kolonie Beta' : 'Siedlung Gamma'}\nKlicken zum Angreifen`;
+                cell.onclick = (e) => {
+                  e.stopPropagation();
+                  const playerStrength = militaryState.player.strength || getResource('military') || 50;
+                  const defenderStrength = ownership.strength;
+                  const successChance = calculateCombat(playerStrength, defenderStrength, 1.2);
+                  
+                  if (confirm(`Sektor ${sectorId} angreifen?\n\nDeine Stärke: ${playerStrength}\nVerteidiger: ${defenderStrength}\nErfolgschance: ${Math.round(successChance * 100)}%`)) {
+                    attackSector(sectorId);
+                    updateMilitaryPanel();
+                  }
+                };
+              } else {
+                cell.style.cursor = 'default';
+                cell.onclick = null;
+              }
+            }
+          });
+        };
+        
+        // KI-Gegner initialisieren
+        const setupAIOpponents = () => {
+          setupTerritorySystem();
+          // KI startet mit Update-Loop
+        };
+        
+        // KI-Verhalten ausführen
+        const updateAIOpponents = () => {
+          if (simState.paused) return;
+          
+          // Alle 10 Tage: KI-Aktionen
+          if (simState.day % 10 === 0) {
+            aiOpponents.forEach(ai => {
+              // Expansion: Suche neutrale Sektoren
+              const neutralSectors = Object.entries(sectorOwnership)
+                .filter(([id, data]) => data.owner === 'neutral');
+              
+              if (neutralSectors.length > 0 && Math.random() < ai.expansionRate) {
+                const target = neutralSectors[Math.floor(Math.random() * neutralSectors.length)];
+                conquerSector(target[0], ai.id);
+                toast({ type: 'info', title: 'KI-Expansion', message: `${ai.name} hat ${target[0]} erobert.` });
+              }
+              
+              // Militär erhöhen
+              ai.military += Math.floor(Math.random() * 5 + 1);
+              militaryState[ai.id].strength = ai.military;
+              
+              // Ressourcen produzieren
+              ai.resources.metal += Math.floor(Math.random() * 10 + 5);
+              ai.resources.water += Math.floor(Math.random() * 8 + 3);
+              ai.resources.food += Math.floor(Math.random() * 6 + 2);
+            });
+            
+            renderSectorOwnership();
+            checkVictoryCondition();
+          }
+        };
+        
+        // Sektor erobern
+        const conquerSector = (sectorId, newOwner) => {
+          if (!sectorOwnership[sectorId]) return;
+          
+          const oldOwner = sectorOwnership[sectorId].owner;
+          sectorOwnership[sectorId].owner = newOwner;
+          
+          // Alten Besitzer aktualisieren
+          if (oldOwner !== 'neutral' && oldOwner !== 'player') {
+            const oldAI = aiOpponents.find(a => a.id === oldOwner);
+            if (oldAI) {
+              oldAI.sectors = oldAI.sectors.filter(s => s !== sectorId);
+            }
+          }
+          
+          // Neuen Besitzer aktualisieren
+          if (newOwner !== 'neutral' && newOwner !== 'player') {
+            const newAI = aiOpponents.find(a => a.id === newOwner);
+            if (newAI && !newAI.sectors.includes(sectorId)) {
+              newAI.sectors.push(sectorId);
+            }
+          }
+          
+          renderSectorOwnership();
+        };
+        
+        // Kampf berechnen
+        const calculateCombat = (attackerStrength, defenderStrength, defenderBonus = 1.0) => {
+          const effectiveDefense = defenderStrength * defenderBonus;
+          const ratio = attackerStrength / effectiveDefense;
+          
+          // Erfolgswahrscheinlichkeit basierend auf Stärke-Verhältnis
+          if (ratio >= 2.0) return 0.95; // Sehr wahrscheinlich
+          if (ratio >= 1.5) return 0.80;
+          if (ratio >= 1.2) return 0.65;
+          if (ratio >= 1.0) return 0.50;
+          if (ratio >= 0.8) return 0.35;
+          if (ratio >= 0.6) return 0.20;
+          return 0.10; // Sehr unwahrscheinlich
+        };
+        
+        // Sektor angreifen
+        const attackSector = (targetSectorId) => {
+          const ownership = sectorOwnership[targetSectorId];
+          if (!ownership || ownership.owner === 'player' || ownership.owner === 'neutral') {
+            return false;
+          }
+          
+          const playerStrength = getResource('military') || militaryState.player.strength || 50;
+          const defenderStrength = ownership.strength;
+          const defenderBonus = 1.2; // Verteidigungs-Bonus
+          
+          const successChance = calculateCombat(playerStrength, defenderStrength, defenderBonus);
+          const success = Math.random() < successChance;
+          
+          if (success) {
+            conquerSector(targetSectorId, 'player');
+            toast({ type: 'success', title: 'Sektor erobert!', message: `Du hast ${targetSectorId} erfolgreich erobert.` });
+            
+            // Beziehung zu KI verschlechtern
+            const ai = aiOpponents.find(a => a.id === ownership.owner);
+            if (ai) {
+              ai.relationship = Math.max(-100, ai.relationship - 20);
+            }
+            
+            // Militär-Verlust auch bei Erfolg
+            const loss = Math.floor(defenderStrength * 0.1);
+            const newStrength = Math.max(0, playerStrength - loss);
+            resourceState.storage.military = newStrength;
+            militaryState.player.strength = newStrength;
+            updateResourcePanel();
+            
+            checkVictoryCondition();
+            return true;
+          } else {
+            // Militär-Verlust bei Niederlage
+            const loss = Math.floor(defenderStrength * 0.2);
+            const newStrength = Math.max(0, playerStrength - loss);
+            resourceState.storage.military = newStrength;
+            militaryState.player.strength = newStrength;
+            updateResourcePanel();
+            toast({ type: 'warning', title: 'Angriff fehlgeschlagen', message: `Der Angriff auf ${targetSectorId} wurde abgewehrt. Militär-Verlust: ${loss}` });
+            return false;
+          }
+        };
+        
+        // Sieg-Bedingung prüfen
+        const checkVictoryCondition = () => {
+          const totalSectors = Object.keys(sectorOwnership).length;
+          const playerSectors = Object.values(sectorOwnership).filter(s => s.owner === 'player').length;
+          const percentage = (playerSectors / totalSectors) * 100;
+          
+          if (percentage >= 100) {
+            // Sieg-Dialog
+            setTimeout(() => {
+              if (confirm('🎉 VICTORY!\n\nDu hast den kompletten Planeten erobert!\n\nNeues Spiel starten?')) {
+                location.reload();
+              }
+            }, 500);
+          }
+        };
+        
+        // Beziehungen aktualisieren
+        const updateRelationships = (action, targetAI) => {
+          const ai = aiOpponents.find(a => a.id === targetAI);
+          if (!ai) return;
+          
+          if (action === 'attack') {
+            ai.relationship = Math.max(-100, ai.relationship - 20);
+          } else if (action === 'gift') {
+            ai.relationship = Math.min(100, ai.relationship + 10);
+          } else if (action === 'trade') {
+            ai.relationship = Math.min(100, ai.relationship + 5);
+          } else if (action === 'conquer_neighbor') {
+            ai.relationship = Math.max(-100, ai.relationship - 5);
+          }
+        };
+        
+        // Militär-Panel aktualisieren
+        const updateMilitaryPanel = () => {
+          const strengthEl = document.getElementById('military-strength');
+          const sectorsEl = document.getElementById('controlled-sectors');
+          const percentageEl = document.getElementById('sector-percentage');
+          const gridEl = document.getElementById('ai-opponents-grid');
+          
+          // Militär-Stärke - synchronisiere mit Ressource
+          const playerStrength = getResource('military') || 50;
+          militaryState.player.strength = playerStrength;
+          if (strengthEl) {
+            strengthEl.textContent = playerStrength;
+            const maxStrength = resourceState.storageCapacity.military || 1000;
+            const percent = Math.round((playerStrength / maxStrength) * 100);
+            strengthEl.parentElement.style.setProperty('--value', `${percent}%`);
+          }
+          
+          // Kontrollierte Sektoren
+          const totalSectors = Object.keys(sectorOwnership).length;
+          const playerSectors = Object.values(sectorOwnership).filter(s => s.owner === 'player').length;
+          const percentage = totalSectors > 0 ? Math.round((playerSectors / totalSectors) * 100) : 0;
+          
+          if (sectorsEl) {
+            sectorsEl.textContent = `${playerSectors}/${totalSectors}`;
+          }
+          if (percentageEl) {
+            percentageEl.textContent = `${percentage}%`;
+            percentageEl.parentElement.style.setProperty('--value', `${percentage}%`);
+          }
+          
+          // KI-Gegner Grid
+          if (gridEl) {
+            gridEl.innerHTML = aiOpponents.map(ai => {
+              const aiSectors = Object.values(sectorOwnership).filter(s => s.owner === ai.id).length;
+              const relationship = ai.relationship || 0;
+              const relationshipStatus = relationship < 0 ? 'Feindlich' : relationship < 50 ? 'Neutral' : 'Freundlich';
+              const relationshipClass = relationship < 0 ? 'hostile' : relationship < 50 ? 'neutral' : 'friendly';
+              
+              return `
+                <div class="faction-card" data-faction="${ai.id}">
+                  <div class="faction-header">
+                    <div class="faction-emblem" style="background: ${ai.color}20; color: ${ai.color};">⚔️</div>
+                    <div class="faction-info">
+                      <h4>${ai.name}</h4>
+                      <span>Sektoren: ${aiSectors} | Militär: ${ai.military}</span>
+                    </div>
+                  </div>
+                  <div class="faction-relations">
+                    <small>Beziehung: <span class="relation-status">${relationshipStatus}</span> (<span class="relation-value">${relationship}</span>)</small>
+                    <div class="relation-bar">
+                      <div class="relation-fill ${relationshipClass}" style="width: ${Math.max(0, Math.min(100, relationship + 100))}%;"></div>
+                    </div>
+                  </div>
+                  <div class="faction-actions">
+                    <button class="faction-btn" data-action="attack-ai" data-ai-id="${ai.id}">⚔️ Angreifen</button>
+                    <button class="faction-btn" data-action="gift-ai" data-ai-id="${ai.id}">🎁 Geschenk</button>
+                  </div>
+                </div>
+              `;
+            }).join('');
+            
+            // Event-Handler für KI-Aktionen
+            gridEl.querySelectorAll('[data-action="attack-ai"]').forEach(btn => {
+              btn.addEventListener('click', () => {
+                const aiId = btn.dataset.aiId;
+                const ai = aiOpponents.find(a => a.id === aiId);
+                if (!ai) return;
+                
+                // Finde einen Sektor dieses KI-Gegners
+                const aiSectors = Object.entries(sectorOwnership)
+                  .filter(([id, data]) => data.owner === aiId);
+                
+                if (aiSectors.length === 0) {
+                  toast({ type: 'info', title: 'Keine Sektoren', message: `${ai.name} hat keine Sektoren mehr.` });
+                  return;
+                }
+                
+                const targetSector = aiSectors[0][0];
+                const ownership = sectorOwnership[targetSector];
+                
+                const playerStrength = militaryState.player.strength || 50;
+                const defenderStrength = ownership.strength;
+                const successChance = calculateCombat(playerStrength, defenderStrength, 1.2);
+                
+                if (confirm(`Sektor ${targetSector} angreifen?\n\nDeine Stärke: ${playerStrength}\nVerteidiger: ${defenderStrength}\nErfolgschance: ${Math.round(successChance * 100)}%`)) {
+                  attackSector(targetSector);
+                  updateMilitaryPanel();
+                }
+              });
+            });
+            
+            gridEl.querySelectorAll('[data-action="gift-ai"]').forEach(btn => {
+              btn.addEventListener('click', () => {
+                const aiId = btn.dataset.aiId;
+                showDiplomacyDialog('gift', aiId);
+                updateMilitaryPanel();
+              });
             });
           }
         };
@@ -8668,13 +9810,16 @@
 
         // Simulation State & Tick
         const simState = {
-          paused: false,
+          paused: true, // Start pausiert
           speed: 1,
           day: 1,
           year: 1,
           tickInterval: null,
           nextEventIn: 35
         };
+
+        // Tutorial State
+        let tutorialCompleted = localStorage.getItem('tutorialCompleted') === 'true';
 
         // ===== PHASE 1: PRODUKTIONSKETTEN-SYSTEM =====
         
@@ -8686,7 +9831,8 @@
             water: 300,
             energy: 4000,
             food: 220,
-            metal: 250
+            metal: 250,
+            military: 50
           },
           storageCapacity: {
             ice: 1000,
@@ -8694,7 +9840,8 @@
             water: 500,
             energy: 10000,
             food: 400,
-            metal: 600
+            metal: 600,
+            military: 1000
           }
         };
 
@@ -8789,7 +9936,7 @@
               const deltaLabel = net === 0 ? "±0" : net > 0 ? `+${net}` : `${net}`;
 
               return `
-                <div class="resource-item" data-resource="${key}">
+                <div class="resource-item" data-resource="${key}" style="cursor: pointer;">
                   <div class="resource-head">
                     <div class="resource-name">${info.icon} ${info.label}</div>
                     <div class="resource-amount">${formatResourceValue(value)} ${info.unit}</div>
@@ -8803,6 +9950,56 @@
               `;
             })
             .join("");
+          
+          // Klick-Handler für Ressourcen-Karten
+          grid.querySelectorAll('.resource-item').forEach(item => {
+            item.addEventListener('click', () => {
+              const resourceKey = item.dataset.resource;
+              const info = resourceDefinitions[resourceKey];
+              if (!info) return;
+              
+              const value = getResource(resourceKey);
+              const capacity = resourceState.storageCapacity[resourceKey] || 0;
+              const produced = lastProductionStats.totalProduced[resourceKey] || 0;
+              const consumed = lastProductionStats.totalConsumed[resourceKey] || 0;
+              const net = produced - consumed;
+              
+              const modal = document.getElementById('kpi-detail-modal');
+              const titleEl = document.getElementById('kpi-detail-title');
+              const contentEl = document.getElementById('kpi-detail-content');
+              
+              if (modal && titleEl && contentEl) {
+                titleEl.textContent = `${info.icon} ${info.label}`;
+                contentEl.innerHTML = `
+                  <div class="kpi-detail-row">
+                    <span class="kpi-detail-label">Aktueller Bestand</span>
+                    <span class="kpi-detail-value">${formatResourceValue(value)} ${info.unit}</span>
+                  </div>
+                  <div class="kpi-detail-row">
+                    <span class="kpi-detail-label">Kapazität</span>
+                    <span class="kpi-detail-value">${formatResourceValue(capacity)} ${info.unit}</span>
+                  </div>
+                  <div class="kpi-detail-row">
+                    <span class="kpi-detail-label">Produktion</span>
+                    <span class="kpi-detail-value">+${formatResourceValue(produced)} ${info.unit}/Tag</span>
+                  </div>
+                  <div class="kpi-detail-row">
+                    <span class="kpi-detail-label">Verbrauch</span>
+                    <span class="kpi-detail-value">-${formatResourceValue(consumed)} ${info.unit}/Tag</span>
+                  </div>
+                  <div class="kpi-detail-row">
+                    <span class="kpi-detail-label">Netto-Fluss</span>
+                    <span class="kpi-detail-value ${net > 0 ? 'kpi-trend up' : net < 0 ? 'kpi-trend down' : ''}">${net > 0 ? '+' : ''}${formatResourceValue(net)} ${info.unit}/Tag</span>
+                  </div>
+                  <div class="kpi-detail-row">
+                    <span class="kpi-detail-label">Auslastung</span>
+                    <span class="kpi-detail-value">${capacity ? Math.round((value / capacity) * 100) : 0}%</span>
+                  </div>
+                `;
+                modal.classList.add('is-open');
+              }
+            });
+          });
         };
 
         const updateEffectsPanel = () => {
@@ -8873,6 +10070,15 @@
             cost: { metal: 250 },
             emissions: 1,
             researchPoints: 5
+          },
+          barracks: {
+            name: 'Kaserne',
+            icon: '⚔️',
+            produces: { military: 5 },
+            consumes: { metal: 10, food: 5, energy: 15 },
+            radius: 2,
+            cost: { metal: 400 },
+            emissions: 3
           },
           home: {
             name: 'Wohnkuppel',
@@ -9180,6 +10386,220 @@
               globalEfficiency: 1.3,
               tradeBonus: 1.5
             }
+          },
+          // Neue Forschungszweige - Energie
+          'Energiespeicher I': {
+            id: 'battery1',
+            tier: 1,
+            cost: 800,
+            requirements: ['solar'],
+            unlocked: false,
+            effects: {
+              storageCapacity: { energy: 1.5 }
+            }
+          },
+          'Energiespeicher II': {
+            id: 'battery2',
+            tier: 2,
+            cost: 2200,
+            requirements: ['battery1'],
+            unlocked: false,
+            effects: {
+              storageCapacity: { energy: 2.0 }
+            }
+          },
+          'Geothermie': {
+            id: 'geothermal',
+            tier: 2,
+            cost: 2800,
+            requirements: ['water'],
+            unlocked: false,
+            effects: {
+              unlockBuilding: 'geothermal-plant',
+              buildingEfficiency: { energy: 1.3 }
+            }
+          },
+          'Kernfusion II': {
+            id: 'fusion2',
+            tier: 3,
+            cost: 6000,
+            requirements: ['fusion'],
+            unlocked: false,
+            effects: {
+              buildingEfficiency: { energy: 1.8 },
+              energyBonus: 1.3
+            }
+          },
+          // Neue Forschungszweige - Ressourcen
+          'Tiefbohrung': {
+            id: 'deepmining',
+            tier: 2,
+            cost: 2400,
+            requirements: ['refinery2'],
+            unlocked: false,
+            effects: {
+              unlockBuilding: 'deep-mine',
+              buildingEfficiency: { refinery: 1.5 }
+            }
+          },
+          'Ressourcen-Recycling': {
+            id: 'recycling',
+            tier: 2,
+            cost: 2000,
+            requirements: ['hydro1'],
+            unlocked: false,
+            effects: {
+              globalEfficiency: 1.15,
+              emissionsReduction: 0.15
+            }
+          },
+          'Asteroiden-Abbau': {
+            id: 'asteroid',
+            tier: 3,
+            cost: 7000,
+            requirements: ['orbital'],
+            unlocked: false,
+            effects: {
+              unlockBuilding: 'asteroid-miner',
+              resourceBonus: 1.4
+            }
+          },
+          // Neue Forschungszweige - Bevölkerung
+          'Hydroponik II': {
+            id: 'hydro2',
+            tier: 2,
+            cost: 2600,
+            requirements: ['hydro1'],
+            unlocked: false,
+            effects: {
+              buildingEfficiency: { hydro: 1.3 },
+              populationBonus: 1.1
+            }
+          },
+          'Hydroponik III': {
+            id: 'hydro3',
+            tier: 3,
+            cost: 5500,
+            requirements: ['hydro2', 'genetics'],
+            unlocked: false,
+            effects: {
+              buildingEfficiency: { hydro: 1.6 },
+              populationBonus: 1.25
+            }
+          },
+          'Lebensraum-Expansion': {
+            id: 'habitat',
+            tier: 2,
+            cost: 3000,
+            requirements: ['climate'],
+            unlocked: false,
+            effects: {
+              unlockBuilding: 'habitat-dome',
+              populationBonus: 1.3
+            }
+          },
+          // Neue Forschungszweige - Terraforming
+          'Terraforming I': {
+            id: 'terraform1',
+            tier: 2,
+            cost: 3200,
+            requirements: ['climate'],
+            unlocked: false,
+            effects: {
+              unlockBuilding: 'terraform-station',
+              emissionsReduction: 0.2
+            }
+          },
+          'Terraforming II': {
+            id: 'terraform2',
+            tier: 3,
+            cost: 7500,
+            requirements: ['terraform1', 'atmosphere'],
+            unlocked: false,
+            effects: {
+              globalEfficiency: 1.2,
+              emissionsReduction: 0.35
+            }
+          },
+          'Biosphären-Engineering': {
+            id: 'biosphere',
+            tier: 3,
+            cost: 6500,
+            requirements: ['genetics', 'terraform1'],
+            unlocked: false,
+            effects: {
+              unlockBuilding: 'biosphere-lab',
+              populationBonus: 1.4,
+              globalEfficiency: 1.15
+            }
+          },
+          // Neue Forschungszweige - Handel
+          'Handelsoptimierung': {
+            id: 'tradeopt',
+            tier: 2,
+            cost: 1800,
+            requirements: [],
+            unlocked: false,
+            effects: {
+              tradeBonus: 1.15
+            }
+          },
+          'Handelsnetzwerk': {
+            id: 'tradenet',
+            tier: 3,
+            cost: 5000,
+            requirements: ['tradeopt', 'orbital'],
+            unlocked: false,
+            effects: {
+              tradeBonus: 1.4,
+              globalEfficiency: 1.1
+            }
+          },
+          'Interplanetarer Handel': {
+            id: 'intertrade',
+            tier: 4,
+            cost: 14000,
+            requirements: ['tradenet', 'network'],
+            unlocked: false,
+            effects: {
+              tradeBonus: 2.0,
+              unlockBuilding: 'interplanetary-port'
+            }
+          },
+          // Neue Forschungszweige - Spezial
+          'Quantencomputer': {
+            id: 'quantum',
+            tier: 3,
+            cost: 8000,
+            requirements: ['fusion', 'network'],
+            unlocked: false,
+            effects: {
+              globalEfficiency: 1.4,
+              researchBonus: 1.5
+            }
+          },
+          'Nanotechnologie': {
+            id: 'nano',
+            tier: 3,
+            cost: 6000,
+            requirements: ['refinery2', 'genetics'],
+            unlocked: false,
+            effects: {
+              buildingEfficiency: { refinery: 1.6, hydro: 1.3 },
+              emissionsReduction: 0.2
+            }
+          },
+          'Künstliche Intelligenz': {
+            id: 'ai',
+            tier: 4,
+            cost: 16000,
+            requirements: ['quantum', 'network'],
+            unlocked: false,
+            effects: {
+              globalEfficiency: 1.5,
+              researchBonus: 2.0,
+              populationBonus: 1.2
+            }
           }
         };
 
@@ -9291,7 +10711,7 @@
             return research.unlocked;
           }
           // Standard-Gebäude sind immer verfügbar
-          return ['solar', 'water', 'hydro', 'refinery', 'lab', 'home', 'spaceport', 'warehouse'].includes(buildingType);
+          return ['solar', 'water', 'hydro', 'refinery', 'lab', 'home', 'spaceport', 'warehouse', 'geothermal-plant', 'deep-mine', 'asteroid-miner', 'habitat-dome', 'terraform-station', 'biosphere-lab', 'interplanetary-port'].includes(buildingType);
         };
 
         // Helper-Funktion für Building-Efficiency (wird durch Research modifiziert)
@@ -9504,7 +10924,8 @@
 
             if (simState.day % 10 === 0) {
               researchPoints += generateResearchPoints();
-              processResearchQueue();
+              // Forschung wird nur manuell verarbeitet, nicht automatisch
+              // processResearchQueue(); // Entfernt - nur manuell
             }
 
             if (simState.nextEventIn <= 0) {
@@ -9522,10 +10943,14 @@
             processRouteTransport(route, daysToAdvance);
           });
           updateRouteUI();
+          
+          // KI-Gegner aktualisieren
+          updateAIOpponents();
 
           updateTimeDisplay();
           updateResearchUI();
           refreshColonyUI();
+          updateMilitaryPanel();
         };
 
         const startSimulation = () => {
@@ -9556,7 +10981,16 @@
           b10.addEventListener("click", () => { simState.speed = 10; setPressed(b10); toast({ type: "info", title: "Speed", message: "10×" }); });
           
           updateTimeDisplay();
-          startSimulation();
+          // Simulation startet pausiert - wird erst nach Tutorial gestartet
+          if (tutorialCompleted) {
+            simState.paused = false;
+            pause.setAttribute("aria-pressed", "false");
+            pause.textContent = "Pause";
+            startSimulation();
+          } else {
+            pause.setAttribute("aria-pressed", "true");
+            pause.textContent = "Weiter";
+          }
           
           // Initialisiere alle Systeme
           updateStorageCapacity();
@@ -11323,6 +12757,40 @@
           ctx.fillStyle = planetColor;
           ctx.fill();
           
+          // Sektoren mit Besitzer-Farben zeichnen (wenn Territorium initialisiert)
+          if (Object.keys(sectorOwnership).length > 0) {
+            const totalSectors = Object.keys(sectorOwnership).length;
+            const sectorAngle = (Math.PI * 2) / totalSectors;
+            
+            Object.entries(sectorOwnership).forEach(([sectorId, ownership], index) => {
+              const startAngle = index * sectorAngle - Math.PI / 2;
+              const endAngle = (index + 1) * sectorAngle - Math.PI / 2;
+              
+              // Besitzer-Farbe
+              let ownerColor = '#888'; // Neutral
+              if (ownership.owner === 'player') {
+                ownerColor = '#4ade80'; // Grün
+              } else if (ownership.owner === 'ai1') {
+                ownerColor = '#ff4444'; // Rot
+              } else if (ownership.owner === 'ai2') {
+                ownerColor = '#ff8844'; // Orange
+              } else if (ownership.owner === 'ai3') {
+                ownerColor = '#8844ff'; // Lila
+              }
+              
+              // Sektor-Segment zeichnen
+              ctx.beginPath();
+              ctx.moveTo(center, center);
+              ctx.arc(center, center, radius, startAngle, endAngle);
+              ctx.closePath();
+              ctx.fillStyle = ownerColor + '40'; // 40 = 25% Opacity
+              ctx.fill();
+              ctx.strokeStyle = ownerColor;
+              ctx.lineWidth = 2;
+              ctx.stroke();
+            });
+          }
+          
           // Generate continents (simplified pixel art)
           const numContinents = Math.floor(rng() * 4) + 3;
           for (let i = 0; i < numContinents; i++) {
@@ -11518,7 +12986,7 @@
         initAuth();
         setupTheme();
         setupNotifications();
-        setupFloatingNav();
+        setupTopbarNav();
         setupGlossary();
         setupTutorial();
         setupBuildEditor();
@@ -11535,6 +13003,10 @@
         window.addEventListener('resize', renderFlowPaths);
         setupAchievements();
         setupEventOverlay();
+        setupKPIActions();
+        setupQuickActions();
+        setupDiplomacyActions();
+        setupResourceActions();
         
         // Enhanced Statistics Dashboard
         let statsHistory = {
