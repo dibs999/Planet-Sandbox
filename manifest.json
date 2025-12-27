@@ -1,7 +1,7 @@
 {
   "name": "Planet Sandbox",
   "short_name": "Planet",
-  "description": "Anno-inspirierte Planetensimulation – Siedeln, Handeln, Terraformen",
+  "description": "Planetensimulation – Siedeln, Handeln, Terraformen",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#0d1117",

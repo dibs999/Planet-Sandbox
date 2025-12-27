@@ -4,9 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#1b2b3a" />
-    <meta name="description" content="Anno-inspirierte Planetensimulation – Siedeln, Handeln, Terraformen" />
+    <meta name="description" content="Planetensimulation – Siedeln, Handeln, Terraformen" />
     <link rel="manifest" href="manifest.json" />
-    <title>Planet Sandbox - Anno im Orbit</title>
+    <title>Planet Sandbox - Siedeln, Handeln, Terraformen</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -83,17 +83,18 @@
       .page {
         max-width: 1180px;
         margin: 0 auto;
-        padding: 48px 24px 90px;
+        padding: 32px 24px 80px;
         position: relative;
         z-index: 1;
       }
 
       .hero {
-        display: grid;
-        grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.85fr);
-        gap: 32px;
+        display: flex;
+        flex-direction: column;
         align-items: center;
-        padding: 32px;
+        text-align: center;
+        gap: 24px;
+        padding: 40px 32px;
         background: var(--panel);
         border: 1px solid var(--stroke);
         border-radius: 28px;
@@ -107,8 +108,7 @@
         position: absolute;
         inset: 0;
         background:
-          linear-gradient(120deg, rgba(255, 255, 255, 0.75), transparent 60%),
-          radial-gradient(circle at 85% 20%, rgba(177, 138, 85, 0.18), transparent 55%);
+          radial-gradient(circle at 50% 50%, rgba(177, 138, 85, 0.12), transparent 70%);
         pointer-events: none;
       }
 
@@ -116,6 +116,17 @@
       .hero-visual {
         position: relative;
         z-index: 1;
+        width: 100%;
+      }
+
+      .hero-text {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .hero-text {
+        max-width: 800px;
+        margin: 0 auto;
       }
 
       .eyebrow {
@@ -155,6 +166,13 @@
         font-size: 1.05rem;
         color: var(--muted);
         max-width: 720px;
+        margin: 0 auto;
+      }
+
+      .hero-actions {
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
       }
 
       .badge-row {
@@ -162,6 +180,7 @@
         flex-wrap: wrap;
         gap: 10px;
         margin-top: 16px;
+        justify-content: center;
       }
 
       .badge {
@@ -179,10 +198,13 @@
         background: rgba(177, 138, 85, 0.12);
         border-left: 4px solid var(--brass);
         color: var(--muted);
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
       }
 
       section {
-        margin-top: 40px;
+        margin-top: 32px;
         animation: fadeUp 0.7s ease both;
       }
 
@@ -224,7 +246,7 @@
         background: var(--panel);
         border: 1px solid var(--stroke);
         border-radius: 18px;
-        padding: 18px;
+        padding: 16px;
         box-shadow: var(--shadow-soft);
       }
 
@@ -1386,7 +1408,7 @@
 
       @media (max-width: 960px) {
         .hero {
-          grid-template-columns: 1fr;
+          padding: 32px 24px;
         }
         .sector-panel {
           grid-template-columns: 1fr;
@@ -3239,13 +3261,13 @@
         }
 
         .hero {
-          grid-template-columns: 1fr;
-          text-align: center;
-          gap: 16px;
+          padding: 24px 16px;
+          gap: 20px;
         }
 
-        .hero-visual {
-          order: -1;
+        .planet-canvas-container {
+          width: 250px;
+          height: 250px;
         }
 
         .kpi-grid,
@@ -4329,9 +4351,12 @@
       /* Pixel Art Planet Canvas */
       .planet-canvas-container {
         position: relative;
-        width: 200px;
-        height: 200px;
+        width: 300px;
+        height: 300px;
         margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .planet-canvas {
@@ -4745,31 +4770,27 @@
           <button class="auth-btn" id="auth-logout" style="display: none;">Abmelden</button>
         </div>
         <div class="hero-text">
-          <p class="eyebrow">Anno-inspirierte Planetensimulation</p>
+          <p class="eyebrow">Planetensimulation</p>
           <h1>Planet Sandbox: Siedeln, Handeln, Terraformen</h1>
           <p class="lead">
-            Ein Siedlungs- und Wirtschaftsspiel, das die klare Lesbarkeit und Tiefe von Anno
-            auf einen lebendigen Planeten &uuml;bertr&auml;gt. Statt Inseln gibt es Sektoren
-            auf einer Kugel, statt Schiffsrouten Orbit-Lanes - der Kern bleibt: elegante
+            Ein Siedlungs- und Wirtschaftsspiel auf einem lebendigen Planeten. 
+            Sektoren auf einer Kugel, Orbit-Lanes statt Schiffsrouten - elegante
             Produktionsketten, zufriedene Bewohner, sichtbare Konsequenzen.
           </p>
+        </div>
+        <div class="hero-visual">
+          <div class="planet-canvas-container">
+            <canvas class="planet-canvas pixel-art" id="main-planet-canvas" width="300" height="300"></canvas>
+          </div>
+          <div class="legend">Pixel Art Planet mit Seed-generierten Kontinenten</div>
+        </div>
+        <div class="hero-actions">
           <div class="badge-row">
             <span class="badge">Zielgruppe: 12+</span>
             <span class="badge">Fokus: Aufbau + Simulation</span>
             <span class="badge">Stil: spielerisch plausibel</span>
-            <span class="badge">Engine: Unity / Godot / Unreal</span>
           </div>
-          <div class="callout">
-            <strong>Anno-DNA:</strong> Warenketten, Bedarfe, Handel und klares Feedback -
-            nur planetar gedacht.
-          </div>
-        </div>
-        <div class="hero-visual">
-          <div class="planet-canvas-container">
-            <canvas class="planet-canvas pixel-art" id="main-planet-canvas" width="200" height="200"></canvas>
-          </div>
-          <div class="legend">Pixel Art Planet mit Seed-generierten Kontinenten</div>
-          <div class="chip-row" style="justify-content: center; margin-top: 12px;">
+          <div class="chip-row" style="justify-content: center; margin-top: 16px;">
             <button class="seed-button secondary" id="glossary-open">📖 Glossar</button>
             <button class="seed-button secondary" id="tutorial-start">🎓 Tutorial</button>
           </div>
@@ -4778,7 +4799,7 @@
 
       <section id="status">
         <h2>Kolonie-Status</h2>
-        <p class="lead">Die Anno-typische Statusleiste als schneller &Uuml;berblick.</p>
+        <p class="lead">Die Statusleiste als schneller &Uuml;berblick.</p>
         <div class="kpi-grid">
           <div class="kpi-card" data-kpi="population" style="--value: 72%;">
             <div class="kpi-title">Bev&ouml;lkerung</div>
@@ -5221,7 +5242,7 @@
               <div class="card">
                 <h3>Sektor-Analyse</h3>
                 <p class="lead">
-                  Lokale Planung wie in Anno: Baufl&auml;chen, Ressourcen, Risiko und
+                  Lokale Planung: Baufl&auml;chen, Ressourcen, Risiko und
                   Versorgung sind auf einen Blick sichtbar.
                 </p>
                 <div class="overlay-controls">
@@ -5349,7 +5370,7 @@
       </section>
 
       <section>
-        <h2>Wie Anno auf einen Planeten &uuml;bersetzt wird</h2>
+        <h2>Planetare Siedlungssimulation</h2>
         <div class="grid-3">
           <div class="card">
             <h3>Inseln -&gt; Sektoren</h3>
@@ -5908,10 +5929,10 @@
             </ul>
           </div>
           <div class="card">
-            <h3>Anno-typische Limits</h3>
+            <h3>Spielmechanische Limits</h3>
             <ul>
               <li>Tools kosten Einfluss oder Ressourcen.</li>
-              <li>Cooldowns erzwingen Planung wie in Anno.</li>
+              <li>Cooldowns erzwingen strategische Planung.</li>
               <li>Events sind Risiko-Management, kein Reset.</li>
             </ul>
           </div>
