@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  lint-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install GDScript tooling
+        run: |
+          python -m pip install --upgrade pip
+          pip install gdtoolkit==4.3.1
+
+      - name: Download Godot headless 4.3
+        run: |
+          curl -LO https://downloads.tuxfamily.org/godotengine/4.3/Godot_v4.3-stable_linux.x86_64.zip
+          unzip Godot_v4.3-stable_linux.x86_64.zip
+          sudo mv Godot_v4.3-stable_linux.x86_64 /usr/local/bin/godot
+          sudo chmod +x /usr/local/bin/godot
+
+      - name: Format check
+        run: gdformat --check scripts
+
+      - name: Lint
+        run: gdlint scripts
+
+      - name: Project validation
+        run: godot --headless --path . --check-only

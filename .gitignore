@@ -1,0 +1,20 @@
+# Godot-specific ignores
+.export/
+.import/
+mono_crash.*.json
+*.translation
+*.import
+*.shader_cache
+*.godot/
+
+# OS-specific ignores
+.DS_Store
+Thumbs.db
+
+# Editor and tooling
+.idea/
+.vscode/
+
+# Build artifacts
+bin/
+
